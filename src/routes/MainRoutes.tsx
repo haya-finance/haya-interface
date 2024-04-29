@@ -13,6 +13,7 @@ const Home = Loadable(lazy(() => import('pages/home')));
 const Swap = Loadable(lazy(() => import('pages/swap')));
 const Mint = Loadable(lazy(() => import('pages/mint')));
 const Pool = Loadable(lazy(() => import('pages/pool')));
+const Auction = Loadable(lazy(() => import('pages/auction')));
 
 // render - sample page
 // ==============================|| MAIN ROUTING ||============================== //
@@ -36,6 +37,10 @@ const MainRoutes = {
     {
       path: '/pool',
       element: <Pool />
+    },
+    {
+      path: '/auction',
+      element: <Auction />
     },
     {
       path: '/maintenance',

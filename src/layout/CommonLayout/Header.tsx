@@ -273,6 +273,9 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                       <Link className='header-link' to="/mint" sx={{ fontSize: '14px', lineHeight: '24px', p: 0, color: currentPath === '/mint' ? '#1aae70' : '#000' }} component={RouterLink} underline="none">
                         Mint
                       </Link>
+                      <Link className='header-link' to="/auction" sx={{ fontSize: '14px', lineHeight: '24px', p: 0, color: currentPath === '/auction' ? '#1aae70' : '#000' }} component={RouterLink} underline="none">
+                        Auction
+                      </Link>
                     </Stack>
                     <Stack direction="row" alignItems="center" spacing="30px">
                       <Box>
@@ -498,6 +501,9 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                 </NavtionButton>
                 <NavtionButton sx={{ backgroundColor: currentPath === '/mint' ? '#f6f6f6' : 'transparent', color: currentPath === '/mint' ? '#1aae70' : '#464646', borderRadius: currentPath === '/mint' ? '10px' : 0 }} onClick={() => onClickNav('/mint')}>
                   Mint
+                </NavtionButton>
+                <NavtionButton sx={{ backgroundColor: currentPath === '/auction' ? '#f6f6f6' : 'transparent', color: currentPath === '/auction' ? '#1aae70' : '#464646', borderRadius: currentPath === '/mint' ? '10px' : 0 }} onClick={() => onClickNav('/auction')}>
+                  Auction
                 </NavtionButton>
 
 

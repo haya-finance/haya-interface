@@ -86,7 +86,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
     if (address !== undefined) {
       for (let i = 0; i < tokenList.length; i++) {
-        getBalance(tokenList[i].address)
+        getBalance(tokenList[i]?.address)
 
       }
     }
@@ -98,12 +98,12 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
   useEffect(() => {
 
     for (let i = 0; i < tokenList.length; i++) {
-      getSymbol(tokenList[i].address)
+      getSymbol(tokenList[i]?.address)
 
 
 
       if (address !== undefined) {
-        getBalance(tokenList[i].address)
+        getBalance(tokenList[i]?.address)
       }
     }
 

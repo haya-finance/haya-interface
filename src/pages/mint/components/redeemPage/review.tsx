@@ -204,6 +204,7 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
 
     }).catch((err) => {
       // console.log("错误结果", err)
+      handleSwapClose()
       openNotification('top')
     })
 

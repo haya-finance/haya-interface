@@ -273,7 +273,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
     if (pay !== "Select token" && address !== undefined) {
       const tokens = data.filter(item => item.symbol === pay)
-      setBalance(String(Number(tokens[0].balance) / 10 ** 18))
+      setBalance(String(Number(tokens[0]?.balance) / 10 ** 18))
     }
 
     if (pay !== "Select token") {
@@ -291,7 +291,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
   const onMax = () => {
     if (pay !== 'Select token') {
-      setInputValue(String(Number(data.filter(item => item.symbol === pay)[0].balance) / (10 ** 18)))
+      setInputValue(String(Number(data.filter(item => item.symbol === pay)[0]?.balance) / (10 ** 18)))
     }
 
   }

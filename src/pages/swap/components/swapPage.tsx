@@ -108,7 +108,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
   const [oneValue, setOneValue] = useState('0')
 
 
-  const [receive, setReceive] = React.useState(data[1].symbol)
+  const [receive, setReceive] = React.useState('H2_test')
 
   const handleSwapOpen = () => {
     setOpenSwap(true)
@@ -408,7 +408,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   </Typography>
                   <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
-                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px' }} placeholder="0" />
+                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px', color: '#6f6f6f' }} placeholder="0" />
                     </Stack>
 
                     {
@@ -471,7 +471,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                 ) : (
                   <Box
                     sx={{
-                      pl: "0.7rem", pr: '0.3rem', backgroundColor: "#f6f6f6", borderRadius: "1.7rem",
+                      pl: "0.7rem", pr: '0.3rem', backgroundColor: "#fff",
                       width: "600px", margin: "0 auto", marginBottom: "10px"
                     }}
                   ><ShowSwap windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} /></Box>
@@ -640,7 +640,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   </Typography>
                   <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
-                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px' }} placeholder="0" />
+                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px', color: '#6f6f6f' }} placeholder="0" />
                     </Stack>
 
                     {
@@ -702,7 +702,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                 ) : (
                   <Box
                     pl="0.7rem" sx={{
-                      mt: '10px', mb: 2, pl: '0.7rem', bg: "#f6f6f6", borderRadius: "1.7rem", pr: "0.3rem",
+                      mt: '10px', mb: 2, pl: '0.7rem', bg: "#fff", pr: "0.3rem",
                       width: "100%"
                     }}
                   ><ShowSwap windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} /></Box>

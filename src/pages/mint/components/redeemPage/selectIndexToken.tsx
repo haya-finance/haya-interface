@@ -67,7 +67,7 @@ export default function RedeemSelectIndexToken({ open, handleClose, handleListCl
             </DialogContent>
           </BootstrapDialog>
         ) : (
-          <Drawer anchor='bottom' open={open} onClose={handleClose} sx={{ left: '5px', right: '5px', borderRadius: '10px 10px 0 0' }}>
+          <Drawer anchor='bottom' open={open} onClose={handleClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff' }, left: '5px', right: '5px', borderRadius: '10px 10px 0 0' }}>
             <Box sx={{ width: 'auto', padding: '10px 10px 20px 10px' }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" pb="10px">
                 <Typography sx={{ color: "#464646", fontSize: '17px', fontWeight: 400 }}>
@@ -82,7 +82,7 @@ export default function RedeemSelectIndexToken({ open, handleClose, handleListCl
                   <CloseIcon />
                 </IconButton>
               </Stack>
-              <Stack direction="row" justifyContent="space-between" sx={{ pr: 2, pl: 2 }}>
+              <Stack direction="row" justifyContent="space-between" sx={{ p: '0 10px' }}>
                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
                   ETF Token
                 </Typography>

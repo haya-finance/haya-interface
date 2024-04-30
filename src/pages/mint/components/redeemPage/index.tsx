@@ -242,17 +242,17 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
               <RedeemReviewSwap windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} name={H30Data[0]?.symbol} windowWidth={windowWidth} />
               <Box
                 sx={{
-                  p: "0.5rem", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
+                  p: "12px 20px", backgroundColor: "#f6f6f6", borderRadius: "20px",
                   width: "600px", margin: "0 auto"
                 }}
               >
                 <RedeemSelectIndexToken open={open} handleClose={handleClose} handleListClose={handleListIndexToken} data={H30Data} windowWidth={windowWidth} />
                 <Box position="relative">
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
+                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
                     You redeem
                   </Typography>
 
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
+                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
                     $ 31.5
                   </Typography>
 
@@ -442,31 +442,31 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
               <RedeemReviewSwap windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} name={H30Data[0]?.symbol} windowWidth={windowWidth} />
               <Box
                 sx={{
-                  p: "0.5rem", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
+                  p: "10px 12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
                   width: "100%"
                 }}
               >
                 <RedeemSelectIndexToken open={open} handleClose={handleClose} handleListClose={handleListIndexToken} data={H30Data} windowWidth={windowWidth} />
                 <Box position="relative">
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
+                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
                     You redeem
                   </Typography>
 
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
+                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
                     $ 31.5
                   </Typography>
 
                   <Box sx={{ position: 'absolute', top: 0, right: '4px' }}>
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                      <Typography variant='body1' sx={{ fontSize: '10px', fontWeight: 600 }} color="#979797">
                         Balance:
                       </Typography>
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#464646">
+                      <Typography variant='body1' sx={{ fontSize: '10px', fontWeight: 600 }} color="#464646">
                         {`${formatNumber(Number(H30Data[0].balance))}`}
                       </Typography>
                     </Stack>
                   </Box>
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0 18px' }} justifyContent="space-between" spacing="4px">
+                  <Stack alignItems="center" direction="row" sx={{ padding: '12px 0 10px' }} justifyContent="space-between" spacing="4px">
                     <Stack flex={1} direction="row" alignItems="center" spacing="2px">
                       <IconButton onClick={onDec} size="large" sx={{ p: 0, width: '20px', height: '20px' }}><MdIndeterminateCheckBox color="#9b9b9b" size={30} /></IconButton>
                       <BootstrapInput value={inputValue} onChange={InputChange} sx={{ color: Number(inputValue) <= Number(H30Data[0]?.balance) ? '#464646' : '#ee3354', fontSize: '20px' }} placeholder="0" />

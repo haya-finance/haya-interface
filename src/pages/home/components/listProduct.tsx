@@ -166,7 +166,7 @@ const ConnectPage = ({ windowWidth }: TypeProps) => {
 
   return (
 
-    <Box sx={{ width: '100%', backgroundColor: '#f6f6f6' }}>
+    <Box sx={{ width: '100%', backgroundColor: '#f6f6f6', pb: '30px' }}>
 
 
       <Box sx={windowWidth >= 600 ? { width: '80%', margin: '0 auto' } : { width: `${windowWidth}px`, pl: '1rem', pr: '1rem' }} >

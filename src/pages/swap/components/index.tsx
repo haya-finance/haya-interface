@@ -38,15 +38,15 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
   const [tokenList, setTokenList] = useState<TokenListType[]>([
     {
       symbol: '',
-      address: '0x8b5F184973b34F9D57A9706E31aE66d67824139B',
+      address: '0x0cE40884F9460593Dd804E346E2fE7CA9b35D3c7',
       balance: '0',
-      network: chain?.name ?? 'sepolia'
+      network: chain?.name ?? 'Arbitrum Sepolia'
     },
     {
       symbol: '',
-      address: '0xa1BE9E952432F582e65152Be90cd76FED27af12b',
+      address: '0x19cb7Ac5E56Fa4ea4da5F20e27097903dd07aF52',
       balance: '0',
-      network: chain?.name ?? 'sepolia'
+      network: chain?.name ?? 'Arbitrum Sepolia'
 
     }
   ])
@@ -134,7 +134,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
   return (
     <>
-      <Box sx={{ paddingTop: windowWidth >= 600 ? '8rem' : '80px', backgroundColor: '#fff' }}>
+      <Box sx={{ paddingTop: windowWidth >= 600 ? '60px' : 0, backgroundColor: '#fff' }}>
         <Card sx={{ p: windowWidth >= 600 ? 1 : '14px', boxShadow: 'none' }}>
           {
             windowWidth >= 600 ? (

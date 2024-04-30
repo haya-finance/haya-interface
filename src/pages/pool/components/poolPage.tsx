@@ -6,8 +6,7 @@ import { useAccount } from 'wagmi';
 import { styled } from '@mui/material/styles';
 import { ButtonProps } from '@mui/material/Button';
 
-
-import { AiOutlineArrowDown } from "react-icons/ai";
+import { MdAdd } from "react-icons/md";
 import InputBase from '@mui/material/InputBase';
 import ShowSwap from './showSwap';
 import { ethers } from 'ethers';
@@ -34,14 +33,11 @@ type typeProps = {
 
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
-  'label + &': {
-    marginTop: theme.spacing(3),
-  },
+
   '& .MuiInputBase-input': {
-    borderRadius: 4,
     backgroundColor: 'transparent',
     border: 'none',
-    fontSize: 22,
+    fontSize: '26px',
     fontWeight: 700,
     width: '100%',
     // Use the system font instead of the default Roboto font.
@@ -99,7 +95,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
   const [inputToValue, setInputValue] = useState('')
 
 
-  const [pay, setPay] = React.useState('Select token')
+  const [pay, setPay] = React.useState('H3_test')
 
   const [balance, setBalance] = React.useState('0')
 
@@ -109,7 +105,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
   const [oneValue, setOneValue] = useState('0')
 
 
-  const [receive, setReceive] = React.useState(data[1].symbol)
+  const [receive, setReceive] = React.useState('WETH')
 
   const handleSwapOpen = () => {
     setOpenSwap(true)
@@ -174,6 +170,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
     backgroundColor: '#9b9b9b',
     border: 0,
     marginRight: 0,
+    padding: '6px 12px',
     '.MuiStack-root>:not(style)+:not(style)': {
       marginRight: 0,
       zIndex: 10
@@ -225,11 +222,6 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
 
 
-  const OnExchange = () => {
-    const to = pay
-    setPay(receive)
-    setReceive(to)
-  }
 
 
   const Swap = async (value: any) => {
@@ -272,9 +264,9 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
       Swap(inputToValue)
     }
 
-    if (pay !== "Select token" && address !== undefined) {
+    if (address !== undefined) {
       const tokens = data.filter(item => item.symbol === pay)
-      setBalance(String(Number(tokens[0].balance) / 10 ** 18))
+      setBalance(String(Number(tokens[0]?.balance) / 10 ** 18))
     }
 
     if (pay !== "Select token") {
@@ -292,7 +284,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
   const onMax = () => {
     if (pay !== 'Select token') {
-      setInputValue(String(Number(data.filter(item => item.symbol === pay)[0].balance) / (10 ** 18)))
+      setInputValue(String(Number(data.filter(item => item.symbol === pay)[0]?.balance) / (10 ** 18)))
     }
 
   }
@@ -308,32 +300,28 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
             <>
               <Box
                 sx={{
-                  p: "0.5rem", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
-                  width: "600px", margin: "0 auto", marginBottom: "9px"
+                  p: "10px 20px", backgroundColor: "#f6f6f6", borderRadius: "20px",
+                  width: "600px", margin: "0 auto", marginBottom: "10px", height: '88px'
                 }}
               >
                 <SelectAddOneToken windowWidth={windowWeight} open={open} handleClose={handleClose} handleListClose={handleToToken} data={data} />
                 <Box sx={{ position: "relative" }}>
 
-                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-46%', left: '46%', borderRadius: '4px' }}>
-                    <Box component="button" sx={{ backgroundColor: '#f6f6f6', m: '5px 6px', p: '5px 6px', borderRadius: '4px', cursor: 'pointer', border: 'none' }} onClick={OnExchange}>
-                      <AiOutlineArrowDown color='#333' size={15} />
+                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-72%', left: '44%', borderRadius: '10px', width: '40px', height: '40px' }}>
+                    <Box sx={{ backgroundColor: '#f6f6f6', m: '5px 4px', p: '2px 2px', borderRadius: '6px', border: 'none', textAlign: 'center', lineHeight: '26px' }}>
+                      < MdAdd color='#333' />
                     </Box>
 
                   </Box>
                   <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You pay
-                  </Typography>
-
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 31.5
+                    You add
                   </Typography>
                   <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
                     <Stack direction="row" spacing={1}>
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span>{`${balance}`}</span>
+                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${balance}`}</span>
                       </Typography>
-                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onMax} color="primary">
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onMax} color="primary">
                         MAX
                       </Typography>
                     </Stack>
@@ -341,141 +329,83 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
 
 
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0 0 0', height: '56px' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1} >
-                      <BootstrapInput value={inputToValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '22px' }} />
+                      <BootstrapInput value={inputToValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} />
                     </Stack>
+                    <IndexTokenButton
+                      variant="text"
+                      sx={{
+                        borderRadius: '100px',
+                        backgroundColor: '#fff',
+                        fontWeight: '500',
+                        border: 'none',
+                        color: '#000',
+                        fontSize: '13px',
+                      }}
+                      startIcon={<TokenColorIcon size={20} name={pay} />}
+                      onClick={handleClickToOpen}
+                      endIcon={<ChevronDownIcon width="13px" height="13px" cursor="pointer" color="#333" />}
+                    >
 
-                    {
-                      pay === "Select token" ? (
-                        <>
-                          <IndexTokenButton
-                            variant="text"
-                            sx={{
-                              borderRadius: '1.12rem',
-                              backgroundColor: '#1AAE70',
-                              fontWeight: '500',
-                              color: '#fff',
-                              fontSize: '14px',
-                            }}
-                            onClick={handleClickToOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                          >
-                            {pay === 'Select token' ? <></> : <TokenColorIcon size={20} name={pay} />}
-                            {pay}
-                          </IndexTokenButton>
-                        </>
-
-                      ) : (
-                        <>
-                          <IndexTokenButton
-                            variant="text"
-                            sx={{
-                              borderRadius: '1.12rem',
-                              backgroundColor: '#fff',
-                              border: 'none',
-                              color: '#000',
-                              fontSize: '14px',
-                            }}
-                            onClick={handleClickToOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                          >
-                            {pay === 'Select token' ? <></> : <TokenColorIcon size={20} name={pay} />}
-                            {pay}
-                          </IndexTokenButton>
-                        </>
-
-                      )
-
-                    }
-
+                      {pay}
+                    </IndexTokenButton>
                   </Stack>
                 </Box>
               </Box>
               <Box
                 sx={{
-                  p: "0.5rem", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
-                  width: "600px", margin: "0 auto", marginBottom: "10px"
+                  p: "12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
+                  width: "600px", margin: "0 auto", marginBottom: "10px", height: '88px'
                 }}
               >
                 <SelectAddTwoToken windowWidth={windowWeight} open={reOpen} handleClose={handleReClose} handleListClose={handleFromToken} data={data} />
                 <Box sx={{ position: "relative" }}>
                   <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You receive
+                    You add
                   </Typography>
-
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 31.5
-                  </Typography>
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
-                    <Stack flex={1}>
-                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px' }} placeholder="0" />
+                  <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
+                    <Stack direction="row" spacing={1}>
+                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${balance}`}</span>
+                      </Typography>
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onMax} color="primary">
+                        MAX
+                      </Typography>
                     </Stack>
+                  </Box>
 
-                    {
-                      receive === "Select token" ? (
-                        <>
-                          <IndexTokenButton
-                            variant="text"
-                            sx={{
-                              borderRadius: '1.12rem',
-                              backgroundColor: '#1AAE70',
-                              fontWeight: '500',
 
-                              color: '#fff',
-                              fontSize: '14px',
-                            }}
-                            onClick={handleClickFromOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                          >
-                            {receive === 'Select token' ? <></> : <TokenColorIcon size={20} name={receive} />}
-                            {receive}
-                          </IndexTokenButton>
-                        </>
-
-                      ) : (
-                        <>
-                          <IndexTokenButton
-                            variant="text"
-                            sx={{
-                              borderRadius: '1.12rem',
-                              backgroundColor: '#fff',
-                              border: 'none',
-                              color: '#000',
-                              fontSize: '14px',
-                            }}
-                            onClick={handleClickFromOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                          >
-                            {receive === 'Select token' ? <></> : <TokenColorIcon size={20} name={receive} />}
-                            {receive}
-                          </IndexTokenButton>
-                        </>
-
-                      )
-
-                    }
+                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0 0 0', height: '56px' }} justifyContent="space-between" spacing={2}>
+                    <Stack flex={1}>
+                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} placeholder="0" />
+                    </Stack>
+                    <IndexTokenButton
+                      variant="text"
+                      sx={{
+                        borderRadius: '100px',
+                        backgroundColor: '#fff',
+                        fontWeight: 500,
+                        border: 'none',
+                        color: '#000',
+                        fontSize: '13px',
+                      }}
+                      onClick={handleClickFromOpen}
+                      startIcon={<TokenColorIcon size={20} name={receive} />}
+                      endIcon={<ChevronDownIcon height="13px" width="13px" cursor="pointer" color="#333" />}
+                    >
+                      {receive}
+                    </IndexTokenButton>
 
                   </Stack>
                 </Box>
-
-
-
-
-
-
               </Box>
 
               {
-                pay === "Select token" ? (
+                inputToValue === '' && inputReValue === '' ? (
                   <></>
                 ) : (
-                  <Box
-                    sx={{
-                      pl: "0.7rem", pr: '0.3rem', backgroundColor: "#f6f6f6", borderRadius: "1.7rem",
-                      width: "600px", margin: "0 auto", marginBottom: "10px"
-                    }}
-                  ><ShowSwap windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} /></Box>
+                  <ShowSwap windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} />
 
                 )
               }
@@ -483,47 +413,31 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                 address !== undefined ? (
                   <>
                     {
-                      pay === "Select token" ? (
-                        <>
-                          <Box sx={{ width: "600px", margin: '0 auto' }}>
-                            <SelectButton >Select a token</SelectButton>
-                          </Box>
-                        </>
+                      inputToValue === '' && inputReValue === '' ? (
+                        <Box sx={{ width: "600px", margin: '0 auto' }}>
+                          <SelectButton >Enter an Amount</SelectButton>
+                        </Box>
 
                       ) : (
                         <>
                           {
-                            inputToValue === '' && inputReValue === '' ? (
+                            Number(balance) >= Number(inputToValue) ? (
                               <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                <SelectButton >Enter amount</SelectButton>
+                                <EnterButton onClick={handleSwapOpen}>Supply</EnterButton>
                               </Box>
 
                             ) : (
-                              <>
-                                {
-                                  Number(balance) >= Number(inputToValue) ? (
-                                    <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                      <EnterButton onClick={handleSwapOpen}>Swap</EnterButton>
-                                    </Box>
-
-                                  ) : (
-                                    <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                      <SelectButton >Insufficient balane</SelectButton>
-                                    </Box>
-
-                                  )
-
-                                }
-
-                              </>
+                              <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                <SelectButton >Insufficient Balance</SelectButton>
+                              </Box>
 
                             )
+
                           }
 
                         </>
 
                       )
-
                     }
                   </>
 
@@ -543,168 +457,115 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
             <>
               <Box
                 sx={{
-                  p: "0.5rem", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
-                  width: "100%", marginBottom: "9px"
+                  p: "12px 10px", backgroundColor: "#f6f6f6", borderRadius: "20px",
+                  width: "100%", marginBottom: "10px"
                 }}
               >
                 <SelectAddOneToken windowWidth={windowWeight} open={open} handleClose={handleClose} handleListClose={handleToToken} data={data} />
                 <Box sx={{ position: "relative" }}>
 
-                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-46%', left: '46%', borderRadius: '4px' }}>
-                    <Box component="button" sx={{ backgroundColor: '#f6f6f6', m: '5px 6px', p: '5px 6px', borderRadius: '4px', cursor: 'pointer', border: 'none' }} onClick={OnExchange}>
-                      <AiOutlineArrowDown color='#333' size={15} />
+                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-72%', left: '44%', borderRadius: '10px' }}>
+                    <Box sx={{ backgroundColor: '#f6f6f6', m: '5px 4px', p: '4px 5px', borderRadius: '6px', border: 'none' }}>
+                      < MdAdd color='#333' />
                     </Box>
 
                   </Box>
                   <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You pay
-                  </Typography>
-
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 31.5
+                    You add
                   </Typography>
                   <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
                     <Stack direction="row" spacing={1}>
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span style={{ color: '#000' }}>{`${balance}`}</span>
+                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${balance}`}</span>
                       </Typography>
-                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", fontSize: '11px', minWidth: 0, p: 0 }} onClick={onMax} color="primary">
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onMax} color="primary">
                         MAX
                       </Typography>
                     </Stack>
                   </Box>
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
+
+
+
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0 0', height: '46px' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1} >
-                      <BootstrapInput value={inputToValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', fontSize: '22px', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354' }} />
+                      <BootstrapInput value={inputToValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} />
                     </Stack>
+                    <IndexTokenButton
+                      variant="text"
+                      sx={{
+                        borderRadius: '100px',
+                        backgroundColor: '#fff',
+                        fontWeight: '500',
+                        border: 'none',
+                        color: '#000',
+                        fontSize: '13px',
+                      }}
+                      startIcon={<TokenColorIcon size={20} name={pay} />}
+                      onClick={handleClickToOpen}
+                      endIcon={<ChevronDownIcon width="13px" height="13px" cursor="pointer" color="#333" />}
+                    >
 
-                    {
-                      pay === "Select token" ? (
-                        <>
-                          <IndexTokenButton
-                            variant="text"
-                            sx={{
-                              borderRadius: '1.12rem',
-                              backgroundColor: '#1AAE70',
-                              fontSize: '14px',
-                              fontWeight: '500',
-                              color: '#fff',
-                            }}
-                            onClick={handleClickToOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                          >
-                            {pay === 'Select token' ? <></> : <TokenColorIcon size={20} name={pay} />}
-                            {pay}
-                          </IndexTokenButton>
-                        </>
-
-                      ) : (
-                        <>
-                          <IndexTokenButton
-                            variant="text"
-                            sx={{
-                              borderRadius: '1.12rem',
-                              backgroundColor: '#fff',
-                              border: 'none',
-                              fontSize: '14px',
-                              color: '#000',
-                            }}
-                            onClick={handleClickToOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                          >
-                            {pay === 'Select token' ? <></> : <TokenColorIcon size={20} name={pay} />}
-                            {pay}
-                          </IndexTokenButton>
-                        </>
-
-                      )
-
-                    }
-
+                      {pay}
+                    </IndexTokenButton>
                   </Stack>
                 </Box>
               </Box>
               <Box
                 sx={{
-                  p: "0.5rem", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
-                  width: "100%", marginBottom: "9px"
+                  p: "12px 10px", backgroundColor: "#f6f6f6", borderRadius: "20px",
+                  width: "600px", margin: "0 auto", marginBottom: "10px", height: '88px'
                 }}
               >
                 <SelectAddTwoToken windowWidth={windowWeight} open={reOpen} handleClose={handleReClose} handleListClose={handleFromToken} data={data} />
                 <Box sx={{ position: "relative" }}>
                   <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You receive
+                    You add
                   </Typography>
-
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 31.5
-                  </Typography>
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
-                    <Stack flex={1}>
-                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px' }} placeholder="0" />
+                  <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
+                    <Stack direction="row" spacing={1}>
+                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${balance}`}</span>
+                      </Typography>
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onMax} color="primary">
+                        MAX
+                      </Typography>
                     </Stack>
+                  </Box>
 
-                    {
-                      receive === "Select token" ? (
-                        <>
-                          <IndexTokenButton
-                            variant="text"
-                            sx={{
-                              borderRadius: '1.12rem',
-                              backgroundColor: '#1AAE70',
-                              fontSize: '14px',
-                              fontWeight: '500',
-                              color: '#fff',
-                            }}
-                            onClick={handleClickFromOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                          >
-                            {receive === 'Select token' ? <></> : <TokenColorIcon size={20} name={receive} />}
-                            {receive}
-                          </IndexTokenButton>
-                        </>
 
-                      ) : (
-                        <>
-                          <IndexTokenButton
-                            variant="text"
-                            sx={{
-                              borderRadius: '1.12rem',
-                              backgroundColor: '#fff',
-                              fontSize: '14px',
-                              border: 'none',
-                              color: '#000',
-                            }}
-                            onClick={handleClickFromOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                          >
-                            {receive === 'Select token' ? <></> : <TokenColorIcon size={20} name={receive} />}
-                            {receive}
-                          </IndexTokenButton>
-                        </>
-
-                      )
-
-                    }
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0 0', height: '46px' }} justifyContent="space-between" spacing={2}>
+                    <Stack flex={1}>
+                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} placeholder="0" />
+                    </Stack>
+                    <IndexTokenButton
+                      variant="text"
+                      sx={{
+                        borderRadius: '100px',
+                        backgroundColor: '#fff',
+                        fontWeight: 500,
+                        border: 'none',
+                        color: '#000',
+                        fontSize: '13px',
+                      }}
+                      onClick={handleClickFromOpen}
+                      startIcon={<TokenColorIcon size={20} name={receive} />}
+                      endIcon={<ChevronDownIcon height="13px" width="13px" cursor="pointer" color="#333" />}
+                    >
+                      {receive}
+                    </IndexTokenButton>
 
                   </Stack>
                 </Box>
-
-
-
-
-
-
               </Box>
 
               {
-                pay === "Select token" ? (
+                inputToValue === '' && inputReValue === '' ? (
                   <></>
                 ) : (
                   <Box
-                    pl="0.7rem" sx={{
-                      mt: '10px', mb: 2, pl: '0.7rem', bg: "#f6f6f6", borderRadius: "1.7rem", pr: "0.3rem",
-                      width: "100%"
+                    sx={{
+                      p: '10px 12px', backgroundColor: "#fff",
+                      width: "600px", margin: "0 auto", marginBottom: "10px"
                     }}
                   ><ShowSwap windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} /></Box>
 
@@ -714,47 +575,31 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                 address !== undefined ? (
                   <>
                     {
-                      pay === "Select token" ? (
-                        <>
-                          <Box sx={{ width: '100%' }}>
-                            <SelectButton>Select a token</SelectButton>
-                          </Box>
-                        </>
+                      inputToValue === '' && inputReValue === '' ? (
+                        <Box sx={{ width: "600px", margin: '0 auto' }}>
+                          <SelectButton >Enter an Amount</SelectButton>
+                        </Box>
 
                       ) : (
                         <>
                           {
-                            inputToValue === '' && inputReValue === '' ? (
-                              <Box sx={{ width: '100%' }}>
-                                <SelectButton >Enter amount</SelectButton>
+                            Number(balance) >= Number(inputToValue) ? (
+                              <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                <EnterButton onClick={handleSwapOpen}>Supply</EnterButton>
                               </Box>
 
                             ) : (
-                              <>
-                                {
-                                  Number(balance) >= Number(inputToValue) ? (
-                                    <Box sx={{ width: '100%' }}>
-                                      <EnterButton onClick={handleSwapOpen}>Swap</EnterButton>
-                                    </Box>
-
-                                  ) : (
-                                    <Box sx={{ width: '100%' }}>
-                                      <SelectButton >Insufficient balane</SelectButton>
-                                    </Box>
-
-                                  )
-
-                                }
-
-                              </>
+                              <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                <SelectButton >Insufficient Balance</SelectButton>
+                              </Box>
 
                             )
+
                           }
 
                         </>
 
                       )
-
                     }
                   </>
 

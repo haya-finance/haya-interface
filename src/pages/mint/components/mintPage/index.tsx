@@ -243,7 +243,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
               <ReviewSwap windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} name={H30Data[0]?.symbol} onChange={onChange} windowWidth={windowWidth} />
               <Box
                 sx={{
-                  p: "20px", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
+                  p: "12px 20px", backgroundColor: "#f6f6f6", borderRadius: "20px",
                   width: "600px", margin: "0 auto"
                 }}
               >
@@ -432,7 +432,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
               <ReviewSwap windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} onChange={onChange} name={H30Data[0]?.symbol} windowWidth={windowWidth} />
               <Box
                 sx={{
-                  p: "10px", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
+                  p: "10px 12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
                   width: "100%"
                 }}
               >

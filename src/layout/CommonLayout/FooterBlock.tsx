@@ -22,6 +22,11 @@ type PropsType = {
 
 const FooterBlock = ({ windowWidth }: PropsType) => {
 
+
+  const goTo = (url: string) => {
+    window.location.assign(url)
+  }
+
   return (
     <Box sx={windowWidth >= 600 ? { width: '100%', backgroundColor: '#1b1b1b', } : { width: `${windowWidth}px`, backgroundColor: '#1b1b1b', }} >
       {
@@ -35,16 +40,16 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                   Haya aspires to become a leading provider of innovative decentralized financial solutions,driving the development of ZKML DeFi and setting new industry standards.
                 </Typography>
                 <Stack direction="row" spacing="10px" pt="20px">
-                  <IconButton sx={{ padding: '0', width: '32px', height: '32px' }}>
+                  <IconButton onClick={() => goTo('https://twitter.com/haya_finance')} sx={{ padding: '0', width: '32px', height: '32px' }}>
                     <FootIcon name="Twitter" size={32} />
                   </IconButton >
-                  <IconButton sx={{ padding: '0', width: '32px', height: '32px' }}>
+                  {/* <IconButton sx={{ padding: '0', width: '32px', height: '32px' }}>
                     <FootIcon name="Des" size={32} />
-                  </IconButton>
-                  <IconButton sx={{ padding: '0', width: '32px', height: '32px' }}>
+                  </IconButton> */}
+                  <IconButton onClick={() => goTo('https://t.me/Haya_Finance')} sx={{ padding: '0', width: '32px', height: '32px' }}>
                     <FootIcon name="Telegram" size={32} />
                   </IconButton>
-                  <IconButton sx={{ padding: '0', width: '32px', height: '32px' }}>
+                  <IconButton onClick={() => goTo('https://github.com/haya-finance')} sx={{ padding: '0', width: '32px', height: '32px' }}>
                     <FootIcon name="GitHub" size={32} />
                   </IconButton>
 
@@ -92,27 +97,29 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
           </Container>
         ) : (
           <>
-            <Stack sx={{ width: '100%', p: "60 20 60 20" }}>
+            <Stack sx={{ width: '100%', p: "60px 20px 60px 20px" }}>
               <Box>
                 <FootLogo />
-                <Typography variant="body1" textAlign="start" sx={{ color: '#c0c0c0', fontSize: "16px", fontWeight: '24px' }}  >
+                <Typography variant="body1" textAlign="start" sx={{ color: '#c0c0c0', fontSize: "14px", fontWeight: '24px' }}  >
                   Haya aspires to become a leading provider of innovative decentralized financial solutions,driving the development of ZKML DeFi and setting new industry standards.
                 </Typography>
-                <Stack direction="row" mt="20px">
-                  <IconButton>
+                <Stack direction="row" spacing="10px" pt="20px">
+                  <IconButton onClick={() => goTo('https://twitter.com/haya_finance')} sx={{ padding: '0', width: '32px', height: '32px' }}>
                     <FootIcon name="Twitter" size={32} />
-                  </IconButton>
-                  <IconButton>
+                  </IconButton >
+                  {/* <IconButton  sx={{ padding: '0', width: '32px', height: '32px' }}>
                     <FootIcon name="Des" size={32} />
-                  </IconButton>
-                  <IconButton>
+                  </IconButton> */}
+                  <IconButton onClick={() => goTo('https://t.me/Haya_Finance')} sx={{ padding: '0', width: '32px', height: '32px' }}>
                     <FootIcon name="Telegram" size={32} />
                   </IconButton>
-                  <IconButton>
+                  <IconButton onClick={() => goTo('https://github.com/haya-finance')} sx={{ padding: '0', width: '32px', height: '32px' }}>
                     <FootIcon name="GitHub" size={32} />
                   </IconButton>
+
+
                 </Stack>
-                <Stack direction="row" spacing="60px" p="30px 0">
+                <Stack direction="row" spacing="60px" pt="30px">
                   <Stack spacing="20px">
                     <Typography variant="body1" textAlign="start" sx={{ color: '#fff', fontSize: "15px", lineHeight: '21px' }}  >
                       App

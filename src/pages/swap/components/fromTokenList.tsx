@@ -31,8 +31,8 @@ export default function TokenFromList({ onClose, data }: Props) {
                   <Stack direction="row" alignItems="center" spacing="6px">
                     <TokenColorIcon name={item.symbol} size={25} />
                     <Stack>
-                      <Typography variant="inherit" sx={{ color: '#000', fontSize: '13px', fontWeight: 400 }}>{item.symbol}</Typography>
-                      <Typography variant="inherit" sx={{ color: '#8c8c8c', fontSize: '13px', fontWeight: 400 }}>{item.network}</Typography>
+                      <Typography variant="inherit" sx={{ color: '#000', fontSize: '13px', fontWeight: 400, textAlign: 'start' }}>{item.symbol}</Typography>
+                      <Typography variant="inherit" sx={{ color: '#8c8c8c', fontSize: '13px', fontWeight: 400, textAlign: 'start' }}>{item.network}</Typography>
                     </Stack>
                   </Stack>
                   <Typography variant="inherit">{String(Number(item.balance) / (10 ** 18))}</Typography>

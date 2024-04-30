@@ -15,6 +15,7 @@ import FIL from './fil';
 import FTM from './ftm';
 import GRT from './grt';
 import HAYColor from './h30';
+import IcpColor from './icp';
 import IMX from './imx';
 import ING from './inj';
 import KAS from './kas';
@@ -79,7 +80,7 @@ const TokenColorIcon = ({ name, size }: Props) => {
       return <LTCColor size={size} />
     case 'WBTC':
       return <WBtcColor size={size} />
-    case 'H3_test':
+    case 'H2_test':
       return <HAYColor size={size} />
     case 'SHIB':
       return <SHIBColor size={size} />;
@@ -121,6 +122,8 @@ const TokenColorIcon = ({ name, size }: Props) => {
       return <ARB size={size} />
     case 'FTM':
       return <FTM size={size} />
+    case 'ICP':
+      return <IcpColor size={size} />
     default:
       return <DefaultToken size={size} />;
   }

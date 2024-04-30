@@ -55,15 +55,13 @@ const ReadPage = ({ windowWidth }: PropsType) => {
   ]
 
   return (
-    <Box>
+    <Box sx={{ display: 'none' }}>
 
       <Stack sx={windowWidth >= 600 ? { width: '100%' } : { width: `${windowWidth - 32}px` }}>
         <Box>
           <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontWeight: 700, ml: 1.5, mt: 4, mb: 1 }}  >
             Read
           </Typography>
-          {/* <Stack direction={{ xs: 'column', sm: 'row' }}
-            spacing={1} flexWrap="wrap"> */}
           <Grid container spacing={1} >
             {
               Reads.map((item, index) => {

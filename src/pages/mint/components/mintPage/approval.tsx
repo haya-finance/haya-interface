@@ -430,7 +430,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
           </Box>
         ) : (
-          <Drawer anchor='bottom' open={open} onClose={handleApprovalClose} sx={{ left: '5px', right: '5px', borderRadius: '10px 10px 0 0' }}>
+          <Drawer anchor='bottom' open={open} onClose={handleApprovalClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff' }, left: '5px', right: '5px', borderRadius: '10px 10px 0 0' }}>
             <Box sx={{ width: 'auto', padding: '10px 10px 20px 10px' }}>
               <Box sx={{ width: '100%' }}>
 

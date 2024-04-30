@@ -169,12 +169,13 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
     const provider = getEthersSigner(config)
     const ApproveContract = new ethers.Contract(data.filter(item => item.symbol === toToken)[0].address, tokenAbi, await provider)
     const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, await provider)
+    // BigInt(Number(inputToNum) * (10 ** 18))
 
-    await ApproveContract.approve(UniswapSepoliaRouterContract, BigInt(Number(inputToNum) * (10 ** 18))).then(async (res) => {
+    await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
       setLoading(true)
 
       await res.wait()
-      await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** 18)), BigInt(Number(inputFromNum) * (10 ** 18)), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 10000).then(async (res: any) => {
+      await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** 18)), BigInt((1 - 0.005) * Number(inputFromNum) * (10 ** 18)), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
         // console.log('结果swap', res)
         await res.wait()
@@ -376,7 +377,7 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
 
           </Box>
         ) : (
-          <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ left: '5px', right: '5px', borderRadius: '10px 10px 0 0' }}>
+          <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff' }, left: '5px', right: '5px', borderRadius: '10px 10px 0 0' }}>
             <Box sx={{ width: 'auto', padding: '10px 10px 20px 10px' }}>
               <Box sx={{ width: '100%' }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" pb="10px">

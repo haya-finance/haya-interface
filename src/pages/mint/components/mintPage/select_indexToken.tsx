@@ -68,8 +68,8 @@ export default function SelectIndexToken({ open, handleClose, handleListClose, d
             </DialogContent>
           </BootstrapDialog>
         ) : (
-          <Drawer anchor='bottom' open={open} onClose={handleClose} sx={{ left: '5px', right: '5px', borderRadius: '10px 10px 0 0' }}>
-            <Box sx={{ width: 'auto', padding: '10px', }}>
+          <Drawer anchor='bottom' open={open} onClose={handleClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff' }, left: '5px', right: '5px', borderRadius: '10px 10px 0 0' }}>
+            <Box sx={{ width: 'auto', padding: '10px 10px 20px 10px' }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" pb="10px">
                 <Typography sx={{ color: "#464646", fontSize: '17px', fontWeight: 400 }}>
                   Select a Index Token

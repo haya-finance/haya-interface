@@ -1,15 +1,12 @@
 
 import { SettingOutlined } from '@ant-design/icons';
-import { Box, Card, Stack } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import Button, { ButtonProps } from '@mui/material/Button';
+import { Box, Card, Stack, Typography } from '@mui/material';
 
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
 // import Web3 from 'web3'
 import tokenAbi from 'abi/token.json'
-import { sepolia_rpc } from 'config';
+import { H30_Address, sepolia_rpc } from 'config';
 import { ethers } from 'ethers';
 import PoolSons from './poolPage';
 
@@ -34,19 +31,19 @@ export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
 
   const { address, chain } = useAccount()
 
-  // 第一个eth地址，第二个h30地址
+  // 第一个H30地址，第二个Weh地址
   const [tokenList, setTokenList] = useState<TokenListType[]>([
     {
       symbol: '',
-      address: '0x8b5F184973b34F9D57A9706E31aE66d67824139B',
+      address: H30_Address,
       balance: '0',
-      network: chain?.name ?? 'sepolia'
+      network: chain?.name ?? 'Arbitrum Sepolia'
     },
     {
       symbol: '',
-      address: '0xa1BE9E952432F582e65152Be90cd76FED27af12b',
+      address: '0x0cE40884F9460593Dd804E346E2fE7CA9b35D3c7',
       balance: '0',
-      network: chain?.name ?? 'sepolia'
+      network: chain?.name ?? 'Arbitrum Sepolia'
 
     }
   ])
@@ -75,12 +72,7 @@ export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
     })
   }
 
-  const [value, setValue] = useState(0)
 
-  const OnCheckTitel = (v: number) => {
-    setValue(v)
-
-  }
 
   const OnChange = async () => {
 
@@ -109,27 +101,27 @@ export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
 
   }, [address])
 
-  const [openWallet, setOpenWallet] = useState(false)
+  // const [openWallet, setOpenWallet] = useState(false)
 
 
-  const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
-    width: '100%',
-    color: '#fff',
-    backgroundColor: '#1AAE70',
-    '&:hover': {
-      backgroundColor: '#1AAE70',
-    },
-  }));
+  // const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  //   width: '100%',
+  //   color: '#fff',
+  //   backgroundColor: '#1AAE70',
+  //   '&:hover': {
+  //     backgroundColor: '#1AAE70',
+  //   },
+  // }));
 
 
 
-  const walletConnect = () => {
-    setOpenWallet(true);
-  };
+  // const walletConnect = () => {
+  //   setOpenWallet(true);
+  // };
 
-  const onClose = () => {
-    setOpenWallet(false);
-  };
+  // const onClose = () => {
+  //   setOpenWallet(false);
+  // };
 
 
   return (
@@ -139,85 +131,38 @@ export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
           {
             windowWidth >= 600 ? (
               <Box sx={{ width: '600px', margin: '0 auto', p: '20px' }}>
-                <Stack direction="row" justifyContent="space-between" width="100%">
+                <Stack direction="row" justifyContent="space-between" width="100%" pb="20px">
                   <Stack direction="row" spacing={1}>
-                    <Box sx={value === 0 ? ({ p: '0 0.7rem', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '12px', borderRadius: 8, cursor: 'pointer', border: 0 }) : ({ p: '0 0.7rem', backgroundColor: '#fff', color: '#6F6F6F', fontSize: '12px', cursor: 'pointer', border: 0 })} component="button" onClick={() => OnCheckTitel(0)}>
-                      Swap
-                    </Box>
+                    <Typography sx={{ color: "#000", fontSize: '15px', fontWeight: 700 }}>
+                      Add Liquidity
+                    </Typography>
                   </Stack>
                   <Box>
                     <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} />
                   </Box>
                 </Stack>
-
-
-              </Box>
-            ) : (
-              <Box sx={{ width: '100%', p: '10px' }}>
-
-              </Box>
-
-            )
-          }
-
-          {
-            windowWidth >= 600 ? (
-              <Stack direction="row" justifyContent="space-between" width="600px" margin="0 auto" mb={1}>
-                <Stack direction="row" spacing={1}>
-                  <Box sx={value === 0 ? ({ p: '0 0.7rem', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '12px', borderRadius: 8, cursor: 'pointer', border: 0 }) : ({ p: '0 0.7rem', backgroundColor: '#fff', color: '#6F6F6F', fontSize: '12px', cursor: 'pointer', border: 0 })} component="button" onClick={() => OnCheckTitel(0)}>
-                    Swap
-                  </Box>
-                </Stack>
-                <Box>
-                  <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} />
-                </Box>
-              </Stack>
-            ) : (
-              <Stack direction="row" justifyContent="space-between" mb={1}>
-                <Stack direction="row" spacing={1}>
-                  <Box sx={value === 0 ? ({ p: '0 0.7rem', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '12px', borderRadius: 8, cursor: 'pointer', border: 0 }) : ({ p: '0 0.7rem', backgroundColor: '#fff', color: '#6F6F6F', fontSize: '12px', cursor: 'pointer', border: 0 })} component="button" onClick={() => OnCheckTitel(0)}>
-                    Swap
-                  </Box>
-                </Stack>
-                <Box>
-                  <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} />
-                </Box>
-              </Stack>
-            )
-          }
-          {
-            value === 0 ? (
-              <Box sx={{ width: '100%' }}>
                 <PoolSons data={tokenList} windowHeight={windowHeight} windowWeight={windowWidth} OnChange={OnChange} />
-                {
-                  address !== undefined ? (
-                    <></>
-
-
-                  ) : (
-                    <>
-                      {
-                        windowWidth >= 600 ? (
-                          <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
-                            <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect wallet</ConnectButton>
-                          </Box>
-                        ) : (
-                          <Box sx={{ width: '100%', mt: 1 }}>
-                            <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect wallet</ConnectButton>
-                          </Box>
-                        )
-                      }
-                    </>
-
-                  )
-                }
               </Box>
             ) : (
-              <></>
+              <Box sx={{ width: '100%', p: '20px 10px' }}>
+                <Stack direction="row" justifyContent="space-between" width="100%" pb="10px">
+                  <Stack direction="row" spacing={1}>
+                    <Typography sx={{ color: "#000", fontSize: '15px', fontWeight: 700 }}>
+                      Add Liquidity
+                    </Typography>
+                  </Stack>
+                  <Box>
+                    <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} />
+                  </Box>
+                </Stack>
+                <PoolSons data={tokenList} windowHeight={windowHeight} windowWeight={windowWidth} OnChange={OnChange} />
+
+              </Box>
+
             )
           }
+
+
 
         </Card>
 

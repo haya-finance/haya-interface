@@ -259,7 +259,7 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
           }
           {
             value == 0 ? (
-              <Container>
+              <Container sx={{ p: 0 }}>
                 <MintSon windowWidth={windowWidth} windowHeight={windowHeight} tokensData={data} H30Data={tokenData} onUpdate={onChange} />
                 {
                   address !== undefined ? (

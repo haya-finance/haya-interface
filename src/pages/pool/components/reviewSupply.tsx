@@ -27,6 +27,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import { LoadingButton } from '@mui/lab';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
+import { MdAdd } from 'react-icons/md';
 
 
 
@@ -238,7 +239,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
               open={open}
             >
               <DialogTitle sx={{ m: 0, p: 2, color: '#000', fontWeight: 700, fontSize: '18px', backgroundColor: 'transparent' }} id="customized-dialog-title">
-                Review Swap
+                Review Supply
               </DialogTitle>
               <IconButton
                 aria-label="close"
@@ -260,9 +261,17 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                       You pay
                     </Typography>
 
-                    <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      $35.1
-                    </Typography>
+                    <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
+
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
+                        {inputToNum} {toToken}
+                      </Typography>
+
+                      <TokenColorIcon name={toToken} size={40} />
+
+
+
+                    </Stack>
                     <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
@@ -277,9 +286,9 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                   </Box>
                 </Box>
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
-                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
-                  <ArrowDownwardIcon sx={{ color: '#1aae70', padding: '0 1px' }} />
-                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
+                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
+                  <MdAdd color='#333' style={{ padding: '0 1px' }} />
+                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
                 </Stack>
 
                 <Box sx={{ marginBottom: '10px', marginTop: '10px' }}>
@@ -288,9 +297,6 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                       You receive
                     </Typography>
 
-                    <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      $35.1
-                    </Typography>
                     <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
@@ -381,7 +387,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
               <Box sx={{ width: '100%' }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" pb="10px">
                   <Typography sx={{ color: "#464646", fontSize: '17px', fontWeight: 700 }}>
-                    Review Swap
+                    Review Supply
                   </Typography>
                   <IconButton
                     aria-label="close"
@@ -398,9 +404,18 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                       You pay
                     </Typography>
 
-                    <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      $35.1
-                    </Typography>
+
+                    <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
+
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
+                        {inputToNum} {toToken}
+                      </Typography>
+
+                      <TokenColorIcon name={toToken} size={30} />
+
+
+
+                    </Stack>
                     <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
@@ -426,9 +441,6 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                       You receive
                     </Typography>
 
-                    <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      $35.1
-                    </Typography>
                     <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>

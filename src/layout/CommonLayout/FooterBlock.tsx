@@ -94,6 +94,11 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                 © 2024 Haya. All rights reserved
               </Typography>
             </Box>
+            <Box >
+              <Typography variant="body1" textAlign="center" sx={{ color: '#c0c0c0', lineHeight: '60px', fontSize: '12px' }}  >
+                {`(V1.0.0) 2024/04/30`}
+              </Typography>
+            </Box>
           </Container>
         ) : (
           <>
@@ -156,6 +161,12 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                 © 2024 Haya. All rights reserved
               </Typography>
             </Box>
+            <Box >
+              <Typography variant="body1" textAlign="center" sx={{ color: '#c0c0c0', lineHeight: '60px', fontSize: '12px' }}  >
+                {`(V1.0.0) 2024/04/30`}
+              </Typography>
+            </Box>
+
           </>
         )
       }

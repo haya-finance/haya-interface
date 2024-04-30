@@ -121,6 +121,9 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
   }
 
   // const provider = new ethers.BrowserProvider(window.ethereum)
+  // const notificonfig = {
+  //   top: windowHeight / 2 + 100
+  // }
 
 
   const [api, contextHolder] = notification.useNotification();

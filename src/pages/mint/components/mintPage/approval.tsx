@@ -161,7 +161,6 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
       },
       key,
       placement,
-      duration: 0,
 
     });
   };
@@ -171,7 +170,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
 
 
-  const [disable, setDisabled] = useState<boolean>(false)
+  const [disable, setDisabled] = useState<boolean>(true)
 
   const [approval, setApproval] = useState<boolean[]>([])
   const [loading, setLoading] = useState<boolean[]>([])

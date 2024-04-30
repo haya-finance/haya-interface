@@ -149,7 +149,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
 
   // const { status } = useEnsName({ address });
 
-  const [indexToken, setIndexToken] = React.useState(address !== undefined ? 'Select Index' : 'H8_test');
+  const [indexToken, setIndexToken] = React.useState(address !== undefined ? 'Select Index' : 'H2_test');
 
   const handleSwapOpen = () => {
     setOpenSwap(true)

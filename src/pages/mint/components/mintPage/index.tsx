@@ -135,7 +135,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
 
   // const { status } = useEnsName({ address });
 
-  const [indexToken, setIndexToken] = React.useState(address !== undefined ? 'Select Index' : 'H3_test');
+  const [indexToken, setIndexToken] = React.useState(address !== undefined ? 'Select Index' : 'H2_test');
 
   const handleSwapOpen = () => {
     setOpenSwap(true)

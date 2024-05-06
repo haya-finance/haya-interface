@@ -46,7 +46,9 @@ type dataType = {
   num: string;
   symbol: string;
   address: string;
-  balance: string
+  balance: string;
+  allowance: string;
+  decimals: string
 }
 
 
@@ -63,12 +65,21 @@ type TypeProps = {
 function ChangeNumber(num: number) {
 
   if (num % 1 !== 0) {
-    num *= 10000000000
-    num = Math.round(num)
-    num /= 10000000000
-    var parts = num.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.round(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+
+
+
+      }
+    }
   } else {
     return num.toLocaleString()
 
@@ -131,6 +142,8 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
 
   const [api, contextHolder] = notification.useNotification(notificonfig);
+
+  // console.log('data', data)
 
   const openNotification = (placement: NotificationPlacement) => {
     const key = `open${Date.now()}`;
@@ -332,6 +345,38 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
 
 
+  useEffect(() => {
+
+    for (let i = 0; i < data.length; i++) {
+      if (BigInt(data[i].allowance) > BigInt(Math.round((Number(data[i].num) * Number(inputNum)) * (10 ** Number(data[i].decimals))))) {
+        // console.log('111111111111111111111')
+
+        setApproval((pre) => {
+          const newPre = [...pre]
+          newPre[i] = true;
+          return newPre
+        })
+
+
+      } else {
+        setApproval((pre) => {
+          const newPre = [...pre]
+          newPre[i] = false;
+          return newPre
+        })
+
+      }
+    }
+
+  }, [])
+
+
+
+
+
+
+
+
 
 
 
@@ -367,12 +412,13 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
               </Stack>
 
               <DialogContent >
-                <Box >
+                <Box>
 
                   {
                     data.map((item, index) => {
                       return (
                         <>
+                          {/* <Box display={BigInt(item.allowance) > BigInt(Math.round((Number(item.num) * Number(inputNum)) * (10 ** Number(item.decimals)))) ? 'none' : 'block'}> */}
                           <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
                             <Stack direction="row" spacing="4px" alignItems="center" key={index}>
                               <TokenColorIcon name={item.symbol.split('-')[0]} size={30} />
@@ -401,6 +447,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
                             }
 
                           </Stack>
+                          {/* </Box> */}
                         </>
                       )
                     })
@@ -452,6 +499,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
                     data.map((item, index) => {
                       return (
                         <>
+                          {/* <Box display={BigInt(item.allowance) > BigInt(Math.round((Number(item.num) * Number(inputNum)) * (10 ** Number(item.decimals)))) ? 'none' : 'block'}> */}
                           <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
                             <Stack direction="row" spacing="4px" alignItems="center" key={index}>
                               <TokenColorIcon name={item.symbol.split('-')[0]} size={30} />
@@ -480,6 +528,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
                             }
 
                           </Stack>
+                          {/* </Box> */}
                         </>
                       )
                     })

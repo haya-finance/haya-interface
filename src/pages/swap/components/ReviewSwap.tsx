@@ -29,7 +29,29 @@ import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
 
 
+function formatNumber(num: number) {
 
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.round(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+
+
+
+      }
+    }
+  } else {
+    return num.toLocaleString()
+
+  }
+}
 
 
 const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
@@ -164,6 +186,7 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
   // const { address } = useAccount();
 
   const [loading, setLoading] = useState(false)
+  // console.log(data)
 
 
 
@@ -174,31 +197,83 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
     const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, await provider)
     // BigInt(Number(inputToNum) * (10 ** 18))
 
-    await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
-      setLoading(true)
+    // console.log(new Date().getTime() + 10000)
 
-      await res.wait()
-      await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** 18)), BigInt((1 - 0.005) * Number(inputFromNum) * (10 ** 18)), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
-        // console.log('结果swap', res)
+    if (BigInt(data.filter(item => item.symbol === toToken)[0].allowance) < BigInt(Math.round(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))))) {
+      await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
+        setLoading(true)
+
         await res.wait()
-        setLoading(false)
-        handleSwapClose()
-      }).catch((_err) => {
+        if (toToken !== 'ETH') {
+          await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - 0.005) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+
+            // console.log('结果swap', res)
+            await res.wait()
+            setLoading(false)
+            handleSwapClose()
+          }).catch((err) => {
+            openNotification('top')
+            handleSwapClose()
+            // console.log('错误1', err)
+          })
+        } else {
+          await swapContract.swapExactTokensForETH(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Number(inputFromNum) * (10 ** 18)), [data.filter(item => item.symbol == toToken)[0].address, data.filter(item => item.symbol == fromToken)[0].address], address, new Date().getTime() + 10000).then((res: any) => {
+            // console.log('结果swap', res)
+            setLoading(false)
+            handleSwapClose()
+          }).catch((err) => {
+            // console.log('错误2', err)
+            openNotification('top')
+            handleSwapClose()
+          })
+
+        }
+
+
+
+
+
+
+      }).catch((err) => {
         openNotification('top')
         handleSwapClose()
         // console.log('错误1', err)
+
       })
+    } else {
+      setLoading(true)
+      if (toToken !== 'ETH') {
+        await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - 0.005) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+
+          // console.log('结果swap', res)
+          await res.wait()
+          setLoading(false)
+          handleSwapClose()
+        }).catch((err) => {
+          openNotification('top')
+          handleSwapClose()
+          // console.log('错误1', err)
+        })
+      } else {
+        await swapContract.swapExactETHForTokens(BigInt(Math.round((1 - 0.005) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol == fromToken)[0].address], address, new Date().getTime() + 10000, {
+          from: address,
+          value: BigInt(Number(inputToNum) * (10 ** 18))
+        }).then((res: any) => {
+          // console.log('结果swap', res)
+          setLoading(false)
+          handleSwapClose()
+        }).catch((err) => {
+          // console.log('错误2', err)
+          openNotification('top')
+          handleSwapClose()
+        })
+
+      }
 
 
 
-
-    }).catch((err) => {
-      openNotification('top')
-      handleSwapClose()
-      // console.log('错误1', err)
-
-    })
+    }
 
 
     // if (toToken == "WETH") {
@@ -209,12 +284,7 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
     //     console.log('错误1', err)
     //   })
     // } else {
-    //   await swapContract.swapExactTokensForETH(BigInt(Number(inputToNum) * (10 ** 18)), BigInt(Number(inputFromNum) * (10 ** 18)), [data.filter(item => item.symbol == toToken)[0].address, data.filter(item => item.symbol == fromToken)[0].address], address, new Date().getTime() + 10000).then((res: any) => {
-    //     console.log('结果swap', res)
-    //     handleSwapClose()
-    //   }).catch((err) => {
-    //     console.log('错误2', err)
-    //   })
+    //   
     // }
 
 
@@ -265,12 +335,12 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
                     </Typography>
 
                     <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      $35.1
+                      $ 0.00
                     </Typography>
                     <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
-                        {inputToNum} {toToken}
+                        {formatNumber(Number(inputToNum))} {toToken}
                       </Typography>
 
                       <TokenColorIcon name={toToken} size={40} />
@@ -293,12 +363,12 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
                     </Typography>
 
                     <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      $35.1
+                      $ 0.00
                     </Typography>
                     <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
-                        {inputFromNum} {fromToken}
+                        {formatNumber(Number(inputFromNum))} {fromToken}
                       </Typography>
 
                       <TokenColorIcon name={fromToken} size={40} />
@@ -403,12 +473,12 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
                     </Typography>
 
                     <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      $35.1
+                      $ 0.00
                     </Typography>
                     <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
-                        {inputToNum} {toToken}
+                        {formatNumber(Number(inputToNum))} {toToken}
                       </Typography>
 
                       <TokenColorIcon name={toToken} size={30} />
@@ -431,12 +501,12 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
                     </Typography>
 
                     <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      $35.1
+                      $ 0.00
                     </Typography>
                     <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
-                        {inputFromNum} {fromToken}
+                        {formatNumber(Number(inputFromNum))} {fromToken}
                       </Typography>
 
                       <TokenColorIcon name={fromToken} size={30} />

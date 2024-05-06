@@ -1,5 +1,5 @@
 
-import { SettingOutlined } from '@ant-design/icons';
+// import { SettingOutlined } from '@ant-design/icons';
 import { Box, Card, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Button, { ButtonProps } from '@mui/material/Button';
@@ -29,7 +29,9 @@ type DataType = {
   symbol: string;
   address: any;
   balance: string;
-  num: string
+  num: string;
+  allowance: string;
+  decimals: string
 
 }
 
@@ -74,20 +76,24 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
 
 
   const getSymbol = async (adds: any) => {
-    const Tokencontract = new ethers.Contract(adds, tokenAbi, provider)
-    await Tokencontract.symbol().then((res1: any) => {
-      setTokenData((pre) => [{ symbol: res1, balance: '0' }])
-    })
+    // const Tokencontract = new ethers.Contract(adds, tokenAbi, provider)
+
+    setTokenData((pre) => [{ symbol: 'H20', balance: '0' }])
+
   }
 
 
   const getBalanceSymbol = async () => {
     const Tokencontract = new ethers.Contract(H30_Address, tokenAbi, provider)
-    await Tokencontract.symbol().then(async (res1: any) => {
-      await Tokencontract.balanceOf(address).then((res2: any) => {
-        const num = Number(res2) / (10 ** 18)
-        setTokenData((pre) => [{ symbol: res1, balance: String(num) }])
+
+    await Tokencontract.balanceOf(address).then(async (res2: any) => {
+      await Tokencontract.decimals().then((decimals: any) => {
+        const num = Number(res2) / (10 ** Number(decimals))
+        setTokenData((pre) => [{ symbol: 'H20', balance: String(num) }])
+
       })
+
+
     })
 
   }
@@ -95,11 +101,16 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
 
   const getBalance = async (adds: any) => {
     const Tokencontract = new ethers.Contract(adds, tokenAbi, provider)
-    await Tokencontract.balanceOf(address).then((res1: any) => {
-      const num = Number(res1) / (10 ** 18)
-      setTokenData((pre) => pre.map(item => {
-        return { symbol: item.symbol, balance: String(Number(num)) }
-      }))
+    await Tokencontract.balanceOf(address).then(async (res1: any) => {
+      await Tokencontract.decimals().then((decimals: any) => {
+        const num = Number(res1) / (10 ** Number(decimals))
+        setTokenData((pre) => pre.map(item => {
+          return { symbol: item.symbol, balance: String(Number(num)) }
+        }))
+
+      })
+
+
 
     })
   }
@@ -114,42 +125,53 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
     ).then(async function (result: any) {
       let arr: DataType[] = []
       // setResData(result)
-      console.log(result)
+      // console.log(result)
 
       for (let i = 0; i < result[0].length; i++) {
 
         const contract = new ethers.Contract(result[0][i], tokenAbi, provider)
         await contract.symbol().then(async function (res1: any) {
 
+          await contract.decimals().then(async (decimals: any) => {
+            const num = Number(result[1][i]) / (10 ** Number(decimals))
 
 
-          const num = res1 == "WBTC-H" ? Number(result[1][i]) / (10 ** 8) : Number(result[1][i]) / (10 ** 18)
-
-          if (address !== undefined) {
-            await contract.balanceOf(address).then(function (res2: any) {
-
-              const balance = res1 == "WBTC-H" ? Number(BigInt(res2)) / (10 ** 8) : Number(BigInt(res2)) / (10 ** 18)
 
 
-              arr.push({
-                symbol: res1 as unknown as string,
-                address: result[0][i],
-                balance: String(balance),
-                num: String(num)
 
+
+
+            if (address !== undefined) {
+              await contract.balanceOf(address).then(async function (res2: any) {
+                const balance = Number(BigInt(res2)) / (10 ** Number(decimals))
+                // console.log('decimals', decimals)
+                await contract.allowance(address, BasicIssuanceModule).then(function (res3: any) {
+                  // console.log('res3', res3)
+                  const allow = BigInt(res3) / BigInt((10 ** Number(decimals)))
+                  arr.push({
+                    symbol: res1 as unknown as string,
+                    address: result[0][i],
+                    balance: String(balance),
+                    num: String(num),
+                    allowance: String(allow),
+                    decimals: String(Number(decimals))
+
+                  })
+                })
               })
 
-            })
+            } else {
+              arr.push({
+                symbol: res1,
+                address: result[0][i],
+                balance: '0',
+                num: String(num),
+                allowance: '0',
+                decimals: String(Number(decimals))
+              })
+            }
 
-          } else {
-            arr.push({
-              symbol: res1,
-              address: result[0][i],
-              balance: '0',
-              num: String(num)
-            })
-          }
-
+          })
         })
       }
 
@@ -163,9 +185,13 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
 
   const getTokenBalance = async (adds: any) => {
     const contract = new ethers.Contract(adds, tokenAbi, provider)
-    await contract.balanceOf(address).then(function (res2: any) {
-      const balance = Number(res2) / (10 ** 18)
-      setData((pre) => pre.map((item) => item.address == adds ? { ...item, balance: String(balance) } : item))
+    await contract.balanceOf(address).then(async function (res2: any) {
+      await contract.decimals().then((decimals) => {
+        const balance = Number(res2) / (10 ** Number(decimals))
+        setData((pre) => pre.map((item) => item.address == adds ? { ...item, balance: String(balance) } : item))
+
+      })
+
     })
   }
 
@@ -238,7 +264,7 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
                   </Box>
                 </Stack>
                 <Box>
-                  <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} />
+                  {/* <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} /> */}
                 </Box>
               </Stack>
             ) : (
@@ -252,7 +278,7 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
                   </Box>
                 </Stack>
                 <Box>
-                  <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} />
+                  {/* <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} /> */}
                 </Box>
               </Stack>
             )

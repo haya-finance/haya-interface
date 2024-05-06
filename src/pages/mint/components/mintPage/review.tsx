@@ -70,7 +70,9 @@ type dataType = {
   num: string;
   symbol: string;
   address: string;
-  balance: string
+  balance: string;
+  allowance: string;
+  decimals: string
 }
 
 
@@ -88,12 +90,21 @@ type TypeProps = {
 function ChangeNumber(num: number) {
 
   if (num % 1 !== 0) {
-    num *= 10000000000
-    num = Math.round(num)
-    num /= 10000000000
-    var parts = num.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.round(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+
+
+
+      }
+    }
   } else {
     return num.toLocaleString()
 
@@ -138,6 +149,7 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
 
   useEffect(() => {
     // console.log('传过来的数据', data)
+
 
 
   }, [data])

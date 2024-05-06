@@ -12,7 +12,7 @@ export const HORIZONTAL_MAX_ITEM = 6;
 export const DRAWER_WIDTH = 260;
 export const BasicIssuanceModule = "0x0Dd18972815D8A2b611F82F57E0bA26faaA972e1";
 export const UniswapSepoliaRouterContract = "0x03bF31D072F676ee35b3B065a9CDFD8085Cb7002";
-export const sepolia_rpc = "https://arb-sepolia.g.alchemy.com/v2/k4x_zgCFGtWQv6DoYyKGrWrvnpYJsVl_"
+export const sepolia_rpc = "https://arbitrum-sepolia-rpc.publicnode.com"
 export const H30_Address = '0x19cb7Ac5E56Fa4ea4da5F20e27097903dd07aF52'
 
 

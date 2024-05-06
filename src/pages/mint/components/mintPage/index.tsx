@@ -1,8 +1,8 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { Button, IconButton, Stack, Typography, Box } from '@mui/material';
+import { Button, Stack, Typography, Box } from '@mui/material';
 import TokenColorIcon from 'assets/tokens';
 import React, { useEffect, useState } from 'react';
-import { MdAddBox, MdIndeterminateCheckBox } from "react-icons/md";
+// import { MdAddBox, MdIndeterminateCheckBox } from "react-icons/md";
 import { useAccount } from 'wagmi';
 import SelectIndexToken from './select_indexToken';
 import { styled } from '@mui/material/styles';
@@ -21,6 +21,8 @@ type DataType = {
   address: any;
   num: string;
   balance: string;
+  allowance: string
+  decimals: string
 
 }
 
@@ -53,7 +55,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     fontSize: 22,
     fontWeight: 700,
     width: '99%',
-    textAlign: 'center',
+    textAlign: 'start',
     // Use the system font instead of the default Roboto font.
     fontFamily: [
       '-apple-system',
@@ -83,17 +85,24 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
   const [inputValue, setInputValue] = useState('')
 
   const InputChange = (event: any) => {
-    setInputValue(event.target.value)
-
+    const newValue = event.target.value.replace(/-/, '')
+    setInputValue(newValue)
   }
 
-  const onDec = () => {
-    setInputValue((pre) => String(Number(pre) - 1))
-  }
+  // const onDec = () => {
+  //   setInputValue((pre) => String(Number(pre) - 1))
+  // }
 
 
-  const onInc = () => {
-    setInputValue((pre) => String(Number(pre) + 1))
+  // const onInc = () => {
+  //   setInputValue((pre) => String(Number(pre) + 1))
+  // }
+
+  const handleBlur = () => {
+    const parsedValue = parseFloat(inputValue)
+    if (!isNaN(parsedValue) && parsedValue < 0) {
+      setInputValue(String(Math.abs(parsedValue)))
+    }
   }
 
 
@@ -135,7 +144,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
 
   // const { status } = useEnsName({ address });
 
-  const [indexToken, setIndexToken] = React.useState(address !== undefined ? 'Select Index' : 'H2_test');
+  const [indexToken, setIndexToken] = React.useState('H20');
 
   const handleSwapOpen = () => {
     setOpenSwap(true)
@@ -235,12 +244,12 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                   sx={{
                     width: "600px", margin: "0 auto", mb: '20px'
                   }}
-                ><TokensList data={tokensData} inputNum={inputValue} name={H30Data[0]?.symbol} windowWidth={windowWidth} /></Box>
+                ><TokensList data={tokensData} inputNum={inputValue} name='H20' windowWidth={windowWidth} /></Box>
 
               )
             }
             <Box sx={{ width: '100%' }}>
-              <ReviewSwap windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} name={H30Data[0]?.symbol} onChange={onChange} windowWidth={windowWidth} />
+              <ReviewSwap windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} name="H20" onChange={onChange} windowWidth={windowWidth} />
               <Box
                 sx={{
                   p: "12px 20px", backgroundColor: "#f6f6f6", borderRadius: "20px",
@@ -254,98 +263,38 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                   </Typography>
 
                   <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
-                    $ 31.5
+                    $ 0.00
                   </Typography>
                   <Stack alignItems="center" direction="row" sx={{ padding: '12px 0' }} justifyContent="space-between" spacing={2}>
-                    <Stack flex={1} direction="row" alignItems="center" spacing="2px">
+                    <BootstrapInput value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: '#464646' }} placeholder="0" />
+
+                    {/* <Stack flex={1} direction="row" alignItems="center" spacing="2px">
                       <IconButton onClick={onDec} size="large" sx={{ p: 0, width: '30px', height: '30px' }}><MdIndeterminateCheckBox color="#9b9b9b" size={30} /></IconButton>
-                      <BootstrapInput value={inputValue} onChange={InputChange} sx={{ color: '#464646' }} placeholder="0" />
+                      <BootstrapInput minRows={0} value={inputValue} onChange={InputChange} sx={{ color: '#464646' }} placeholder="0" />
                       <IconButton onClick={onInc} size="large" sx={{ p: 0, width: '30px', height: '30px' }}><MdAddBox color="#9b9b9b" size={30} /></IconButton>
-                    </Stack>
+                    </Stack> */}
                     <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onMax} color="primary">
                       MAX
                     </Typography>
 
 
 
-
-                    {
-                      address !== undefined ? (
-                        <>
-                          {
-                            indexToken == "Select Index" ? (
-                              <>
-                                <IndexTokenButton
-                                  variant="text"
-                                  sx={{
-                                    borderRadius: '1.12rem',
-                                    backgroundColor: '#1AAE70',
-                                    fontWeight: '500',
-                                    color: '#fff',
-                                    fontSize: '14px',
-                                    padding: '4px 8px'
-                                  }}
-                                  onClick={handleClickOpen}
-                                  endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                                >
-                                  {indexToken === 'Select Index' ? <></> : <TokenColorIcon size={20} name={indexToken} />}
-                                  {indexToken}
-                                </IndexTokenButton>
-                              </>
-
-                            ) : (
-                              <>
-                                <IndexTokenButton
-                                  variant="text"
-                                  sx={{
-                                    borderRadius: '1.12rem',
-                                    backgroundColor: '#fff',
-                                    border: 'none',
-                                    color: '#000',
-                                    fontSize: '14px',
-                                    padding: '4px 8px'
-                                  }}
-                                  onClick={handleClickOpen}
-                                  endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                                >
-                                  {indexToken === 'Select Index' ? <></> : <TokenColorIcon size={20} name={indexToken} />}
-                                  {indexToken}
-                                </IndexTokenButton>
-                              </>
-
-                            )
-
-                          }
-                        </>
-
-
-
-                      ) : (
-                        <>
-
-
-                          <IndexTokenButton
-                            variant="text"
-                            sx={{
-                              borderRadius: '1.12rem',
-                              backgroundColor: '#fff',
-                              border: 'none',
-                              color: '#000',
-                              fontSize: '14px',
-                              padding: '4px 8px'
-                            }}
-                            onClick={handleClickOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                          >
-                            {indexToken === 'Select Index' ? <></> : <TokenColorIcon size={20} name={indexToken} />}
-                            {indexToken}
-                          </IndexTokenButton>
-                        </>
-
-
-
-                      )
-                    }
+                    <IndexTokenButton
+                      variant="text"
+                      sx={{
+                        borderRadius: '1.12rem',
+                        backgroundColor: '#fff',
+                        border: 'none',
+                        color: '#000',
+                        fontSize: '14px',
+                        padding: '4px 8px'
+                      }}
+                      onClick={handleClickOpen}
+                      startIcon={<TokenColorIcon size={20} name={indexToken} />}
+                      endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                    >
+                      {indexToken}
+                    </IndexTokenButton>
                   </Stack>
                 </Box>
 
@@ -356,38 +305,23 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                 address !== undefined ? (
                   <>
                     {
-                      indexToken == "Select Index" ? (
-                        <>
-                          <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                            <SelectButton disabled>Select a index token</SelectButton>
-                          </Box>
-                        </>
+                      inputValue == '' ? (
+                        <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
+                          <SelectButton disabled>Enter amount</SelectButton>
+                        </Box>
 
                       ) : (
                         <>
                           {
-                            inputValue == '' ? (
+                            tokensData.every(item => Number(item.balance) >= Number(item.num) * Number(inputValue)) ? (
                               <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                                <SelectButton disabled>Enter amount</SelectButton>
+                                <EnterButton onClick={handleSwapOpen}>{`Mint H20`}</EnterButton>
                               </Box>
 
                             ) : (
-                              <>
-                                {
-                                  tokensData.every(item => Number(item.balance) >= Number(item.num) * Number(inputValue)) ? (
-                                    <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                                      <EnterButton onClick={handleSwapOpen}>{`Mint ${H30Data[0].symbol}`}</EnterButton>
-                                    </Box>
-
-                                  ) : (
-                                    <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                                      <SelectButton disabled>Insufficient balane</SelectButton>
-                                    </Box>
-
-                                  )
-                                }
-
-                              </>
+                              <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
+                                <SelectButton disabled>Insufficient balane</SelectButton>
+                              </Box>
 
                             )
                           }
@@ -395,7 +329,6 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                         </>
 
                       )
-
                     }
                   </>
 
@@ -424,12 +357,12 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                     mb: '10px',
                     width: "100%"
                   }}
-                ><TokensList data={tokensData} inputNum={inputValue} name={H30Data[0]?.symbol} windowWidth={windowWidth} /></Box>
+                ><TokensList data={tokensData} inputNum={inputValue} name='H20' windowWidth={windowWidth} /></Box>
 
               )
             }
             <Box sx={{ width: '100%' }}>
-              <ReviewSwap windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} onChange={onChange} name={H30Data[0]?.symbol} windowWidth={windowWidth} />
+              <ReviewSwap windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} onChange={onChange} name='H20' windowWidth={windowWidth} />
               <Box
                 sx={{
                   p: "10px 12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
@@ -443,14 +376,16 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                   </Typography>
 
                   <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
-                    $ 31.5
+                    $ 0.00
                   </Typography>
                   <Stack alignItems="center" direction="row" sx={{ padding: '12px 0' }} justifyContent="space-between" spacing="4px">
-                    <Stack flex={1} direction="row" alignItems="center" spacing="2px">
+                    <BootstrapInput minRows={0} value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: '#464646', fontSize: '20px' }} placeholder="0" />
+
+                    {/* <Stack flex={1} direction="row" alignItems="center" spacing="2px">
                       <IconButton onClick={onDec} size="large" sx={{ p: 0, width: '20px', height: '20px' }}><MdIndeterminateCheckBox color="#9b9b9b" size={30} /></IconButton>
                       <BootstrapInput value={inputValue} onChange={InputChange} sx={{ color: '#464646', fontSize: '20px' }} placeholder="0" />
                       <IconButton onClick={onInc} size="large" sx={{ p: 0, width: '20px', height: '20px' }}><MdAddBox color="#9b9b9b" size={30} /></IconButton>
-                    </Stack>
+                    </Stack> */}
                     <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onMax} color="primary">
                       MAX
                     </Typography>
@@ -458,83 +393,22 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
 
 
 
-                    {
-                      address !== undefined ? (
-                        <>
-                          {
-                            indexToken == "Select Index" ? (
-                              <>
-                                <IndexTokenButton
-                                  variant="text"
-                                  sx={{
-                                    borderRadius: '1.12rem',
-                                    backgroundColor: '#1AAE70',
-                                    fontWeight: '500',
-                                    color: '#fff',
-                                    fontSize: '14px',
-                                    padding: '4px 8px'
-                                  }}
-                                  onClick={handleClickOpen}
-                                  endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                                >
-                                  {indexToken === 'Select Index' ? <></> : <TokenColorIcon size={20} name={indexToken} />}
-                                  {indexToken}
-                                </IndexTokenButton>
-                              </>
-
-                            ) : (
-                              <>
-                                <IndexTokenButton
-                                  variant="text"
-                                  sx={{
-                                    borderRadius: '1.12rem',
-                                    backgroundColor: '#fff',
-                                    border: 'none',
-                                    color: '#000',
-                                    fontSize: '14px',
-                                    padding: '4px 8px'
-                                  }}
-                                  onClick={handleClickOpen}
-                                  endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                                >
-                                  {indexToken === 'Select Index' ? <></> : <TokenColorIcon size={20} name={indexToken} />}
-                                  {indexToken}
-                                </IndexTokenButton>
-                              </>
-
-                            )
-
-                          }
-                        </>
-
-
-
-                      ) : (
-                        <>
-
-
-                          <IndexTokenButton
-                            variant="text"
-                            sx={{
-                              borderRadius: '1.12rem',
-                              backgroundColor: '#fff',
-                              border: 'none',
-                              color: '#000',
-                              fontSize: '14px',
-                              padding: '4px 8px'
-                            }}
-                            onClick={handleClickOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
-                          >
-                            {indexToken === 'Select Index' ? <></> : <TokenColorIcon size={20} name={indexToken} />}
-                            {indexToken}
-                          </IndexTokenButton>
-                        </>
-
-
-
-                      )
-                    }
+                    <IndexTokenButton
+                      variant="text"
+                      sx={{
+                        borderRadius: '1.12rem',
+                        backgroundColor: '#fff',
+                        border: 'none',
+                        color: '#000',
+                        fontSize: '14px',
+                        padding: '4px 8px'
+                      }}
+                      onClick={handleClickOpen}
+                      startIcon={<TokenColorIcon size={20} name={indexToken} />}
+                      endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                    >
+                      {indexToken}
+                    </IndexTokenButton>
                   </Stack>
                 </Box>
 
@@ -545,38 +419,23 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                 address !== undefined ? (
                   <>
                     {
-                      indexToken == "Select Index" ? (
-                        <>
-                          <Box sx={{ width: '100%', mt: '10px' }}>
-                            <SelectButton disabled>Select a index token</SelectButton>
-                          </Box>
-                        </>
+                      inputValue == '' ? (
+                        <Box sx={{ width: '100%', mt: '10px' }}>
+                          <SelectButton disabled>Enter amount</SelectButton>
+                        </Box>
 
                       ) : (
                         <>
                           {
-                            inputValue == '' ? (
+                            tokensData.every(item => Number(item.balance) >= Number(item.num) * Number(inputValue)) ? (
                               <Box sx={{ width: '100%', mt: '10px' }}>
-                                <SelectButton disabled>Enter amount</SelectButton>
+                                <EnterButton onClick={handleSwapOpen}>{`Mint H20`}</EnterButton>
                               </Box>
 
                             ) : (
-                              <>
-                                {
-                                  tokensData.every(item => Number(item.balance) >= Number(item.num) * Number(inputValue)) ? (
-                                    <Box sx={{ width: '100%', mt: '10px' }}>
-                                      <EnterButton onClick={handleSwapOpen}>{`Mint ${H30Data[0].symbol}`}</EnterButton>
-                                    </Box>
-
-                                  ) : (
-                                    <Box sx={{ width: '100%', mt: '10px' }}>
-                                      <SelectButton disabled>Insufficient balane</SelectButton>
-                                    </Box>
-
-                                  )
-                                }
-
-                              </>
+                              <Box sx={{ width: '100%', mt: '10px' }}>
+                                <SelectButton disabled>Insufficient balane</SelectButton>
+                              </Box>
 
                             )
                           }
@@ -584,7 +443,6 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                         </>
 
                       )
-
                     }
                   </>
 

@@ -56,7 +56,7 @@ export default function RedeemSelectIndexToken({ open, handleClose, handleListCl
             <DialogContent>
               <Stack direction="row" justifyContent="space-between" sx={{ pr: 2, pl: 2 }}>
                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                  ETF Token
+                  Index Token
                 </Typography>
                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
                   My balance
@@ -84,7 +84,7 @@ export default function RedeemSelectIndexToken({ open, handleClose, handleListCl
               </Stack>
               <Stack direction="row" justifyContent="space-between" sx={{ p: '0 10px' }}>
                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                  ETF Token
+                  Index Token
                 </Typography>
                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
                   My balance

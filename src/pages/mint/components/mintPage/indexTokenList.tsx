@@ -16,12 +16,23 @@ interface Props {
 function formatNumber(num: number) {
 
   if (num % 1 !== 0) {
-    num *= 100000
-    num = Math.round(num)
-    num /= 100000
-    var parts = num.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.round(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+
+
+
+      }
+    }
+
+
   } else {
     return num.toLocaleString()
 

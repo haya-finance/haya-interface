@@ -12,7 +12,7 @@ type DataProps = {
   toToken: string,
   fromToken: string,
   windowWeight: number,
-  oneSwap: string
+
 }
 
 const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
@@ -31,7 +31,7 @@ const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 
 
-export default function ShowSwap({ toToken, fromToken, windowWeight, oneSwap }: DataProps) {
+export default function ShowSwap({ toToken, fromToken, windowWeight, }: DataProps) {
 
   const [hidden, setHidden] = React.useState(true)
   const handleChange = () => {

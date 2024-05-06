@@ -28,7 +28,7 @@ interface Props {
   handleClose: () => void;
   handleListClose: (value: string) => void;
   data: any[];
-  windowWidth: number
+  windowWidth: number;
 
 }
 

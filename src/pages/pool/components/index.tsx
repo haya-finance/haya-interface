@@ -1,12 +1,12 @@
 
-import { SettingOutlined } from '@ant-design/icons';
+// import { SettingOutlined } from '@ant-design/icons';
 import { Box, Card, Stack, Typography } from '@mui/material';
 
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 // import Web3 from 'web3'
 import tokenAbi from 'abi/token.json'
-import { H30_Address, sepolia_rpc } from 'config';
+import { H30_Address, sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
 import { ethers } from 'ethers';
 import PoolSons from './poolPage';
 
@@ -23,7 +23,9 @@ type TokenListType = {
   symbol: string;
   address: string;
   balance: string;
-  network: string
+  network: string;
+  allowance: string
+
 }
 
 export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
@@ -34,42 +36,50 @@ export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
   // 第一个H30地址，第二个Weh地址
   const [tokenList, setTokenList] = useState<TokenListType[]>([
     {
-      symbol: '',
+      symbol: 'H20',
       address: H30_Address,
       balance: '0',
-      network: chain?.name ?? 'Arbitrum Sepolia'
+      network: chain?.name ?? 'Arbitrum Sepolia',
+      allowance: ''
     },
     {
-      symbol: '',
+      symbol: 'ETH',
       address: '0x0cE40884F9460593Dd804E346E2fE7CA9b35D3c7',
       balance: '0',
-      network: chain?.name ?? 'Arbitrum Sepolia'
+      network: chain?.name ?? 'Arbitrum Sepolia',
+      allowance: ''
 
     }
   ])
 
 
 
-  const getSymbol = async (add: any) => {
+
+
+
+  const getBalance = async (add: any) => {
     const contract = new ethers.Contract(add, tokenAbi, provider)
 
-    await contract.symbol().then((res1: any) => {
-      setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, symbol: String(res1)?.split('-')[0] } : item))
+    await contract.balanceOf(address).then(async (res2: any) => {
+      // console.log('数据', res2)
+      await contract.allowance(address, UniswapSepoliaRouterContract).then((res3: any) => {
+
+        setTokenList((pre) => pre.map((item) => item.symbol === 'H20' ? { ...item, balance: String(Number(res2) / (10 ** 18)), allowance: String(BigInt(res3) / BigInt(10 ** 18)) } : item))
+      })
+
+
+
     }).catch((_err) => {
 
     })
   }
 
 
-  const getBalance = async (add: any) => {
-    const contract = new ethers.Contract(add, tokenAbi, provider)
+  const getEthBalance = async () => {
+    const balance = await provider.getBalance(address ?? '')
+    // console.log("balance", balance)
+    setTokenList((pre) => pre.map((item) => item.symbol === 'ETH' ? { ...item, balance: String(Number(balance) / (10 ** 18)), allowance: String(ethers.MaxUint256) } : item))
 
-    await contract.balanceOf(address).then((res2: any) => {
-      setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, balance: String(BigInt(res2)) } : item))
-
-    }).catch((_err) => {
-
-    })
   }
 
 
@@ -78,11 +88,24 @@ export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
 
     if (address !== undefined) {
       for (let i = 0; i < tokenList.length; i++) {
-        getBalance(tokenList[i].address)
+        if (tokenList[i].symbol == 'ETH') {
+          getEthBalance()
+
+        } else {
+          getBalance(tokenList[i].address)
+        }
 
       }
     }
   }
+
+
+  useEffect(() => {
+
+  }, [tokenList])
+
+
+
 
 
 
@@ -90,12 +113,14 @@ export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
   useEffect(() => {
 
     for (let i = 0; i < tokenList.length; i++) {
-      getSymbol(tokenList[i].address)
-
-
 
       if (address !== undefined) {
-        getBalance(tokenList[i].address)
+        if (tokenList[i].symbol == 'ETH') {
+          getEthBalance()
+
+        } else {
+          getBalance(tokenList[i].address)
+        }
       }
     }
 
@@ -104,24 +129,7 @@ export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
   // const [openWallet, setOpenWallet] = useState(false)
 
 
-  // const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  //   width: '100%',
-  //   color: '#fff',
-  //   backgroundColor: '#1AAE70',
-  //   '&:hover': {
-  //     backgroundColor: '#1AAE70',
-  //   },
-  // }));
 
-
-
-  // const walletConnect = () => {
-  //   setOpenWallet(true);
-  // };
-
-  // const onClose = () => {
-  //   setOpenWallet(false);
-  // };
 
 
   return (
@@ -138,7 +146,7 @@ export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
                     </Typography>
                   </Stack>
                   <Box>
-                    <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} />
+                    {/* <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} /> */}
                   </Box>
                 </Stack>
                 <PoolSons data={tokenList} windowHeight={windowHeight} windowWeight={windowWidth} OnChange={OnChange} />
@@ -152,7 +160,7 @@ export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
                     </Typography>
                   </Stack>
                   <Box>
-                    <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} />
+                    {/* <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} /> */}
                   </Box>
                 </Stack>
                 <PoolSons data={tokenList} windowHeight={windowHeight} windowWeight={windowWidth} OnChange={OnChange} />

@@ -10,6 +10,31 @@ interface Props {
   data: any[]
 }
 
+
+function formatNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.round(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+
+
+
+      }
+    }
+  } else {
+    return num.toLocaleString()
+
+  }
+}
+
 export default function TokenFromList({ onClose, data }: Props) {
 
 
@@ -35,7 +60,7 @@ export default function TokenFromList({ onClose, data }: Props) {
                       <Typography variant="inherit" sx={{ color: '#8c8c8c', fontSize: '13px', fontWeight: 400, textAlign: 'start' }}>{item.network}</Typography>
                     </Stack>
                   </Stack>
-                  <Typography variant="inherit">{String(Number(item.balance) / (10 ** 18))}</Typography>
+                  <Typography variant="inherit">{formatNumber(Number(item.balance))}</Typography>
 
                 </Stack>
               </Box>

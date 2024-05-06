@@ -1,5 +1,5 @@
 
-import { SettingOutlined } from '@ant-design/icons';
+// import { SettingOutlined } from '@ant-design/icons';
 import { Box, Card, Stack } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Button, { ButtonProps } from '@mui/material/Button';
@@ -10,7 +10,7 @@ import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
 import SwapSons from './swapPage';
 // import Web3 from 'web3'
 import tokenAbi from 'abi/token.json'
-import { sepolia_rpc } from 'config';
+import { sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
 import { ethers } from 'ethers';
 
 // const web3 = new Web3(sepolia_rpc)
@@ -26,7 +26,9 @@ type TokenListType = {
   symbol: string;
   address: string;
   balance: string;
-  network: string
+  network: string;
+  decimasl: string;
+  allowance: string
 }
 
 export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
@@ -34,41 +36,76 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
   const { address, chain } = useAccount()
 
-  // 第一个eth地址，第二个h30地址
+  // 第一个weth地址，第二个h30地址,  第四个 USDT， 第五个USDC
   const [tokenList, setTokenList] = useState<TokenListType[]>([
     {
-      symbol: '',
+      symbol: 'WETH',
       address: '0x0cE40884F9460593Dd804E346E2fE7CA9b35D3c7',
       balance: '0',
-      network: chain?.name ?? 'Arbitrum Sepolia'
+      network: chain?.name ?? 'Arbitrum Sepolia',
+      decimasl: '',
+      allowance: ''
     },
     {
-      symbol: '',
+      symbol: 'H20',
       address: '0x19cb7Ac5E56Fa4ea4da5F20e27097903dd07aF52',
       balance: '0',
-      network: chain?.name ?? 'Arbitrum Sepolia'
+      network: chain?.name ?? 'Arbitrum Sepolia',
+      decimasl: '',
+      allowance: ''
 
-    }
+    },
+    {
+      symbol: 'USDT',
+      address: '0xD7fbE1d17b8bAB5e94377428fcDC04904f39c4F4',
+      balance: '0',
+      network: chain?.name ?? 'Arbitrum Sepolia',
+      decimasl: '',
+      allowance: ''
+
+    },
+    {
+      symbol: 'USDC',
+      address: '0x3b88ef38959aC57f69eF2798e03c0E8994F1a3aa',
+      balance: '0',
+      network: chain?.name ?? 'Arbitrum Sepolia',
+      decimasl: '',
+      allowance: ''
+    },
+    // {
+    //   symbol: 'ETH',
+    //   address: '0x0d05D33Ab10870069DE5Aa7Ddcd42fbEB8C44dCd',
+    //   balance: '0',
+    //   network: chain?.name ?? 'Arbitrum Sepolia',
+    //   decimasl: '',
+    //   allowance: ''
+    // }
   ])
 
 
 
-  const getSymbol = async (add: any) => {
-    const contract = new ethers.Contract(add, tokenAbi, provider)
 
-    await contract.symbol().then((res1: any) => {
-      setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, symbol: String(res1)?.split('-')[0] } : item))
-    }).catch((_err) => {
-
-    })
-  }
 
 
   const getBalance = async (add: any) => {
     const contract = new ethers.Contract(add, tokenAbi, provider)
 
-    await contract.balanceOf(address).then((res2: any) => {
-      setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, balance: String(BigInt(res2)) } : item))
+
+
+
+    await contract.balanceOf(address).then(async (res2: any) => {
+      await contract.decimals().then(async (decimasl: any) => {
+        await contract.allowance(address, UniswapSepoliaRouterContract).then((allow: any) => {
+
+          setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, balance: String(Number(res2) / (10 ** Number(decimasl))), decimasl: decimasl, allowance: String(BigInt(allow) / BigInt((10 ** Number(decimasl)))) } : item))
+
+
+        })
+
+
+
+      })
+
 
     }).catch((_err) => {
 
@@ -94,16 +131,32 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
 
 
+  const getEthBalance = async () => {
+    const balance = await provider.getBalance(address ?? '')
+    setTokenList((pre) => pre.map((item) => item.symbol === 'ETH' ? { ...item, balance: String(Number(balance) / (10 ** 18)), decimasl: String(18), allowance: String(ethers.MaxUint256) } : item))
+
+  }
+
+
+
 
   useEffect(() => {
 
     for (let i = 0; i < tokenList.length; i++) {
-      getSymbol(tokenList[i]?.address)
+
 
 
 
       if (address !== undefined) {
-        getBalance(tokenList[i]?.address)
+        if (tokenList[i].symbol == 'ETH') {
+          getEthBalance()
+
+
+
+
+        } else {
+          getBalance(tokenList[i]?.address)
+        }
       }
     }
 
@@ -145,7 +198,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
                   </Box>
                 </Stack>
                 <Box>
-                  <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} />
+                  {/* <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} /> */}
                 </Box>
               </Stack>
             ) : (
@@ -156,7 +209,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
                   </Box>
                 </Stack>
                 <Box>
-                  <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} />
+                  {/* <SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} /> */}
                 </Box>
               </Stack>
             )

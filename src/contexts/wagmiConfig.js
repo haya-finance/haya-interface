@@ -15,7 +15,7 @@ const projectId = '823b8497d9c99138b4aebecfa4425469'
 export const config = createConfig({
   chains: [arbitrumSepolia],
   connectors: [
-    injected({ target: 'metaMask' }),
+    injected({ target: 'metaMask', chains: [arbitrumSepolia] }),
     walletConnect({ projectId }),
     coinbaseWallet({
       enableMobileWalletLink: true,

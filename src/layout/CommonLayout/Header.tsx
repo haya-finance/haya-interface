@@ -141,6 +141,8 @@ const NavtionButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 
 const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeight, ...others }: Props) => {
+
+
   const theme = useTheme();
   const matchDownMd = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -164,10 +166,10 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
     }
   ]
 
-  const [network, setNetwork] = React.useState<NetworkType>(address === undefined ? {
+  const [network, setNetwork] = React.useState<NetworkType>({
     id: 421614,
     name: 'Arbitrum Sepolia'
-  } : { name: chain?.name, id: chain?.id })
+  })
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const [open, setOpen] = React.useState(false);
   const handleClose = (event: Event | React.SyntheticEvent) => {
@@ -267,9 +269,9 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                       <Link className='header-link' to="/swap" sx={{ fontSize: '14px', lineHeight: '24px', p: 0, color: currentPath === '/swap' ? '#1aae70' : '#000' }} component={RouterLink} underline="none">
                         Swap
                       </Link>
-                      {/* <Link className='header-link' to="/pool" sx={{ fontSize: '14px', lineHeight: '24px', p: 0, color: currentPath === '/pool' ? '#1aae70' : '#000' }} component={RouterLink} underline="none">
+                      <Link className='header-link' to="/pool" sx={{ fontSize: '14px', lineHeight: '24px', p: 0, color: currentPath === '/pool' ? '#1aae70' : '#000' }} component={RouterLink} underline="none">
                         Pool
-                      </Link> */}
+                      </Link>
                       <Link className='header-link' to="/mint" sx={{ fontSize: '14px', lineHeight: '24px', p: 0, color: currentPath === '/mint' ? '#1aae70' : '#000' }} component={RouterLink} underline="none">
                         Mint
                       </Link>
@@ -496,9 +498,9 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                 <NavtionButton sx={{ backgroundColor: currentPath === '/swap' ? '#f6f6f6' : 'transparent', color: currentPath === '/swap' ? '#1aae70' : '#464646', borderRadius: currentPath === '/swap' ? '10px' : 0 }} onClick={() => onClickNav('/swap')}>
                   Swap
                 </NavtionButton>
-                {/* <NavtionButton sx={{ backgroundColor: currentPath === '/pool' ? '#f6f6f6' : 'transparent', color: currentPath === '/pool' ? '#1aae70' : '#464646', borderRadius: currentPath === '/pool' ? '10px' : 0 }} onClick={() => onClickNav('/pool')}>
+                <NavtionButton sx={{ backgroundColor: currentPath === '/pool' ? '#f6f6f6' : 'transparent', color: currentPath === '/pool' ? '#1aae70' : '#464646', borderRadius: currentPath === '/pool' ? '10px' : 0 }} onClick={() => onClickNav('/pool')}>
                   Pool
-                </NavtionButton> */}
+                </NavtionButton>
                 <NavtionButton sx={{ backgroundColor: currentPath === '/mint' ? '#f6f6f6' : 'transparent', color: currentPath === '/mint' ? '#1aae70' : '#464646', borderRadius: currentPath === '/mint' ? '10px' : 0 }} onClick={() => onClickNav('/mint')}>
                   Mint
                 </NavtionButton>

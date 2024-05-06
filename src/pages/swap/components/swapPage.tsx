@@ -2,7 +2,7 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Stack, Typography, Box } from '@mui/material';
 import TokenColorIcon from 'assets/tokens';
 import React, { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { styled } from '@mui/material/styles';
 import { ButtonProps } from '@mui/material/Button';
 
@@ -65,16 +65,69 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
 
 
+function formatNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.round(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    return num.toLocaleString()
+
+  }
+}
+
+
+function ValueNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.round(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        // console.log(parts)
+        // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    num *= 10000
+    num = Math.round(num)
+    num /= 10000
+
+    return String(num)
+
+  }
+}
+
+
+
 
 
 
 
 const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
+  // console.log('data', data)
+
 
   const provider = new ethers.JsonRpcProvider(sepolia_rpc)
 
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
+  const [disable, setDisable] = React.useState(true)
 
 
 
@@ -84,6 +137,16 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
 
   // console.log('arrs', arrs)
+
+
+
+
+  useEffect(() => {
+    if (chain?.id !== undefined) {
+      setDisable(false)
+    }
+
+  }, [chain?.id])
 
 
   const [open, setOpen] = React.useState(false);
@@ -96,19 +159,22 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
 
   const [inputToValue, setInputValue] = useState('')
+  const [inputToShowValue, setInputShowValue] = useState('')
 
 
   const [pay, setPay] = React.useState('Select token')
 
   const [balance, setBalance] = React.useState('0')
+  const [reBalance, setReBalance] = React.useState('0')
 
 
   const [inputReValue, setInputReValue] = useState('')
+  const [inputReShowValue, setInputReShowValue] = useState('')
 
   const [oneValue, setOneValue] = useState('0')
 
 
-  const [receive, setReceive] = React.useState('H2_test')
+  const [receive, setReceive] = React.useState('H20')
 
   const handleSwapOpen = () => {
     setOpenSwap(true)
@@ -120,6 +186,8 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
     setOpenSwap(false)
     setInputValue('')
     setInputReValue('')
+    setInputShowValue('')
+    setInputReShowValue('')
   }
 
   const handleClickFromOpen = () => {
@@ -206,21 +274,132 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
     },
   }));
 
+
+  const ConnectNetorkButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    width: '100%',
+    color: '#fff',
+    backgroundColor: '#1AAE70',
+    '&:hover': {
+      backgroundColor: '#1AAE70',
+    },
+  }));
+
+  const Swap = async (value: any) => {
+
+    // console.log(signer)
+
+    const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, provider)
+
+    // console.log(data.filter(item => item.symbol == pay)[0].address, data.filter(item => item.symbol == receive)[0].address, swapContract)
+
+    await swapContract.getAmountsOut(BigInt(Number(value) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
+      // console.log('结果', res)
+      setInputReValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
+      setInputReShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
+    }).catch(err => {
+      setInputReValue('0')
+      setInputReShowValue('0')
+      // console.log('错误输出', err)
+    })
+
+  }
+
+
+  const ReSwap = async (value: any) => {
+
+    // console.log(signer)
+
+    const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, provider)
+
+    // console.log(BigInt(Number(value) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === pay)[0].address])
+
+    await swapContract.getAmountsOut(BigInt(Number(value) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === pay)[0].address]).then((res: any) => {
+      // console.log('结果', res)
+      setInputValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
+      setInputShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
+    }).catch(err => {
+      setInputValue('0')
+      setInputShowValue('0')
+      // console.log('错误输出', err)
+    })
+
+  }
+
+
+  useEffect(() => {
+
+  }, [inputReShowValue, inputToShowValue])
+
+  const OneSwap = async () => {
+
+    // const signer = await provider.getSigner()
+
+    const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, provider)
+
+    await swapContract.getAmountsOut(BigInt(Number('1') * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
+      // console.log('结果', res)
+      setOneValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
+    })
+
+  }
+
   const InputChange = (event: any) => {
-    setInputValue(event.target.value)
+    const newValue = event.target.value.replace(/-/, '')
+    setInputValue(newValue)
+    setInputShowValue(newValue)
+    if (pay !== 'Select token' && receive !== "Select token") {
+      Swap(newValue)
+      OneSwap()
+    }
+
 
   }
 
   const InputFromChange = (event: any) => {
-    setInputReValue(event.target.value)
+    const newValue = event.target.value.replace(/-/, '')
+    setInputReValue(newValue)
+    setInputReShowValue(newValue)
+    if (pay !== 'Select token' && receive !== "Select token") {
+      // console.log('数量', newValue)
+      ReSwap(newValue)
+      OneSwap()
+    }
 
+  }
+
+  const handleBlur = () => {
+    const parsedValue = parseFloat(inputToValue)
+    if (!isNaN(parsedValue) && parsedValue < 0) {
+      setInputValue(String(Math.abs(parsedValue)))
+      setInputShowValue(String(Math.abs(parsedValue)))
+    }
+  }
+
+  const handleReBlur = () => {
+    const parsedValue = parseFloat(inputReValue)
+    if (!isNaN(parsedValue) && parsedValue < 0) {
+      setInputReValue(String(Math.abs(parsedValue)))
+      setInputReShowValue(String(Math.abs(parsedValue)))
+    }
   }
 
 
   useEffect(() => {
     // console.log('自己账户的钱', balance)
 
-  }, [balance])
+  }, [balance, reBalance])
+
+  useEffect(() => {
+    // console.log('自己账户的钱', balance)
+    if (address !== undefined && pay !== "Select token") {
+      setDisable(false)
+      const tokens = data.filter(item => item.symbol === pay)
+      const Retokens = data.filter(item => item.symbol === receive)
+      setBalance(String(Number(tokens[0]?.balance)))
+      setReBalance(String(Number(Retokens[0]?.balance)))
+    }
+
+  }, [address])
 
 
 
@@ -231,56 +410,34 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
   }
 
 
-  const Swap = async (value: any) => {
 
-    // console.log(signer)
-
-    const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, provider)
-
-    // console.log(data.filter(item => item.symbol == pay)[0].address, data.filter(item => item.symbol == receive)[0].address, swapContract)
-
-    await swapContract.getAmountsOut(BigInt(Number(value) * (10 ** 18)), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
-      // console.log('结果', res)
-      setInputReValue(String(Number(res[1]) / (10 ** 18)))
-    }).catch(err => {
-      setInputReValue('0')
-      // console.log('错误输出', err)
-    })
-
-  }
-
-  const OneSwap = async () => {
-
-    // const signer = await provider.getSigner()
-
-    const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, provider)
-
-    await swapContract.getAmountsOut(BigInt(Number('1') * (10 ** 18)), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
-      // console.log('结果', res)
-      setOneValue(String(Number(res[1]) / (10 ** 18)))
-    })
-
-  }
 
 
   useEffect(() => {
 
-    // console.log('变化')
 
-    if (inputToValue !== '0' && pay !== 'Select token') {
-      Swap(inputToValue)
-    }
 
     if (pay !== "Select token" && address !== undefined) {
       const tokens = data.filter(item => item.symbol === pay)
-      setBalance(String(Number(tokens[0]?.balance) / 10 ** 18))
+      // console.log('tokens', tokens)
+      setBalance(String(Number(tokens[0]?.balance)))
     }
 
-    if (pay !== "Select token") {
+    if (pay !== 'Select token' && receive !== 'Select token') {
+
       OneSwap()
+      if (inputToValue !== "") {
+        Swap(inputToValue)
+      } else if (inputReValue !== "") {
+        ReSwap(inputReValue)
 
+      }
     }
-  }, [pay, inputToValue, balance])
+  }, [pay, receive])
+
+
+
+
 
 
   useEffect(() => {
@@ -291,8 +448,18 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
   const onMax = () => {
     if (pay !== 'Select token') {
-      setInputValue(String(Number(data.filter(item => item.symbol === pay)[0]?.balance) / (10 ** 18)))
+      const tokens = data.filter(item => item.symbol === pay)
+      setInputValue(String(Number(tokens[0]?.balance) / Number(tokens[0]?.decimasl)))
+      setInputShowValue(String(Number(tokens[0]?.balance) / Number(tokens[0]?.decimasl)))
     }
+
+  }
+
+  const { switchChain } = useSwitchChain()
+
+
+  const onChangeNetwork = () => {
+    switchChain({ chainId: 421614 })
 
   }
 
@@ -325,12 +492,12 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   </Typography>
 
                   <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 31.5
+                    $ 0.00
                   </Typography>
-                  <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
+                  <Box sx={{ position: 'absolute', top: 0, right: '2px', display: pay === 'Select token' ? 'none' : "block" }}>
                     <Stack direction="row" spacing={1}>
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span>{`${balance}`}</span>
+                        Balance: <span>{`${formatNumber(Number(balance))}`}</span>
                       </Typography>
                       <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onMax} color="primary">
                         MAX
@@ -342,7 +509,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
                   <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1} >
-                      <BootstrapInput value={inputToValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '22px' }} />
+                      <BootstrapInput disabled={disable} onBlur={handleBlur} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '22px' }} />
                     </Stack>
 
                     {
@@ -357,6 +524,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                               color: '#fff',
                               fontSize: '14px',
                             }}
+                            disabled={disable}
                             onClick={handleClickToOpen}
                             endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
                           >
@@ -376,6 +544,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                               color: '#000',
                               fontSize: '14px',
                             }}
+                            disabled={disable}
                             onClick={handleClickToOpen}
                             endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
                           >
@@ -404,11 +573,11 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   </Typography>
 
                   <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 31.5
+                    $ 0.00
                   </Typography>
                   <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
-                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px', color: '#6f6f6f' }} placeholder="0" />
+                      <BootstrapInput disabled={disable} onBlur={handleReBlur} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px', color: '#6f6f6f' }} placeholder="0" />
                     </Stack>
 
                     {
@@ -424,6 +593,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                               color: '#fff',
                               fontSize: '14px',
                             }}
+                            disabled={disable}
                             onClick={handleClickFromOpen}
                             endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
                           >
@@ -443,6 +613,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                               color: '#000',
                               fontSize: '14px',
                             }}
+                            disabled={disable}
                             onClick={handleClickFromOpen}
                             endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
                           >
@@ -482,48 +653,67 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                 address !== undefined ? (
                   <>
                     {
-                      pay === "Select token" ? (
+                      chain?.id === undefined ? (
                         <>
                           <Box sx={{ width: "600px", margin: '0 auto' }}>
-                            <SelectButton >Select a token</SelectButton>
+                            <ConnectNetorkButton onClick={onChangeNetwork}>
+                              Connect to Arbitrum Sepolia
+                            </ConnectNetorkButton>
                           </Box>
+
                         </>
 
                       ) : (
                         <>
                           {
-                            inputToValue === '' && inputReValue === '' ? (
-                              <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                <SelectButton >Enter amount</SelectButton>
-                              </Box>
+                            pay === "Select token" ? (
+                              <>
+                                <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                  <SelectButton >Select a token</SelectButton>
+                                </Box>
+                              </>
 
                             ) : (
                               <>
                                 {
-                                  Number(balance) >= Number(inputToValue) ? (
+                                  inputToValue === '' && inputReValue === '' ? (
                                     <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                      <EnterButton onClick={handleSwapOpen}>Swap</EnterButton>
+                                      <SelectButton >Enter amount</SelectButton>
                                     </Box>
 
                                   ) : (
-                                    <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                      <SelectButton >Insufficient balane</SelectButton>
-                                    </Box>
+                                    <>
+                                      {
+                                        Number(balance) >= Number(inputToValue) ? (
+                                          <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                            <EnterButton onClick={handleSwapOpen}>Swap</EnterButton>
+                                          </Box>
+
+                                        ) : (
+                                          <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                            <SelectButton >Insufficient balane</SelectButton>
+                                          </Box>
+
+                                        )
+
+                                      }
+
+                                    </>
 
                                   )
-
                                 }
 
                               </>
 
                             )
+
                           }
 
                         </>
 
                       )
-
                     }
+
                   </>
 
 
@@ -560,7 +750,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   </Typography>
 
                   <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 31.5
+                    $ 0.00
                   </Typography>
                   <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
                     <Stack direction="row" spacing={1}>
@@ -574,7 +764,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   </Box>
                   <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1} >
-                      <BootstrapInput value={inputToValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', fontSize: '22px', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354' }} />
+                      <BootstrapInput disabled={disable} onBlur={handleBlur} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', fontSize: '22px', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354' }} />
                     </Stack>
 
                     {
@@ -589,6 +779,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                               fontWeight: '500',
                               color: '#fff',
                             }}
+                            disabled={disable}
                             onClick={handleClickToOpen}
                             endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
                           >
@@ -608,6 +799,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                               fontSize: '14px',
                               color: '#000',
                             }}
+                            disabled={disable}
                             onClick={handleClickToOpen}
                             endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
                           >
@@ -636,11 +828,11 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   </Typography>
 
                   <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 31.5
+                    $ 0.00
                   </Typography>
                   <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
-                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px', color: '#6f6f6f' }} placeholder="0" />
+                      <BootstrapInput disabled={disable} onBlur={handleReBlur} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px', color: '#6f6f6f' }} placeholder="0" />
                     </Stack>
 
                     {
@@ -655,6 +847,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                               fontWeight: '500',
                               color: '#fff',
                             }}
+                            disabled={disable}
                             onClick={handleClickFromOpen}
                             endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
                           >
@@ -674,6 +867,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                               border: 'none',
                               color: '#000',
                             }}
+                            disabled={disable}
                             onClick={handleClickFromOpen}
                             endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
                           >
@@ -713,47 +907,63 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
                 address !== undefined ? (
                   <>
                     {
-                      pay === "Select token" ? (
-                        <>
-                          <Box sx={{ width: '100%' }}>
-                            <SelectButton>Select a token</SelectButton>
-                          </Box>
-                        </>
-
-                      ) : (
+                      chain?.id !== undefined ? (
                         <>
                           {
-                            inputToValue === '' && inputReValue === '' ? (
-                              <Box sx={{ width: '100%' }}>
-                                <SelectButton >Enter amount</SelectButton>
-                              </Box>
+                            pay === "Select token" ? (
+                              <>
+                                <Box sx={{ width: '100%' }}>
+                                  <SelectButton>Select a token</SelectButton>
+                                </Box>
+                              </>
 
                             ) : (
                               <>
                                 {
-                                  Number(balance) >= Number(inputToValue) ? (
+                                  inputToValue === '' && inputReValue === '' ? (
                                     <Box sx={{ width: '100%' }}>
-                                      <EnterButton onClick={handleSwapOpen}>Swap</EnterButton>
+                                      <SelectButton >Enter amount</SelectButton>
                                     </Box>
 
                                   ) : (
-                                    <Box sx={{ width: '100%' }}>
-                                      <SelectButton >Insufficient balane</SelectButton>
-                                    </Box>
+                                    <>
+                                      {
+                                        Number(balance) >= Number(inputToValue) ? (
+                                          <Box sx={{ width: '100%' }}>
+                                            <EnterButton onClick={handleSwapOpen}>Swap</EnterButton>
+                                          </Box>
+
+                                        ) : (
+                                          <Box sx={{ width: '100%' }}>
+                                            <SelectButton >Insufficient balane</SelectButton>
+                                          </Box>
+
+                                        )
+
+                                      }
+
+                                    </>
 
                                   )
-
                                 }
 
                               </>
 
                             )
+
                           }
+                        </>
+                      ) : (
+                        <>
+                          <Box sx={{ width: '100%' }}>
+                            <ConnectNetorkButton onClick={onChangeNetwork}>
+                              Connect to Arbitrum Sepolia
+                            </ConnectNetorkButton>
+                          </Box>
+
 
                         </>
-
                       )
-
                     }
                   </>
 

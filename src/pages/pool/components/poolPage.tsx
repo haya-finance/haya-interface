@@ -2,19 +2,20 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Stack, Typography, Box } from '@mui/material';
 import TokenColorIcon from 'assets/tokens';
 import React, { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { styled } from '@mui/material/styles';
 import { ButtonProps } from '@mui/material/Button';
 
 import { MdAdd } from "react-icons/md";
 import InputBase from '@mui/material/InputBase';
 import ShowSwap from './showSwap';
-import { ethers } from 'ethers';
-import SwapAbi from 'abi/swap.json'
-import { sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
+// import { ethers } from 'ethers';
+// import SwapAbi from 'abi/swap.json'
+// import { sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
 import ReviewSupply from './reviewSupply';
 import SelectAddOneToken from './select_add_token_one';
 import SelectAddTwoToken from './select_add_token_two';
+import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
 
 // import Select, { components } from 'react-select'
 
@@ -62,16 +63,39 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
 
 
+function formatNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.round(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    return num.toLocaleString()
+
+  }
+}
 
 
 
 
-const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
 
-  const provider = new ethers.JsonRpcProvider(sepolia_rpc)
 
-  const { address } = useAccount();
+const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => {
+
+
+  // const provider = new ethers.JsonRpcProvider(sepolia_rpc)
+
+  const { address, chain } = useAccount();
 
 
 
@@ -84,6 +108,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
 
   const [open, setOpen] = React.useState(false);
+  const [disable, setDisable] = React.useState(true)
 
   const [reOpen, setReOpen] = React.useState(false);
 
@@ -95,17 +120,31 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
   const [inputToValue, setInputValue] = useState('')
 
 
-  const [pay, setPay] = React.useState('H3_test')
+  const [pay, setPay] = React.useState('H20')
 
   const [balance, setBalance] = React.useState('0')
+
+  const [reBalance, setReBalance] = React.useState('0')
 
 
   const [inputReValue, setInputReValue] = useState('')
 
-  const [oneValue, setOneValue] = useState('0')
+
+  const [receive, setReceive] = React.useState('ETH')
+
+  useEffect(() => {
+    if (chain?.id !== undefined) {
+      setDisable(false)
+    }
+
+    if (address !== undefined) {
+      setDisable(false)
+    }
+
+  }, [chain?.id, address])
 
 
-  const [receive, setReceive] = React.useState('WETH')
+
 
   const handleSwapOpen = () => {
     setOpenSwap(true)
@@ -113,10 +152,8 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
 
   const handleSwapClose = () => {
-    OnChange()
+
     setOpenSwap(false)
-    setInputValue('')
-    setInputReValue('')
   }
 
   const handleClickFromOpen = () => {
@@ -204,97 +241,121 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
     },
   }));
 
+  const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    width: '100%',
+    color: '#fff',
+    backgroundColor: '#1AAE70',
+    '&:hover': {
+      backgroundColor: '#1AAE70',
+    },
+  }));
+
+  const [openWallet, setOpenWallet] = useState(false)
+
+
+
+  const walletConnect = () => {
+    setOpenWallet(true);
+  };
+
+  const onClose = () => {
+    setOpenWallet(false);
+  };
+
   const InputChange = (event: any) => {
-    setInputValue(event.target.value)
+    const newValue = event.target.value.replace(/-/, '')
+    setInputValue(newValue)
 
   }
 
   const InputFromChange = (event: any) => {
-    setInputReValue(event.target.value)
+    const newValue = event.target.value.replace(/-/, '')
+    setInputReValue(newValue)
 
+  }
+
+
+  const handleBlur = () => {
+    const parsedValue = parseFloat(inputToValue)
+    if (!isNaN(parsedValue) && parsedValue < 0) {
+      setInputValue(String(Math.abs(parsedValue)))
+    }
+  }
+
+
+  const handleReBlur = () => {
+    const parsedValue = parseFloat(inputReValue)
+    if (!isNaN(parsedValue) && parsedValue < 0) {
+      setInputReValue(String(Math.abs(parsedValue)))
+    }
   }
 
 
   useEffect(() => {
-    // console.log('自己账户的钱', balance)
+    // console.log('自己账户的钱', balance, reBalance)
 
-  }, [balance])
-
-
+  }, [balance, reBalance])
 
 
 
-  const Swap = async (value: any) => {
 
-    // console.log(signer)
 
-    const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, provider)
 
-    // console.log(data.filter(item => item.symbol == pay)[0].address, data.filter(item => item.symbol == receive)[0].address, swapContract)
 
-    await swapContract.getAmountsOut(BigInt(Number(value) * (10 ** 18)), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
-      // console.log('结果', res)
-      setInputReValue(String(Number(res[1]) / (10 ** 18)))
-    }).catch(err => {
-      setInputReValue('0')
-      // console.log('错误输出', err)
-    })
 
-  }
 
-  const OneSwap = async () => {
 
-    // const signer = await provider.getSigner()
 
-    const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, provider)
-
-    await swapContract.getAmountsOut(BigInt(Number('1') * (10 ** 18)), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
-      // console.log('结果', res)
-      setOneValue(String(Number(res[1]) / (10 ** 18)))
-    })
-
-  }
 
 
   useEffect(() => {
 
     // console.log('变化')
 
-    if (inputToValue !== '0' && pay !== 'Select token') {
-      Swap(inputToValue)
-    }
-
     if (address !== undefined) {
       const tokens = data.filter(item => item.symbol === pay)
-      setBalance(String(Number(tokens[0]?.balance) / 10 ** 18))
-    }
-
-    if (pay !== "Select token") {
-      OneSwap()
+      setBalance(String(Number(tokens[0]?.balance)))
+      const reTokens = data.filter(item => item.symbol === receive)
+      setReBalance(String(Number(reTokens[0]?.balance)))
 
     }
-  }, [pay, inputToValue, balance])
+  }, [address, data])
 
 
   useEffect(() => {
     // console.log(inputReValue)
 
-  }, [inputReValue])
+  }, [inputReValue, inputToValue])
 
 
   const onMax = () => {
     if (pay !== 'Select token') {
-      setInputValue(String(Number(data.filter(item => item.symbol === pay)[0]?.balance) / (10 ** 18)))
+      setInputValue(String(Number(data.filter(item => item.symbol === pay)[0]?.balance)))
     }
 
   }
+
+  const { switchChain } = useSwitchChain()
+
+
+  const onChangeNetwork = () => {
+    switchChain({ chainId: 421614 })
+
+  }
+
+  const onChange = (change: boolean) => {
+    setInputValue('')
+    setInputReValue('')
+    OnChange()
+  }
+
 
 
   return (
     <>
 
       <Box sx={{ width: '100%' }}>
-        <ReviewSupply open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
+        <ReviewSupply onChange={onChange} windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
         {
           windowWeight >= 600 ? (
             <>
@@ -319,7 +380,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
                     <Stack direction="row" spacing={1}>
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${balance}`}</span>
+                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${formatNumber(Number(balance))}`}</span>
                       </Typography>
                       <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onMax} color="primary">
                         MAX
@@ -331,7 +392,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
                   <Stack alignItems="center" direction="row" sx={{ padding: '20px 0 0 0', height: '56px' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1} >
-                      <BootstrapInput value={inputToValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} />
+                      <BootstrapInput onBlur={handleBlur} disabled={disable} value={inputToValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} />
                     </Stack>
                     <IndexTokenButton
                       variant="text"
@@ -343,6 +404,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                         color: '#000',
                         fontSize: '13px',
                       }}
+                      disabled={disable}
                       startIcon={<TokenColorIcon size={20} name={pay} />}
                       onClick={handleClickToOpen}
                       endIcon={<ChevronDownIcon width="13px" height="13px" cursor="pointer" color="#333" />}
@@ -367,7 +429,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
                     <Stack direction="row" spacing={1}>
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${balance}`}</span>
+                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${formatNumber(Number(reBalance))}`}</span>
                       </Typography>
                       <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onMax} color="primary">
                         MAX
@@ -378,7 +440,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
                   <Stack alignItems="center" direction="row" sx={{ padding: '20px 0 0 0', height: '56px' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
-                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} placeholder="0" />
+                      <BootstrapInput disabled={disable} onBlur={handleReBlur} value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', color: Number(reBalance) >= Number(inputReValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} placeholder="0" />
                     </Stack>
                     <IndexTokenButton
                       variant="text"
@@ -391,6 +453,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                         fontSize: '13px',
                       }}
                       onClick={handleClickFromOpen}
+                      disabled={disable}
                       startIcon={<TokenColorIcon size={20} name={receive} />}
                       endIcon={<ChevronDownIcon height="13px" width="13px" cursor="pointer" color="#333" />}
                     >
@@ -405,7 +468,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                 inputToValue === '' && inputReValue === '' ? (
                   <></>
                 ) : (
-                  <ShowSwap windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} />
+                  <ShowSwap windowWeight={windowWeight} toToken={pay} fromToken={receive} />
 
                 )
               }
@@ -413,30 +476,43 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                 address !== undefined ? (
                   <>
                     {
-                      inputToValue === '' && inputReValue === '' ? (
-                        <Box sx={{ width: "600px", margin: '0 auto' }}>
-                          <SelectButton >Enter an Amount</SelectButton>
-                        </Box>
-
-                      ) : (
+                      chain?.id !== undefined ? (
                         <>
                           {
-                            Number(balance) >= Number(inputToValue) ? (
-                              <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                <EnterButton onClick={handleSwapOpen}>Supply</EnterButton>
+                            inputToValue === '' || inputReValue === '' ? (
+                              <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
+                                <SelectButton >Enter an Amount</SelectButton>
                               </Box>
 
                             ) : (
-                              <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                <SelectButton >Insufficient Balance</SelectButton>
-                              </Box>
+                              <>
+                                {
+                                  Number(balance) >= Number(inputToValue) && Number(reBalance) >= Number(inputReValue) ? (
+                                    <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
+                                      <EnterButton onClick={handleSwapOpen}>Supply</EnterButton>
+                                    </Box>
+
+                                  ) : (
+                                    <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
+                                      <SelectButton >Insufficient Balance</SelectButton>
+                                    </Box>
+
+                                  )
+
+                                }
+
+                              </>
 
                             )
-
                           }
+                        </>
+                      ) : (
+                        <>
+                          <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
+                            <ConnectButton onClick={onChangeNetwork} >Connect to Arbitrum Sepolia</ConnectButton>
+                          </Box>
 
                         </>
-
                       )
                     }
                   </>
@@ -445,6 +521,10 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
                 ) : (
                   <>
+                    <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
+                      <ConnectWallet windowWidth={windowWeight} open={openWallet} handleClose={onClose} />
+                      <ConnectButton onClick={walletConnect} >Connect wallet</ConnectButton>
+                    </Box>
 
                   </>
 
@@ -476,7 +556,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
                     <Stack direction="row" spacing={1}>
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${balance}`}</span>
+                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${formatNumber(Number(balance))}`}</span>
                       </Typography>
                       <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onMax} color="primary">
                         MAX
@@ -488,7 +568,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
                   <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0 0', height: '46px' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1} >
-                      <BootstrapInput value={inputToValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} />
+                      <BootstrapInput onBlur={handleBlur} disabled={disable} value={inputToValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} />
                     </Stack>
                     <IndexTokenButton
                       variant="text"
@@ -500,6 +580,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                         color: '#000',
                         fontSize: '13px',
                       }}
+                      disabled={disable}
                       startIcon={<TokenColorIcon size={20} name={pay} />}
                       onClick={handleClickToOpen}
                       endIcon={<ChevronDownIcon width="13px" height="13px" cursor="pointer" color="#333" />}
@@ -524,7 +605,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
                     <Stack direction="row" spacing={1}>
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${balance}`}</span>
+                        Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${formatNumber(Number(reBalance))}`}</span>
                       </Typography>
                       <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onMax} color="primary">
                         MAX
@@ -535,7 +616,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
                   <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0 0', height: '46px' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
-                      <BootstrapInput value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} placeholder="0" />
+                      <BootstrapInput onBlur={handleReBlur} disabled={disable} value={inputReValue} onChange={InputFromChange} sx={{ width: '100%', color: Number(reBalance) >= Number(inputReValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} placeholder="0" />
                     </Stack>
                     <IndexTokenButton
                       variant="text"
@@ -547,6 +628,7 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                         color: '#000',
                         fontSize: '13px',
                       }}
+                      disabled={disable}
                       onClick={handleClickFromOpen}
                       startIcon={<TokenColorIcon size={20} name={receive} />}
                       endIcon={<ChevronDownIcon height="13px" width="13px" cursor="pointer" color="#333" />}
@@ -565,9 +647,9 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                   <Box
                     sx={{
                       p: '10px 12px', backgroundColor: "#fff",
-                      width: "600px", margin: "0 auto", marginBottom: "10px"
+                      width: "100%", marginBottom: "10px"
                     }}
-                  ><ShowSwap windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} /></Box>
+                  ><ShowSwap windowWeight={windowWeight} toToken={pay} fromToken={receive} /></Box>
 
                 )
               }
@@ -575,30 +657,45 @@ const PoolSons = ({ data, windowWeight, OnChange }: typeProps) => {
                 address !== undefined ? (
                   <>
                     {
-                      inputToValue === '' && inputReValue === '' ? (
-                        <Box sx={{ width: "600px", margin: '0 auto' }}>
-                          <SelectButton >Enter an Amount</SelectButton>
-                        </Box>
-
-                      ) : (
+                      chain?.id !== undefined ? (
                         <>
                           {
-                            Number(balance) >= Number(inputToValue) ? (
-                              <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                <EnterButton onClick={handleSwapOpen}>Supply</EnterButton>
+                            inputToValue === '' || inputReValue === '' ? (
+                              <Box sx={{ width: "100%" }}>
+                                <SelectButton >Enter an Amount</SelectButton>
                               </Box>
 
                             ) : (
-                              <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                <SelectButton >Insufficient Balance</SelectButton>
-                              </Box>
+                              <>
+                                {
+                                  Number(balance) >= Number(inputToValue) && Number(reBalance) >= Number(inputReValue) ? (
+                                    <Box sx={{ width: "100%" }}>
+                                      <EnterButton onClick={handleSwapOpen}>Supply</EnterButton>
+                                    </Box>
+
+                                  ) : (
+                                    <Box sx={{ width: "100%" }}>
+                                      <SelectButton >Insufficient Balance</SelectButton>
+                                    </Box>
+
+                                  )
+
+                                }
+
+                              </>
 
                             )
-
                           }
+                        </>
+                      ) : (
+                        <>
+                          <Box sx={{ width: '100%' }}>
+                            <ConnectButton onClick={onChangeNetwork}>
+                              Connect to Arbitrum Sepolia
+                            </ConnectButton>
+                          </Box>
 
                         </>
-
                       )
                     }
                   </>

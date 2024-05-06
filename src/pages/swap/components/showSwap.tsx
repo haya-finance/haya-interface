@@ -47,8 +47,8 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, oneSwap }: 
         <img style={{ width: 22, height: 22 }} src={exchange} />
         <Box sx={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 1, overflow: 'hidden' }}>
           <Stack direction="row" sx={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 1, overflow: 'hidden' }}>
-            <Typography sx={{ display: 'inline' }}>{`1 ${toToken} = ${oneSwap} ${fromToken}INDEX`} </Typography>
-            <Typography sx={{ display: 'inline', color: '#9b9b9b', fontSize: '12px' }}>{`($3513.18)`}</Typography>
+            <Typography sx={{ display: 'inline' }}>{`1 ${toToken} = ${oneSwap} ${fromToken}`} </Typography>
+            {/* <Typography sx={{ display: 'inline', color: '#9b9b9b', fontSize: '12px' }}>{`($3513.18)`}</Typography> */}
 
           </Stack>
         </Box>

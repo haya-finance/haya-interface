@@ -2,8 +2,6 @@
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
-import { notification } from 'antd';
-import { NotificationPlacement } from 'antd/es/notification/interface';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
@@ -18,32 +16,15 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // import Web3 from 'web3';
 import { useState } from 'react';
-import { ethers } from 'ethers'
-import SwapAbi from 'abi/swap.json'
-import { useAccount } from 'wagmi';
-import tokenAbi from 'abi/token.json'
 import { UniswapSepoliaRouterContract } from 'config';
-import WarningIcon from '@mui/icons-material/Warning';
 import { LoadingButton } from '@mui/lab';
-import { getEthersSigner } from 'contract/getEthersSigner';
-import { config } from 'contexts/wagmiConfig';
 import { MdAdd } from 'react-icons/md';
+import ApprovalTokens from './approveToken';
 
 
 
 
 
-const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  width: '100%',
-  color: '#fff',
-  boxShadow: 'none',
-  borderRadius: '10px',
-  backgroundColor: '#1AAE70',
-  '&:hover': {
-    backgroundColor: '#1AAE70',
-    color: '#fff',
-  },
-}));
 
 // const sepolia_rpc = "https://sepolia.infura.io/v3/0edd253962184b628e0cfabc2f91b0ae"
 
@@ -105,17 +86,17 @@ type TypeProps = {
   inputFromNum: string;
   toToken: string;
   fromToken: string;
-  windowWidth: number
+  windowWidth: number;
+  windowHeight: number;
+  onChange: (update: boolean) => void;
 }
 
 
 
-export default function ReviewSupply({ open, windowWidth, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken }: TypeProps) {
+export default function ReviewSupply({ open, windowWidth, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onChange }: TypeProps) {
 
 
   const [hidder, setHidder] = useState(false)
-
-  const { address } = useAccount()
 
   const onShowMore = () => {
     setHidder(!hidder)
@@ -124,97 +105,30 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
   // const provider = new ethers.BrowserProvider(window.ethereum)
 
 
-  const [api, contextHolder] = notification.useNotification();
-
-  const openNotification = (placement: NotificationPlacement) => {
-    const key = `open${Date.now()}`;
-    const btn = (
-      <Box>
-        <Stack width="100%" alignItems="center" textAlign="center" padding="12px 0" spacing="6px">
-          <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
-          <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
-            The transaction submission was either cancelled or failed.
-          </Typography>
-        </Stack>
-        <OkButton onClick={() => api.destroy()}>
-          OK
-        </OkButton>
-      </Box>
-    );
+  const [openApproval, setOpenApproval] = useState(false)
 
 
-
-    api.open({
-      message: '',
-      description: btn,
-      className: 'custom-class',
-      style: {
-        width: '280px',
-        padding: '20px 24px',
-        borderRadius: '20px'
-      },
-      // btn,
-      key,
-      placement,
-      duration: 0,
-    });
-  };
   // const { address } = useAccount();
 
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
 
 
 
   const handleSwap = async () => {
     // const signer = await provider.getSigner()
-    const provider = getEthersSigner(config)
-    const ApproveContract = new ethers.Contract(data.filter(item => item.symbol === toToken)[0].address, tokenAbi, await provider)
-    const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, await provider)
+    handleSwapClose()
+    setOpenApproval(true)
 
-    await ApproveContract.approve(UniswapSepoliaRouterContract, BigInt(Number(inputToNum) * (10 ** 18))).then(async (res) => {
-      setLoading(true)
+  }
 
-      await res.wait()
-      await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** 18)), BigInt(Number(inputFromNum) * (10 ** 18)), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 10000).then(async (res: any) => {
-
-        // console.log('结果swap', res)
-        await res.wait()
-        setLoading(false)
-        handleSwapClose()
-      }).catch((_err) => {
-        openNotification('top')
-        handleSwapClose()
-        // console.log('错误1', err)
-      })
+  const [update, setUpdate] = useState(false)
 
 
 
-
-    }).catch((err) => {
-      openNotification('top')
-      handleSwapClose()
-      // console.log('错误1', err)
-
-    })
-
-
-    // if (toToken == "WETH") {
-    //   await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** 18)),BigInt(Number(inputFromNum) * (10 ** 18)), [data.filter(item => item.symbol == toToken)[0].address, data.filter(item => item.symbol == fromToken)[0].address], address, new Date().getTime() + 10000, { from: '0xEBC004b6bB06E85c5111e41C460712CeDD1680FC', value: ethers.parseEther(String(0.01)) }).then((res: any) => {
-    //     console.log('结果swap', res)
-    //     handleSwapClose()
-    //   }).catch((err) => {
-    //     console.log('错误1', err)
-    //   })
-    // } else {
-    //   await swapContract.swapExactTokensForETH(BigInt(Number(inputToNum) * (10 ** 18)), BigInt(Number(inputFromNum) * (10 ** 18)), [data.filter(item => item.symbol == toToken)[0].address, data.filter(item => item.symbol == fromToken)[0].address], address, new Date().getTime() + 10000).then((res: any) => {
-    //     console.log('结果swap', res)
-    //     handleSwapClose()
-    //   }).catch((err) => {
-    //     console.log('错误2', err)
-    //   })
-    // }
-
-
+  const handleApprovalClose = () => {
+    setOpenApproval(false)
+    setUpdate(!update)
+    onChange(update)
   }
 
 
@@ -229,7 +143,8 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
   return (
     <>
-      {contextHolder}
+      <ApprovalTokens windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} toToken={toToken} fromToken={fromToken} inputFromNum={inputFromNum} inputToNum={inputToNum} windowWidth={windowWidth} />
+
       {
         windowWidth >= 600 ? (
           <Box sx={{ width: '100%' }}>
@@ -256,12 +171,12 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
               <DialogContent >
 
                 <Box sx={{ marginBottom: '10px' }}>
-                  <Box position="relative">
-                    <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                  <Stack alignItems="start" spacing="10px" width="100%" >
+                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
                       You pay
                     </Typography>
 
-                    <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
+                    <Stack width="100%" alignItems="center" direction="row" justifyContent="space-between">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
                         {inputToNum} {toToken}
@@ -272,18 +187,19 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
 
                     </Stack>
-                    <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
+                    <Stack width="100%" alignItems="center" direction="row" justifyContent="space-between">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
-                        {inputToNum} {toToken}
+                        {inputFromNum} {fromToken}
                       </Typography>
 
-                      <TokenColorIcon name={toToken} size={40} />
+                      <TokenColorIcon name={fromToken} size={40} />
 
 
 
                     </Stack>
-                  </Box>
+
+                  </Stack>
                 </Box>
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
@@ -297,13 +213,13 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                       You receive
                     </Typography>
 
-                    <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
+                    <Stack alignItems="center" direction="row" justifyContent="space-between" pt="20px">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
-                        {inputFromNum} {fromToken}
+                        0.001 LP-H30/ETH
                       </Typography>
 
-                      <TokenColorIcon name={fromToken} size={40} />
+                      <TokenColorIcon name="ETH" size={40} />
                     </Stack>
                   </Box>
                 </Box>
@@ -374,7 +290,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
               </DialogContent>
               <DialogActions>
-                <SwapButton loading={loading} onClick={handleSwap}>
+                <SwapButton onClick={handleSwap}>
                   Confirm Swap
                 </SwapButton>
               </DialogActions>
@@ -516,7 +432,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                 </Box>
 
 
-                <SwapButton loading={loading} onClick={handleSwap}>
+                <SwapButton onClick={handleSwap}>
                   Confirm Swap
                 </SwapButton>
 

@@ -80,7 +80,7 @@ const TokenColorIcon = ({ name, size }: Props) => {
       return <LTCColor size={size} />
     case 'WBTC':
       return <WBtcColor size={size} />
-    case 'H2_test':
+    case 'H20':
       return <HAYColor size={size} />
     case 'SHIB':
       return <SHIBColor size={size} />;

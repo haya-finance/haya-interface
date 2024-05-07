@@ -14,7 +14,7 @@ import basicIssAbi from 'abi/basicIssuance.json'
 import { sepolia_rpc, BasicIssuanceModule, H30_Address } from 'config';
 import { ethers } from 'ethers';
 import { Container } from '@mui/system';
-// import { ethers } from 'ethers';
+// import totalAbi from 'abi/totalData.json'
 
 const provider = new ethers.JsonRpcProvider(sepolia_rpc)
 
@@ -124,8 +124,47 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
       String(1 * (10 ** 18))
     ).then(async function (result: any) {
       let arr: DataType[] = []
+      // let addresses: string[] = []
+      // let symbols: string[] = []
+      // let decimals: string[] = []
+      // let balances: string[] = []
+      // let allowances: string[] = []
       // setResData(result)
       // console.log(result)
+
+
+      // for (let i = 0; i < result[0].length; i++) {
+      //   addresses.push(result[0][i])
+
+      // }
+
+      // const symbolsContract = new ethers.Contract(total_Address, totalAbi, provider)
+
+      // await symbolsContract.batchFetchBaseInfos(addresses).then(async (res) => {
+      //   for (let i = 0; i < res[0].length; i++) {
+      //     symbols.push(res[0][i])
+      //     decimals.push(res[2][i])
+      //   }
+
+      //   console.log('symbols', symbols, decimals)
+
+      //   if (address !== undefined) {
+      //     await symbolsContract.batchFetchBalancesOf(addresses, [...address]).then(async (res1) => {
+      //       console.log('balance', res1)
+
+
+      //       await symbolsContract.batchFetchAllowances(addresses, [...address], [BasicIssuanceModule]).then(async (res2) => {
+      //         console.log(res1)
+      //         console.log(res2)
+
+      //       })
+
+      //     })
+
+
+
+      //   }
+      // })
 
       for (let i = 0; i < result[0].length; i++) {
 

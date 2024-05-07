@@ -390,7 +390,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
     }
 
-  }, [])
+  }, [data])
 
   // console.log(toToken, inputFromNum, inputToNum, fromToken)
 

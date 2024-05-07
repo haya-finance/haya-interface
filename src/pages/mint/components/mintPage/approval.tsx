@@ -343,6 +343,10 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
   }, [approval, disable, data])
 
+  useEffect(() => {
+
+  }, [data])
+
 
 
   useEffect(() => {
@@ -368,7 +372,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
       }
     }
 
-  }, [])
+  }, [data])
 
 
 

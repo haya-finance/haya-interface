@@ -216,7 +216,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                     <Stack alignItems="center" direction="row" justifyContent="space-between" pt="20px">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
-                        0.001 LP-H30/ETH
+                        0.001 LP-H20/ETH
                       </Typography>
 
                       <TokenColorIcon name="ETH" size={40} />

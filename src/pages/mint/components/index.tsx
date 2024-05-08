@@ -11,10 +11,10 @@ import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
 import RedeemSon from './redeemPage';
 import tokenAbi from 'abi/token.json'
 import basicIssAbi from 'abi/basicIssuance.json'
-import { sepolia_rpc, BasicIssuanceModule, H30_Address } from 'config';
+import { sepolia_rpc, BasicIssuanceModule, H30_Address, total_Address } from 'config';
 import { ethers } from 'ethers';
 import { Container } from '@mui/system';
-// import totalAbi from 'abi/totalData.json'
+import totalAbi from 'abi/totalData.json'
 
 const provider = new ethers.JsonRpcProvider(sepolia_rpc)
 
@@ -123,99 +123,82 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
       H30_Address,
       String(1 * (10 ** 18))
     ).then(async function (result: any) {
-      let arr: DataType[] = []
-      // let addresses: string[] = []
-      // let symbols: string[] = []
-      // let decimals: string[] = []
-      // let balances: string[] = []
-      // let allowances: string[] = []
+      let newArr: DataType[] = []
+      let nums: string[] = []
+      let ownerAddresses: string[] = []
+      let spenderAddresses: string[] = []
+      let addresses: string[] = []
+      let symbols: string[] = []
+      let decimals: string[] = []
       // setResData(result)
       // console.log(result)
 
 
-      // for (let i = 0; i < result[0].length; i++) {
-      //   addresses.push(result[0][i])
-
-      // }
-
-      // const symbolsContract = new ethers.Contract(total_Address, totalAbi, provider)
-
-      // await symbolsContract.batchFetchBaseInfos(addresses).then(async (res) => {
-      //   for (let i = 0; i < res[0].length; i++) {
-      //     symbols.push(res[0][i])
-      //     decimals.push(res[2][i])
-      //   }
-
-      //   console.log('symbols', symbols, decimals)
-
-      //   if (address !== undefined) {
-      //     await symbolsContract.batchFetchBalancesOf(addresses, [...address]).then(async (res1) => {
-      //       console.log('balance', res1)
-
-
-      //       await symbolsContract.batchFetchAllowances(addresses, [...address], [BasicIssuanceModule]).then(async (res2) => {
-      //         console.log(res1)
-      //         console.log(res2)
-
-      //       })
-
-      //     })
-
-
-
-      //   }
-      // })
-
       for (let i = 0; i < result[0].length; i++) {
-
-        const contract = new ethers.Contract(result[0][i], tokenAbi, provider)
-        await contract.symbol().then(async function (res1: any) {
-
-          await contract.decimals().then(async (decimals: any) => {
-            const num = Number(result[1][i]) / (10 ** Number(decimals))
-
-
-
-
-
-
-
-            if (address !== undefined) {
-              await contract.balanceOf(address).then(async function (res2: any) {
-                const balance = Number(BigInt(res2)) / (10 ** Number(decimals))
-                // console.log('decimals', decimals)
-                await contract.allowance(address, BasicIssuanceModule).then(function (res3: any) {
-                  // console.log('res3', res3)
-                  const allow = BigInt(res3) / BigInt((10 ** Number(decimals)))
-                  arr.push({
-                    symbol: res1 as unknown as string,
-                    address: result[0][i],
-                    balance: String(balance),
-                    num: String(num),
-                    allowance: String(allow),
-                    decimals: String(Number(decimals))
-
-                  })
-                })
-              })
-
-            } else {
-              arr.push({
-                symbol: res1,
-                address: result[0][i],
-                balance: '0',
-                num: String(num),
-                allowance: '0',
-                decimals: String(Number(decimals))
-              })
-            }
-
-          })
-        })
+        addresses.push(result[0][i])
+        nums.push(String(result[1][i]))
+        ownerAddresses.push(String(address))
+        spenderAddresses.push(BasicIssuanceModule)
       }
 
-      // console.log('arr', arr)
-      setData(arr)
+      const symbolsContract = new ethers.Contract(total_Address, totalAbi, provider)
+
+      await symbolsContract.batchFetchBaseInfos(addresses).then(async (res) => {
+        for (let i = 0; i < res[0].length; i++) {
+          symbols.push(String(res[0][i]))
+          decimals.push(String(Number(res[2][i])))
+        }
+
+        if (address !== undefined) {
+          await symbolsContract.batchFetchBalancesOf(addresses, ownerAddresses).then(async (res1) => {
+
+
+            await symbolsContract.batchFetchAllowances(addresses, ownerAddresses, spenderAddresses).then(async (res2) => {
+
+
+              for (let i = 0; i < res1.length; i++) {
+
+                newArr.push({
+                  symbol: symbols[i],
+                  address: addresses[i],
+                  balance: String(Number(BigInt(res1[i])) / (10 ** Number(decimals[i]))),
+                  num: String(Number(nums[i]) / (10 ** Number(decimals[i]))),
+                  allowance: String(BigInt(res2[i]) / BigInt((10 ** Number(decimals[i])))),
+                  decimals: String(decimals[i])
+
+                })
+
+              }
+
+
+
+            })
+
+          })
+
+
+
+        } else {
+          for (let i = 0; i < res[0].length; i++) {
+            newArr.push({
+              symbol: symbols[i],
+              address: addresses[i],
+              balance: '0',
+              num: String(Number(nums[i]) / (10 ** Number(decimals[i]))),
+              allowance: '0',
+              decimals: decimals[i]
+
+            })
+
+          }
+
+        }
+
+      })
+      setData(newArr)
+
+
+
 
     })
 
@@ -223,6 +206,7 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
 
 
   const getTokenBalance = async (adds: any) => {
+    // const symbolsContract = new ethers.Contract(total_Address, totalAbi, provider)
     const contract = new ethers.Contract(adds, tokenAbi, provider)
     await contract.balanceOf(address).then(async function (res2: any) {
       await contract.decimals().then((decimals) => {

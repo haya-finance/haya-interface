@@ -27,7 +27,8 @@ type typeProps = {
   data: any[];
   windowWeight: number;
   windowHeight: number;
-  OnChange: () => void
+  OnChange: () => void;
+  slippage: string;
 }
 
 
@@ -95,7 +96,7 @@ function ValueNumber(num: number) {
     for (let i = 0; i < decimalPart.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= 10 ** (i + 4)
-        num = Math.round(num)
+        num = Math.floor(num)
         num /= 10 ** (i + 4)
         var parts = num.toString().split(".");
         // console.log(parts)
@@ -105,7 +106,7 @@ function ValueNumber(num: number) {
     }
   } else {
     num *= 10000
-    num = Math.round(num)
+    num = Math.floor(num)
     num /= 10000
 
     return String(num)
@@ -119,7 +120,7 @@ function ValueNumber(num: number) {
 
 
 
-const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
+const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
 
   // console.log('data', data)
 
@@ -448,7 +449,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
 
   const onMax = () => {
     if (pay !== 'Select token') {
-      const tokens = data.filter(item => item.symbol === pay)
+      const tokens = data.filter(item => item?.symbol === pay)
       setInputValue(String(Number(tokens[0]?.balance) / Number(tokens[0]?.decimasl)))
       setInputShowValue(String(Number(tokens[0]?.balance) / Number(tokens[0]?.decimasl)))
     }
@@ -468,7 +469,7 @@ const SwapSons = ({ data, windowWeight, OnChange }: typeProps) => {
     <>
 
       <Box sx={{ width: '100%' }}>
-        <SwapReviewSwap open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
+        <SwapReviewSwap slippage={slippage} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
         {
           windowWeight >= 600 ? (
             <>

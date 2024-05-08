@@ -27,6 +27,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import { LoadingButton } from '@mui/lab';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
+import wethAbi from 'abi/weth.json'
 
 
 function formatNumber(num: number) {
@@ -126,12 +127,13 @@ type TypeProps = {
   inputFromNum: string;
   toToken: string;
   fromToken: string;
-  windowWidth: number
+  windowWidth: number;
+  slippage: string
 }
 
 
 
-export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken }: TypeProps) {
+export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken }: TypeProps) {
 
 
   const [hidder, setHidder] = useState(false)
@@ -200,13 +202,11 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
     // console.log(new Date().getTime() + 10000)
 
 
-    if (BigInt(data.filter(item => item.symbol === toToken)[0].allowance) < BigInt(Math.round(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))))) {
-      await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
-        setLoading(true)
-
-        await res.wait()
-        if (toToken !== 'ETH') {
-          await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - 0.005) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+    if (toToken !== 'ETH' && fromToken !== 'ETH') {
+      if (BigInt(data.filter(item => item.symbol === toToken)[0].allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))))) {
+        await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
+          setLoading(true)
+          await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
             // console.log('结果swap', res)
             await res.wait()
@@ -217,34 +217,18 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
             handleSwapClose()
             // console.log('错误1', err)
           })
-        } else {
-          await swapContract.swapExactTokensForETH(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Number(inputFromNum) * (10 ** 18)), [data.filter(item => item.symbol == toToken)[0].address, data.filter(item => item.symbol == fromToken)[0].address], address, new Date().getTime() + 10000).then((res: any) => {
-            // console.log('结果swap', res)
-            setLoading(false)
-            handleSwapClose()
-          }).catch((err) => {
-            // console.log('错误2', err)
-            openNotification('top')
-            handleSwapClose()
-          })
 
-        }
+          await res.wait()
 
+        }).catch((err) => {
+          openNotification('top')
+          handleSwapClose()
+          // console.log('错误1', err)
 
-
-
-
-
-      }).catch((err) => {
-        openNotification('top')
-        handleSwapClose()
-        // console.log('错误1', err)
-
-      })
-    } else {
-      setLoading(true)
-      if (toToken !== 'ETH') {
-        await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - 0.005) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+        })
+      } else {
+        setLoading(true)
+        await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
           // console.log('结果swap', res)
           await res.wait()
@@ -255,25 +239,164 @@ export default function SwapReviewSwap({ open, windowWidth, handleSwapClose, dat
           handleSwapClose()
           // console.log('错误1', err)
         })
-      } else {
-        await swapContract.swapExactETHForTokens(BigInt(Math.round((1 - 0.005) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol == fromToken)[0].address], address, new Date().getTime() + 10000, {
-          from: address,
-          value: BigInt(Number(inputToNum) * (10 ** 18))
-        }).then((res: any) => {
-          // console.log('结果swap', res)
-          setLoading(false)
-          handleSwapClose()
-        }).catch((err) => {
-          // console.log('错误2', err)
-          openNotification('top')
-          handleSwapClose()
-        })
+
+
+
 
       }
 
 
+    } else {
+      if (toToken !== 'ETH') {
+        if (BigInt(data.filter(item => item.symbol === toToken)[0].allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))))) {
+          const tokenContract = new ethers.Contract(data.filter(item => item.symbol === fromToken)[0].address, wethAbi, await provider)
+          await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
+            setLoading(true)
+
+            await res.wait()
+            await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+
+              // console.log('结果swap', res)
+              await res.wait()
+              await tokenContract.withdraw(BigInt(Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimals)))).then(async (res2) => {
+                await res2.wait()
+                setLoading(false)
+                handleSwapClose()
+
+
+
+              }).catch((err) => {
+                openNotification('top')
+                handleSwapClose()
+
+              })
+
+
+            }).catch((err) => {
+              openNotification('top')
+              handleSwapClose()
+              // console.log('错误1', err)
+            })
+          }).catch((err) => {
+            openNotification('top')
+            handleSwapClose()
+            // console.log('错误1', err)
+
+          })
+        } else {
+
+
+
+          await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))),
+            BigInt(Math.floor((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))),
+            [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address],
+            address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+              setLoading(true)
+
+              console.log('结果swap', res)
+              // await res.wait()
+              const tokenContract = new ethers.Contract(data.filter(item => item.symbol === fromToken)[0].address, wethAbi, await provider)
+              await tokenContract.withdraw(BigInt(Math.floor((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl))))).then(async (res2) => {
+                await res2.wait()
+                setLoading(false)
+                handleSwapClose()
+
+
+
+              }).catch((err) => {
+                console.log(err)
+                openNotification('top')
+                handleSwapClose()
+
+              })
+
+
+            }).catch((err) => {
+              openNotification('top')
+              handleSwapClose()
+              console.log('错误1', err)
+            })
+
+
+
+
+        }
+
+      } else {
+        const tokenContract = new ethers.Contract(data.filter(item => item.symbol === toToken)[0].address, wethAbi, await provider)
+
+        await tokenContract.deposit({
+          from: address,
+          value: String(Number(inputToNum) * (10 ** 18))
+        }).then(async (result) => {
+          setLoading(true)
+          await result.wait()
+          if (BigInt(data.filter(item => item.symbol === toToken)[0].allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))))) {
+            await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
+
+              await res.wait()
+
+
+              await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+
+                // console.log('结果swap', res)
+                await res.wait()
+                setLoading(false)
+                handleSwapClose()
+              }).catch((err) => {
+                openNotification('top')
+                handleSwapClose()
+                // console.log('错误1', err)
+              })
+            }).catch((err) => {
+              openNotification('top')
+              handleSwapClose()
+              // console.log('错误1', err)
+
+            })
+
+          } else {
+            await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+
+              // console.log('结果swap', res)
+              await res.wait()
+              setLoading(false)
+              handleSwapClose()
+            }).catch((err) => {
+              openNotification('top')
+              handleSwapClose()
+              // console.log('错误1', err)
+            })
+
+          }
+
+
+
+        })
+
+
+
+
+        // await swapContract.swapExactETHForTokens(String(Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl))), ['0x0000D00000000000000000000000000000000000', data.filter(item => item.symbol == fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5, {
+        //   from: address,
+        //   value: String(Number(inputToNum) * (10 ** 18))
+        // }).then((res: any) => {
+        //   // console.log('结果swap', res)
+        //   res.wait()
+        //   setLoading(false)
+        //   handleSwapClose()
+        // }).catch((err) => {
+        //   console.log('错误2', err)
+        //   openNotification('top')
+        //   handleSwapClose()
+        // })
+
+      }
 
     }
+
+
+
 
 
     // if (toToken == "WETH") {

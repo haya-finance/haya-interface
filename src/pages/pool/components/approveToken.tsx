@@ -60,7 +60,8 @@ type TypeProps = {
   inputToNum: string;
   toToken: string;
   fromToken: string;
-  inputFromNum: string
+  inputFromNum: string;
+  slippage: string
 }
 
 
@@ -79,7 +80,7 @@ const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 
 
-export default function ApprovalTokens({ open, handleApprovalClose, data, windowWidth, windowHeight, inputFromNum, inputToNum, toToken, fromToken }: TypeProps) {
+export default function ApprovalTokens({ slippage, open, handleApprovalClose, data, windowWidth, windowHeight, inputFromNum, inputToNum, toToken, fromToken }: TypeProps) {
 
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
@@ -151,7 +152,6 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
       },
       key,
       placement,
-      duration: 0,
 
     });
   };
@@ -195,10 +195,12 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
     // const signer = await provider.getSigner()
     const provider = getEthersSigner(config)
     const poolContract = new ethers.Contract(UniswapSepoliaRouterContract, swapabi, await provider)
+    // Math.floor(Number(Number(inputToNum) / Number(inputFromNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))
+
     if (toToken == "ETH") {
       await poolContract.addLiquidityETH(H30_Address, String(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
         from: address,
-        value: String(Number(inputToNum) * (10 ** 18))
+        value: BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))
 
 
       }).then(async (res) => {
@@ -225,9 +227,11 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
       })
 
     } else {
-      await poolContract.addLiquidityETH(H30_Address, String(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+      console.log(String(Math.floor(Number(inputFromNum) * (10 ** 18))))
+      // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.floor(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
+      await poolContract.addLiquidityETH(H30_Address, BigInt(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
         from: address,
-        value: String(Number(inputFromNum) * (10 ** 18))
+        value: BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))
       }).then(async (res) => {
 
         // console.log('结果222222222222', res)
@@ -348,7 +352,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
     for (let i = 0; i < data.length; i++) {
       if (toToken == 'ETH') {
-        if (BigInt(data[i].allowance) > BigInt(Math.round(Number(inputFromNum) * (10 ** 18)))) {
+        if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
           // console.log('111111111111111111111')
 
           setApproval((pre) => {
@@ -368,7 +372,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
         }
 
       } else {
-        if (BigInt(data[i].allowance) > BigInt(Math.round(Number(inputToNum) * (10 ** 18)))) {
+        if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
           // console.log('111111111111111111111')
 
           setApproval((pre) => {

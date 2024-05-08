@@ -108,13 +108,43 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
 
     if (num % 1 !== 0) {
       num *= 100000
-      num = Math.round(num)
+      num = Math.floor(num)
       num /= 100000
       var parts = num.toString().split(".");
       parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       return parts.join(".");
     } else {
       return num.toLocaleString()
+
+    }
+  }
+
+
+  function ValueNumber(num: number) {
+
+    if (num % 1 !== 0) {
+      const decimalPart = num.toString().split('.')[1]
+
+      for (let i = 0; i < decimalPart.length; i++) {
+        if (Number(decimalPart[i]) !== 0) {
+          num *= 10 ** (i + 4)
+          num = Math.floor(num)
+          num /= 10 ** (i + 4)
+          console.log(num)
+
+          // num = Number(parseFloat(String(num)).toFixed((i + 4)))
+          var parts = num.toString().split(".");
+          // console.log(parts)
+          // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          return parts.join(".");
+        }
+      }
+    } else {
+      num *= 10000
+      num = Math.floor(num)
+      num /= 10000
+
+      return String(num)
 
     }
   }
@@ -233,7 +263,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
   }));
 
   const onMax = () => {
-    setInputValue(H30Data[0]?.balance)
+    setInputValue(ValueNumber(Number(H30Data[0]?.balance)) ?? '0')
   }
 
 

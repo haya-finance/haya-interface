@@ -76,13 +76,42 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+function ValueNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.floor(num)
+        num /= 10 ** (i + 4)
+        console.log(num)
+
+        // num = Number(parseFloat(String(num)).toFixed((i + 4)))
+        var parts = num.toString().split(".");
+        // console.log(parts)
+        // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    num *= 10000
+    num = Math.floor(num)
+    num /= 10000
+
+    return String(num)
+
+  }
+}
+
 
 const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: PropsType) => {
 
 
   const { address } = useAccount();
 
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState<string>('')
 
   const InputChange = (event: any) => {
     const newValue = event.target.value.replace(/-/, '')
@@ -215,13 +244,14 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
     // setInputValue()
     let arr = []
     for (let i = 0; i < tokensData.length; i++) {
-      const num = Math.floor(Number(tokensData[i].balance) / Number(tokensData[i].num))
+      const num = Number(tokensData[i].balance) / Number(tokensData[i].num)
       arr.push(num)
     }
 
 
     const minNum = Math.min(...arr)
-    setInputValue(String(minNum))
+
+    setInputValue(ValueNumber(Number(minNum)) ?? '0')
 
   }
 

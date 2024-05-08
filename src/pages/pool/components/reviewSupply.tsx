@@ -15,11 +15,19 @@ import { ButtonProps } from '@mui/material/Button';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // import Web3 from 'web3';
-import { useState } from 'react';
-import { UniswapSepoliaRouterContract } from 'config';
+import { useEffect, useState } from 'react';
+import { H30_Address, UniswapSepoliaRouterContract } from 'config';
 import { LoadingButton } from '@mui/lab';
 import { MdAdd } from 'react-icons/md';
 import ApprovalTokens from './approveToken';
+import { useAccount } from 'wagmi';
+import { getEthersSigner } from 'contract/getEthersSigner';
+import { config } from 'contexts/wagmiConfig';
+import { ethers } from 'ethers';
+import swapabi from 'abi/swap.json'
+import { notification } from 'antd';
+import { NotificationPlacement } from 'antd/es/notification/interface';
+import { WarningIcon } from '@chakra-ui/icons';
 
 
 
@@ -89,11 +97,24 @@ type TypeProps = {
   windowWidth: number;
   windowHeight: number;
   onChange: (update: boolean) => void;
+  slippage: string;
 }
 
+const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  width: '100%',
+  color: '#fff',
+  boxShadow: 'none',
+  borderRadius: '10px',
+  backgroundColor: '#1AAE70',
+  '&:hover': {
+    backgroundColor: '#1AAE70',
+    color: '#fff',
+  },
+}));
 
 
-export default function ReviewSupply({ open, windowWidth, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onChange }: TypeProps) {
+
+export default function ReviewSupply({ open, windowWidth, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onChange, slippage }: TypeProps) {
 
 
   const [hidder, setHidder] = useState(false)
@@ -102,7 +123,50 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
     setHidder(!hidder)
   }
 
+  const [doneLoading, setDoneLoading] = useState<boolean>(false)
+
   // const provider = new ethers.BrowserProvider(window.ethereum)
+
+
+  const notificonfig = {
+    top: windowHeight / 2 + 100
+  }
+
+
+  const [api, contextHolder] = notification.useNotification(notificonfig);
+
+  const openNotification = (placement: NotificationPlacement) => {
+    const key = `open${Date.now()}`;
+    const btn = (
+      <Box>
+        <Stack width="100%" alignItems="center" textAlign="center" padding="12px 0" spacing="6px">
+          <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
+          <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
+            The transaction submission was either cancelled or failed.
+          </Typography>
+        </Stack>
+        <OkButton onClick={() => api.destroy()}>
+          OK
+        </OkButton>
+      </Box>
+    );
+
+
+
+    api.open({
+      message: '',
+      description: btn,
+      className: 'custom-class',
+      style: {
+        width: '280px',
+        padding: '20px 24px',
+        borderRadius: '20px'
+      },
+      key,
+      placement,
+
+    });
+  };
 
 
   const [openApproval, setOpenApproval] = useState(false)
@@ -111,15 +175,107 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
   // const { address } = useAccount();
 
   // const [loading, setLoading] = useState(false)
+  const { address } = useAccount();
 
 
 
   const handleSwap = async () => {
+    const provider = getEthersSigner(config)
+    const poolContract = new ethers.Contract(UniswapSepoliaRouterContract, swapabi, await provider)
+
     // const signer = await provider.getSigner()
-    handleSwapClose()
-    setOpenApproval(true)
+
+    if (toToken == 'ETH') {
+      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
+        // console.log('111111111111111111111')
+        await poolContract.addLiquidityETH(H30_Address, String(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+          from: address,
+          value: BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))
+
+
+        }).then(async (res) => {
+
+          // console.log('结果222222222222', res)
+          setDoneLoading(true)
+
+
+          const res1 = await res.wait()
+
+          if (res1.blockNumber == null) {
+            // console.log('nulllllllllll')
+          } else {
+
+            setDoneLoading(false)
+            handleSwapClose()
+            setUpdate(!update)
+            onChange(update)
+          }
+
+
+        }).catch((err) => {
+          // console.log("错误结果", err)
+          openNotification('top')
+          handleSwapClose()
+        })
+
+
+
+
+      } else {
+        handleSwapClose()
+        setOpenApproval(true)
+
+      }
+
+    } else {
+      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
+        // console.log('111111111111111111111')
+
+        await poolContract.addLiquidityETH(H30_Address, BigInt(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+          from: address,
+          value: BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))
+        }).then(async (res) => {
+
+          // console.log('结果222222222222', res)
+          setDoneLoading(true)
+
+
+          const res1 = await res.wait()
+
+          if (res1.blockNumber == null) {
+            // console.log('nulllllllllll')
+          } else {
+
+            setDoneLoading(false)
+            handleSwapClose()
+            setUpdate(!update)
+            onChange(update)
+          }
+
+
+        }).catch((err) => {
+          // console.log("错误结果", err)
+          openNotification('top')
+          handleSwapClose()
+        })
+
+
+      } else {
+        handleSwapClose()
+        setOpenApproval(true)
+
+      }
+    }
+
+
+
 
   }
+
+
+  useEffect(() => {
+
+  }, [doneLoading])
 
   const [update, setUpdate] = useState(false)
 
@@ -143,9 +299,11 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
   return (
     <>
-      <ApprovalTokens windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} toToken={toToken} fromToken={fromToken} inputFromNum={inputFromNum} inputToNum={inputToNum} windowWidth={windowWidth} />
+      <ApprovalTokens slippage={slippage} windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} toToken={toToken} fromToken={fromToken} inputFromNum={inputFromNum} inputToNum={inputToNum} windowWidth={windowWidth} />
+      {contextHolder}
 
       {
+
         windowWidth >= 600 ? (
           <Box sx={{ width: '100%' }}>
             <BootstrapDialog
@@ -290,7 +448,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
               </DialogContent>
               <DialogActions>
-                <SwapButton onClick={handleSwap}>
+                <SwapButton loading={doneLoading} onClick={handleSwap}>
                   Confirm Swap
                 </SwapButton>
               </DialogActions>
@@ -432,7 +590,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                 </Box>
 
 
-                <SwapButton onClick={handleSwap}>
+                <SwapButton loading={doneLoading} onClick={handleSwap}>
                   Confirm Swap
                 </SwapButton>
 

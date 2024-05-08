@@ -28,7 +28,8 @@ type typeProps = {
   data: any[];
   windowWeight: number;
   windowHeight: number;
-  OnChange: () => void
+  OnChange: () => void;
+  slippage: string;
 }
 
 
@@ -71,7 +72,7 @@ function formatNumber(num: number) {
     for (let i = 0; i < decimalPart.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= 10 ** (i + 4)
-        num = Math.round(num)
+        num = Math.floor(num)
         num /= 10 ** (i + 4)
         var parts = num.toString().split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -84,13 +85,39 @@ function formatNumber(num: number) {
   }
 }
 
+function ValueNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.floor(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        // console.log(parts)
+        // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    num *= 10000
+    num = Math.floor(num)
+    num /= 10000
+
+    return String(num)
+
+  }
+}
 
 
 
 
 
 
-const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => {
+
+const PoolSons = ({ data, windowWeight, OnChange, windowHeight, slippage }: typeProps) => {
 
 
   // const provider = new ethers.JsonRpcProvider(sepolia_rpc)
@@ -118,6 +145,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
 
   const [inputToValue, setInputValue] = useState('')
+  const [inputToShowValue, setInputShowValue] = useState('')
 
 
   const [pay, setPay] = React.useState('H20')
@@ -128,6 +156,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
 
   const [inputReValue, setInputReValue] = useState('')
+  const [inputReShowValue, setInputReShowValue] = useState('')
 
 
   const [receive, setReceive] = React.useState('ETH')
@@ -265,13 +294,24 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
   const InputChange = (event: any) => {
     const newValue = event.target.value.replace(/-/, '')
     setInputValue(newValue)
+    setInputShowValue(newValue)
+    const toToken = data.filter(item => item.symbol === pay)
+    const fromToken = data.filter(item => item.symbol === receive)
+    const num = (Number(fromToken[0].proportion) * Number(newValue)) / Number(toToken[0].proportion)
+    setInputReValue(String(num))
+    setInputReShowValue(ValueNumber(num) ?? '0')
 
   }
 
   const InputFromChange = (event: any) => {
     const newValue = event.target.value.replace(/-/, '')
     setInputReValue(newValue)
-
+    setInputReShowValue(newValue)
+    const toToken = data.filter(item => item.symbol === pay)
+    const fromToken = data.filter(item => item.symbol === receive)
+    const num = (Number(toToken[0].proportion) * Number(newValue)) / Number(fromToken[0].proportion)
+    setInputValue(String(num))
+    setInputShowValue(ValueNumber(num) ?? '0')
   }
 
 
@@ -325,7 +365,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
   useEffect(() => {
     // console.log(inputReValue)
 
-  }, [inputReValue, inputToValue])
+  }, [inputReValue, inputToValue, inputToShowValue, inputReShowValue])
 
 
   const onMax = () => {
@@ -346,6 +386,8 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
   const onChange = (change: boolean) => {
     setInputValue('')
     setInputReValue('')
+    setInputShowValue('')
+    setInputReShowValue('')
     OnChange()
   }
 
@@ -355,7 +397,8 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
     <>
 
       <Box sx={{ width: '100%' }}>
-        <ReviewSupply onChange={onChange} windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
+        <ReviewSupply slippage={slippage} onChange={onChange} windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
+
         {
           windowWeight >= 600 ? (
             <>
@@ -392,7 +435,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
                   <Stack alignItems="center" direction="row" sx={{ padding: '20px 0 0 0', height: '56px' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1} >
-                      <BootstrapInput onBlur={handleBlur} disabled={disable} value={inputToValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} />
+                      <BootstrapInput onBlur={handleBlur} disabled={disable} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} />
                     </Stack>
                     <IndexTokenButton
                       variant="text"

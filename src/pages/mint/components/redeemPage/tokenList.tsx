@@ -80,19 +80,7 @@ export default function RedeemTokensList({ data, inputNum, windowWidth }: DataPr
                             {
                               index == 0 ? (
                                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600, pb: "6px" }} color="#979797">
-                                  My balance
-                                </Typography>
-                              ) : null
-                            }
-                            <Typography sx={{ color: "#464646", fontSize: '11px', fontWeight: 700 }}>
-                              {formatNumber(Number(item.balance))}
-                            </Typography>
-                          </Stack>
-                          <Stack alignItems="end" width="40%">
-                            {
-                              index == 0 ? (
-                                <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600, pb: "6px" }} color="#979797">
-                                  Need
+                                  Receive
                                 </Typography>
                               ) : null
                             }

@@ -130,7 +130,7 @@ export default function TokensList({ data, inputNum, name, windowWidth }: DataPr
                             {
                               index == 0 ? (
                                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600, pb: "6px" }} color="#979797">
-                                  Need
+                                  Requires
                                 </Typography>
                               ) : null
                             }

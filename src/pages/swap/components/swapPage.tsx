@@ -300,8 +300,8 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
       setInputReValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
       setInputReShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
     }).catch(err => {
-      setInputReValue('0')
-      setInputReShowValue('0')
+      setInputReValue('')
+      setInputReShowValue('')
       // console.log('错误输出', err)
     })
 
@@ -321,8 +321,8 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
       setInputValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
       setInputShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
     }).catch(err => {
-      setInputValue('0')
-      setInputShowValue('0')
+      setInputValue('')
+      setInputShowValue('')
       // console.log('错误输出', err)
     })
 
@@ -350,6 +350,10 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
     const newValue = event.target.value.replace(/-/, '')
     setInputValue(newValue)
     setInputShowValue(newValue)
+    if (newValue == "") {
+      setInputReShowValue("")
+      setInputReValue("")
+    }
     if (pay !== 'Select token' && receive !== "Select token") {
       Swap(newValue)
       OneSwap()
@@ -362,6 +366,10 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
     const newValue = event.target.value.replace(/-/, '')
     setInputReValue(newValue)
     setInputReShowValue(newValue)
+    if (newValue == "") {
+      setInputShowValue("")
+      setInputValue("")
+    }
     if (pay !== 'Select token' && receive !== "Select token") {
       // console.log('数量', newValue)
       ReSwap(newValue)
@@ -446,7 +454,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
 
       }
     }
-  }, [pay, receive])
+  }, [pay, receive, inputToValue, inputReValue])
 
 
 

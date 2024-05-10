@@ -100,7 +100,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb="10px">
           <Stack direction="row" alignItems="center" spacing="12px">
             <Stack direction="row" alignItems="center" spacing="10px">
-              <Box component='button' onClick={onCheckBTC} sx={{ position: 'relative', width: '22px', borderRadius: '7px', height: '22px', border: btcShow ? '1px solid #5EAE4A' : 'none', backgroundColor: btcShow ? 'transparent' : '#E3E8EF' }}>
+              <Box component='button' onClick={onCheckBTC} sx={{ cursor: 'pointer', position: 'relative', width: '22px', borderRadius: '7px', height: '22px', border: btcShow ? '1px solid #5EAE4A' : 'none', backgroundColor: btcShow ? 'transparent' : '#E3E8EF' }}>
                 <MdOutlineCheck size={20} color="#5EAE4A" style={{ position: 'absolute', top: '0', right: '-1px', display: btcShow ? 'block' : 'none' }} />
 
 
@@ -112,7 +112,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
             </Stack>
             <Stack direction="row" alignItems="center" spacing="10px">
-              <Box component="button" onClick={onCheckSPX} sx={{ position: 'relative', width: '22px', height: '22px', borderRadius: '7px', border: spxShow ? '1px solid #5EAE4A' : 'none', backgroundColor: spxShow ? 'transparent' : '#E3E8EF' }}>
+              <Box component="button" onClick={onCheckSPX} sx={{ cursor: 'pointer', position: 'relative', width: '22px', height: '22px', borderRadius: '7px', border: spxShow ? '1px solid #5EAE4A' : 'none', backgroundColor: spxShow ? 'transparent' : '#E3E8EF' }}>
                 <MdOutlineCheck size={20} color="#5EAE4A" style={{ position: 'absolute', top: '0', right: '-1px', display: spxShow ? 'block' : 'none' }} />
 
 

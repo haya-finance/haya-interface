@@ -10,6 +10,7 @@ import Button, { ButtonProps } from '@mui/material/Button';
 import titlePng from 'assets/actionImg/title.png'
 import Methodology from './methodology';
 import HistoryNotial from './growth';
+import { useNavigate } from 'react-router-dom';
 
 // third party
 
@@ -34,6 +35,13 @@ const BuyButton = styled(Button)<ButtonProps>(({ theme }) => ({
   },
 }));
 const HeaderPage = ({ windowWidth }: PropsType) => {
+  const navigate = useNavigate()
+
+
+  const goToSwap = () => {
+    navigate('/swap')
+
+  }
 
   return (
     <>
@@ -51,7 +59,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
               <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '16px', lineHeight: '24px', mt: '20px', mb: '30px' }}  >
                 H20 is an entirely data-driven on-chain index token consisting of 20 top-tier crypto market assets.It is fully open-source and represents the growth of the crypto market.
               </Typography>
-              <BuyButton>Buy $H20</BuyButton>
+              <BuyButton onClick={goToSwap}>Buy $H20</BuyButton>
             </Stack>
             <Box flex={1} textAlign="right">
               <img

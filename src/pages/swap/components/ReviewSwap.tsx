@@ -215,6 +215,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
           }).catch((err) => {
             openNotification('top')
             handleSwapClose()
+            setLoading(false)
             // console.log('错误1', err)
           })
 
@@ -223,6 +224,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
         }).catch((err) => {
           openNotification('top')
           handleSwapClose()
+          setLoading(false)
           // console.log('错误1', err)
 
         })
@@ -237,6 +239,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
         }).catch((err) => {
           openNotification('top')
           handleSwapClose()
+          setLoading(false)
           // console.log('错误1', err)
         })
 
@@ -268,6 +271,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
               }).catch((err) => {
                 openNotification('top')
                 handleSwapClose()
+                setLoading(false)
 
               })
 
@@ -275,11 +279,13 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
             }).catch((err) => {
               openNotification('top')
               handleSwapClose()
+              setLoading(false)
               // console.log('错误1', err)
             })
           }).catch((err) => {
             openNotification('top')
             handleSwapClose()
+            setLoading(false)
             // console.log('错误1', err)
 
           })
@@ -304,9 +310,10 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
 
 
               }).catch((err) => {
-                console.log(err)
+                // console.log(err)
                 openNotification('top')
                 handleSwapClose()
+                setLoading(false)
 
               })
 
@@ -314,7 +321,8 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
             }).catch((err) => {
               openNotification('top')
               handleSwapClose()
-              console.log('错误1', err)
+              setLoading(false)
+              // console.log('错误1', err)
             })
 
 
@@ -346,11 +354,13 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
               }).catch((err) => {
                 openNotification('top')
                 handleSwapClose()
+                setLoading(false)
                 // console.log('错误1', err)
               })
             }).catch((err) => {
               openNotification('top')
               handleSwapClose()
+              setLoading(false)
               // console.log('错误1', err)
 
             })
@@ -365,6 +375,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
             }).catch((err) => {
               openNotification('top')
               handleSwapClose()
+              setLoading(false)
               // console.log('错误1', err)
             })
 

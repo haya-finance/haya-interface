@@ -3,7 +3,7 @@ import { Button, Stack, Typography, Box } from '@mui/material';
 import TokenColorIcon from 'assets/tokens';
 import React, { useEffect, useState } from 'react';
 // import { MdAddBox, MdIndeterminateCheckBox } from "react-icons/md";
-import { useAccount } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import SelectIndexToken from './select_indexToken';
 import { styled } from '@mui/material/styles';
 import { ButtonProps } from '@mui/material/Button';
@@ -109,7 +109,7 @@ function ValueNumber(num: number) {
 const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: PropsType) => {
 
 
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
 
   const [inputValue, setInputValue] = useState<string>('')
 
@@ -200,6 +200,15 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
 
   }
 
+  const ConnectNetorkButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    width: '100%',
+    color: '#fff',
+    backgroundColor: '#1AAE70',
+    '&:hover': {
+      backgroundColor: '#1AAE70',
+    },
+  }));
+
 
   const IndexTokenButton = styled(Button)<ButtonProps>(({ theme }) => ({
     // width: '%',
@@ -255,6 +264,38 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
 
   }
 
+  const [disable, setDisable] = React.useState(true)
+
+
+
+
+
+
+
+
+  // console.log('arrs', arrs)
+
+
+
+
+  useEffect(() => {
+    if (chain?.id !== undefined) {
+      setDisable(false)
+    } else {
+      setDisable(true)
+    }
+
+  }, [chain?.id])
+
+
+  const { switchChain } = useSwitchChain()
+
+
+  const onChangeNetwork = () => {
+    switchChain({ chainId: 421614 })
+
+  }
+
 
 
 
@@ -296,7 +337,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                     $ 0.00
                   </Typography>
                   <Stack alignItems="center" direction="row" sx={{ padding: '12px 0' }} justifyContent="space-between" spacing={2}>
-                    <BootstrapInput value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: '#464646' }} placeholder="0" />
+                    <BootstrapInput disabled={disable} value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: '#464646' }} placeholder="0" />
 
                     {/* <Stack flex={1} direction="row" alignItems="center" spacing="2px">
                       <IconButton onClick={onDec} size="large" sx={{ p: 0, width: '30px', height: '30px' }}><MdIndeterminateCheckBox color="#9b9b9b" size={30} /></IconButton>
@@ -319,6 +360,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                         fontSize: '14px',
                         padding: '4px 8px'
                       }}
+                      disabled={disable}
                       onClick={handleClickOpen}
                       startIcon={<TokenColorIcon size={20} name={indexToken} />}
                       endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
@@ -335,29 +377,43 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                 address !== undefined ? (
                   <>
                     {
-                      inputValue == '' ? (
-                        <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                          <SelectButton disabled>Enter amount</SelectButton>
-                        </Box>
-
+                      chain?.id === undefined ? (
+                        <>
+                          <Box sx={{ width: "600px", margin: '0 auto' }}>
+                            <ConnectNetorkButton onClick={onChangeNetwork}>
+                              Connect to Arbitrum Sepolia
+                            </ConnectNetorkButton>
+                          </Box>
+                        </>
                       ) : (
                         <>
                           {
-                            tokensData.every(item => Number(item.balance) >= Number(item.num) * Number(inputValue)) ? (
+                            inputValue == '' ? (
                               <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                                <EnterButton onClick={handleSwapOpen}>{`Mint H20`}</EnterButton>
+                                <SelectButton disabled>Enter amount</SelectButton>
                               </Box>
 
                             ) : (
-                              <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                                <SelectButton disabled>Insufficient balane</SelectButton>
-                              </Box>
+                              <>
+                                {
+                                  tokensData.every(item => Number(item.balance) >= Number(item.num) * Number(inputValue)) ? (
+                                    <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
+                                      <EnterButton onClick={handleSwapOpen}>{`Mint H20`}</EnterButton>
+                                    </Box>
+
+                                  ) : (
+                                    <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
+                                      <SelectButton disabled>Insufficient balane</SelectButton>
+                                    </Box>
+
+                                  )
+                                }
+
+                              </>
 
                             )
                           }
-
                         </>
-
                       )
                     }
                   </>
@@ -409,7 +465,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                     $ 0.00
                   </Typography>
                   <Stack alignItems="center" direction="row" sx={{ padding: '12px 0' }} justifyContent="space-between" spacing="4px">
-                    <BootstrapInput minRows={0} value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: '#464646', fontSize: '20px' }} placeholder="0" />
+                    <BootstrapInput disabled={disable} minRows={0} value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: '#464646', fontSize: '20px' }} placeholder="0" />
 
                     {/* <Stack flex={1} direction="row" alignItems="center" spacing="2px">
                       <IconButton onClick={onDec} size="large" sx={{ p: 0, width: '20px', height: '20px' }}><MdIndeterminateCheckBox color="#9b9b9b" size={30} /></IconButton>
@@ -433,6 +489,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                         fontSize: '14px',
                         padding: '4px 8px'
                       }}
+                      disabled={disable}
                       onClick={handleClickOpen}
                       startIcon={<TokenColorIcon size={20} name={indexToken} />}
                       endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
@@ -449,29 +506,43 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                 address !== undefined ? (
                   <>
                     {
-                      inputValue == '' ? (
-                        <Box sx={{ width: '100%', mt: '10px' }}>
-                          <SelectButton disabled>Enter amount</SelectButton>
-                        </Box>
-
+                      chain?.id === undefined ? (
+                        <>
+                          <Box sx={{ width: '100%' }}>
+                            <ConnectNetorkButton onClick={onChangeNetwork}>
+                              Connect to Arbitrum Sepolia
+                            </ConnectNetorkButton>
+                          </Box>
+                        </>
                       ) : (
                         <>
                           {
-                            tokensData.every(item => Number(item.balance) >= Number(item.num) * Number(inputValue)) ? (
+                            inputValue == '' ? (
                               <Box sx={{ width: '100%', mt: '10px' }}>
-                                <EnterButton onClick={handleSwapOpen}>{`Mint H20`}</EnterButton>
+                                <SelectButton disabled>Enter amount</SelectButton>
                               </Box>
 
                             ) : (
-                              <Box sx={{ width: '100%', mt: '10px' }}>
-                                <SelectButton disabled>Insufficient balane</SelectButton>
-                              </Box>
+                              <>
+                                {
+                                  tokensData.every(item => Number(item.balance) >= Number(item.num) * Number(inputValue)) ? (
+                                    <Box sx={{ width: '100%', mt: '10px' }}>
+                                      <EnterButton onClick={handleSwapOpen}>{`Mint H20`}</EnterButton>
+                                    </Box>
+
+                                  ) : (
+                                    <Box sx={{ width: '100%', mt: '10px' }}>
+                                      <SelectButton disabled>Insufficient balane</SelectButton>
+                                    </Box>
+
+                                  )
+                                }
+
+                              </>
 
                             )
                           }
-
                         </>
-
                       )
                     }
                   </>

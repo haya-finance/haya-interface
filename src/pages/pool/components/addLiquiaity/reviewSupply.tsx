@@ -212,7 +212,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
     // const signer = await provider.getSigner()
 
     if (toToken == 'ETH') {
-      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) < BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
+      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
         // console.log('111111111111111111111')
         await poolContract.addLiquidityETH(H30_Address, String(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
           from: address,
@@ -254,7 +254,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
       }
 
     } else {
-      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
+      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
         // console.log('111111111111111111111')
 
         await poolContract.addLiquidityETH(H30_Address, BigInt(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {

@@ -49,7 +49,7 @@ export default function PoolPage({ windowHeight, windowWidth }: PropsType) {
     },
     {
       symbol: 'ETH',
-      address: '0x0cE40884F9460593Dd804E346E2fE7CA9b35D3c7',
+      address: '0xc8d5A5b5E59dF02Eb3108158C724ED956b020029',
       balance: '0',
       network: chain?.name ?? 'Arbitrum Sepolia',
       allowance: '',

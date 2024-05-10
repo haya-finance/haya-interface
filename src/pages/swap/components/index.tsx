@@ -10,7 +10,7 @@ import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
 import SwapSons from './swapPage';
 // import Web3 from 'web3'
 import tokenAbi from 'abi/token.json'
-import { sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
+import { H30_Address, sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
 import { ethers } from 'ethers';
 import { PiWarningBold } from "react-icons/pi";
 
@@ -51,7 +51,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
     },
     {
       symbol: 'H20',
-      address: '0x19cb7Ac5E56Fa4ea4da5F20e27097903dd07aF52',
+      address: H30_Address,
       balance: '0',
       network: chain?.name ?? 'Arbitrum Sepolia',
       decimasl: '',
@@ -77,7 +77,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
     },
     {
       symbol: 'ETH',
-      address: '0x0d05D33Ab10870069DE5Aa7Ddcd42fbEB8C44dCd',
+      address: '0xc8d5A5b5E59dF02Eb3108158C724ED956b020029',
       balance: '0',
       network: chain?.name ?? 'Arbitrum Sepolia',
       decimasl: '',

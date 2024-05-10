@@ -430,6 +430,12 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
       setBalance(String(Number(tokens[0]?.balance)))
     }
 
+    if (receive !== "Select token" && address !== undefined) {
+      const tokens = data.filter(item => item.symbol === receive)
+      // console.log('tokens', tokens)
+      setReBalance(String(Number(tokens[0]?.balance)))
+    }
+
     if (pay !== 'Select token' && receive !== 'Select token') {
 
       OneSwap()

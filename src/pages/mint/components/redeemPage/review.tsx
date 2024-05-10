@@ -389,7 +389,7 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
 
           </Box>
         ) : (
-          <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff' }, left: '5px', right: '5px', borderRadius: '10px 10px 0 0' }}>
+          <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff', left: '5px', right: '5px', borderRadius: '10px 10px 0 0' } }}>
             <Box sx={{ width: 'auto', padding: '10px 10px 20px 10px' }}>
               <Box sx={{ width: '100%' }}>
 

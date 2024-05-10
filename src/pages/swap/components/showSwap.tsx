@@ -15,7 +15,8 @@ type DataProps = {
   toToken: string,
   fromToken: string,
   windowWeight: number,
-  oneSwap: string
+  oneSwap: string;
+  liquidity: string;
 }
 
 
@@ -37,7 +38,7 @@ const Accordion = styled((props: AccordionProps) => (
 
 
 
-export default function ShowSwap({ toToken, fromToken, windowWeight, oneSwap }: DataProps) {
+export default function ShowSwap({ toToken, fromToken, windowWeight, oneSwap, liquidity }: DataProps) {
 
   const AccordionSummary = styled((props: AccordionSummaryProps) => (
     <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -88,7 +89,7 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, oneSwap }: 
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails sx={{ paddingBottom: '0' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: 2, mr: 2 }} >
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
@@ -97,7 +98,7 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, oneSwap }: 
             </Stack>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                0.5%
+                {liquidity}
               </Typography>
             </Stack>
           </Stack>

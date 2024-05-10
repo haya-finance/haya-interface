@@ -30,6 +30,7 @@ import PEPE from './pepe';
 import RNDR from './rndr';
 import SHIBColor from './shib';
 import SOLColor from './sol';
+import SPXColor from './spx';
 import TonCoinColor from './toncoin';
 import TRXColor from './trx';
 import UNI from './uni';
@@ -58,6 +59,10 @@ const TokenColorIcon = ({ name, size }: Props) => {
       return <DAIColor size={size} />;
     case 'WBNB':
       return <BNBColor size={size} />;
+    case 'BNB':
+      return <BNBColor size={size} />;
+    case 'SPX':
+      return <SPXColor size={size} />;
     case 'USDT':
       return <USDTColor size={size} />;
     case 'USDC':
@@ -85,6 +90,8 @@ const TokenColorIcon = ({ name, size }: Props) => {
     case 'SHIB':
       return <SHIBColor size={size} />;
     case 'TONCOIN':
+      return <TonCoinColor size={size} />;
+    case 'TON':
       return <TonCoinColor size={size} />;
     case 'LINK':
       return <LinkColor size={size} />;

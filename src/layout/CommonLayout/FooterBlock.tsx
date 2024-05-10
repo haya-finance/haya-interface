@@ -28,15 +28,15 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
   }
 
   return (
-    <Box sx={windowWidth >= 600 ? { width: '100%', backgroundColor: '#1b1b1b', } : { width: `${windowWidth}px`, backgroundColor: '#1b1b1b', }} >
+    <Box sx={windowWidth >= 600 ? { width: '100%', backgroundColor: '#F6F6F6', } : { width: `${windowWidth}px`, backgroundColor: '#F6F6F6', }} >
       {
         windowWidth >= 600 ? (
           <Container>
 
-            <Stack direction="row" justifyContent="space-between" p="100px 0">
+            <Stack direction="row" justifyContent="space-between" p="100px 36px 60px 36px">
               <Box sx={{ maxWidth: '700px' }}>
                 <FootLogo />
-                <Typography variant="body1" textAlign="start" sx={{ color: '#c0c0c0', fontSize: "16px", fontWeight: '24px' }}  >
+                <Typography variant="body1" textAlign="start" sx={{ color: '#6F6F6F', fontSize: "16px", fontWeight: '24px' }}  >
                   Haya aspires to become a leading provider of innovative decentralized financial solutions,driving the development of ZKML DeFi and setting new industry standards.
                 </Typography>
                 <Stack direction="row" spacing="10px" pt="20px">
@@ -59,28 +59,31 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
               <Box>
                 <Stack direction="row" spacing="60px">
                   <Stack spacing="20px">
-                    <Typography variant="body1" textAlign="start" sx={{ color: '#fff', fontSize: "15px", lineHeight: '21px' }}  >
+                    <Typography variant="body1" textAlign="start" sx={{ color: '#000000', fontSize: "15px", lineHeight: '21px' }}  >
                       App
                     </Typography>
-                    <Link to="/swap" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#c0c0c0' }} component={RouterLink} underline="none">
+                    <Link to="/swap" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
                       Swap
                     </Link>
-                    <Link to="/mint" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#c0c0c0' }} component={RouterLink} underline="none">
+                    <Link to="/pool" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                      Pool
+                    </Link>
+                    <Link to="/mint" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
                       Mint
                     </Link>
 
                   </Stack>
                   <Stack spacing="20px">
-                    <Typography variant="body1" textAlign="start" sx={{ color: '#fff', fontSize: "15px", lineHeight: '21px' }}  >
+                    <Typography variant="body1" textAlign="start" sx={{ color: '#000000', fontSize: "15px", lineHeight: '21px' }}  >
                       Resource
                     </Typography>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#c0c0c0' }} component={RouterLink} underline="none">
+                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
                       White Paper
                     </Link>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#c0c0c0' }} component={RouterLink} underline="none">
+                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
                       Medium
                     </Link>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#c0c0c0' }} component={RouterLink} underline="none">
+                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
                       Brand Kit
                     </Link>
 
@@ -90,13 +93,8 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
             </Stack>
 
             <Box sx={{ height: '100px' }}>
-              <Typography variant="body1" textAlign="center" sx={{ color: '#c0c0c0', lineHeight: '100px' }}  >
+              <Typography variant="body1" textAlign="center" sx={{ color: '#9B9B9B', lineHeight: '100px' }}  >
                 © 2024 Haya. All rights reserved
-              </Typography>
-            </Box>
-            <Box >
-              <Typography variant="body1" textAlign="center" sx={{ color: '#c0c0c0', lineHeight: '60px', fontSize: '12px' }}  >
-                {`(V1.0.0) 2024/04/30`}
               </Typography>
             </Box>
           </Container>
@@ -105,7 +103,7 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
             <Stack sx={{ width: '100%', p: "60px 20px 60px 20px" }}>
               <Box>
                 <FootLogo />
-                <Typography variant="body1" textAlign="start" sx={{ color: '#c0c0c0', fontSize: "14px", fontWeight: '24px' }}  >
+                <Typography variant="body1" textAlign="start" sx={{ color: '#6F6F6F', fontSize: "14px", fontWeight: '24px' }}  >
                   Haya aspires to become a leading provider of innovative decentralized financial solutions,driving the development of ZKML DeFi and setting new industry standards.
                 </Typography>
                 <Stack direction="row" spacing="10px" pt="20px">
@@ -126,28 +124,31 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                 </Stack>
                 <Stack direction="row" spacing="60px" pt="30px">
                   <Stack spacing="20px">
-                    <Typography variant="body1" textAlign="start" sx={{ color: '#fff', fontSize: "15px", lineHeight: '21px' }}  >
+                    <Typography variant="body1" textAlign="start" sx={{ color: '#000000', fontSize: "15px", lineHeight: '21px' }}  >
                       App
                     </Typography>
-                    <Link to="/swap" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#c0c0c0' }} component={RouterLink} underline="none">
+                    <Link to="/swap" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
                       Swap
                     </Link>
-                    <Link to="/mint" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#c0c0c0' }} component={RouterLink} underline="none">
+                    <Link to="/pool" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                      Pool
+                    </Link>
+                    <Link to="/mint" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
                       Mint
                     </Link>
 
                   </Stack>
                   <Stack spacing="20px">
-                    <Typography variant="body1" textAlign="start" sx={{ color: '#fff', fontSize: "15px", lineHeight: '21px' }}  >
+                    <Typography variant="body1" textAlign="start" sx={{ color: '#000000', fontSize: "15px", lineHeight: '21px' }}  >
                       Resource
                     </Typography>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#c0c0c0' }} component={RouterLink} underline="none">
+                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
                       White Paper
                     </Link>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#c0c0c0' }} component={RouterLink} underline="none">
+                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
                       Medium
                     </Link>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#c0c0c0' }} component={RouterLink} underline="none">
+                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
                       Brand Kit
                     </Link>
 
@@ -157,13 +158,8 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
               </Box>
             </Stack>
             <Box sx={{ height: '60px' }}>
-              <Typography variant="body1" textAlign="center" sx={{ color: '#c0c0c0', lineHeight: '60px' }}  >
+              <Typography variant="body1" textAlign="center" sx={{ color: '#9B9B9B', lineHeight: '60px' }}  >
                 © 2024 Haya. All rights reserved
-              </Typography>
-            </Box>
-            <Box >
-              <Typography variant="body1" textAlign="center" sx={{ color: '#c0c0c0', lineHeight: '60px', fontSize: '12px' }}  >
-                {`(V1.0.0) 2024/04/30`}
               </Typography>
             </Box>
 

@@ -50,6 +50,7 @@ function ElevationScroll({ layout, children, window }: any) {
     target: window ? window() : undefined
   });
 
+
   const backColorScroll = '#fff';
   const backColor = layout !== 'landing' ? backColorScroll : '#fff';
 
@@ -250,7 +251,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
       {
         windowWidth >= 600 ? (
           <ElevationScroll layout={layout} {...others}>
-            <AppBar sx={{ bgcolor: 'transparent', color: theme.palette.text.primary, boxShadow: 'none', borderBottom: currentPath === '/' ? 0 : '0.5px solid rgb(0, 0, 0, 0.1)' }}>
+            <AppBar sx={{ bgcolor: 'transparent', color: theme.palette.text.primary, boxShadow: 'none', padding: '0 36px', borderBottom: currentPath === '/' ? 0 : '0.5px solid rgb(0, 0, 0, 0.1)' }}>
               <Container disableGutters={matchDownMd}>
                 <Toolbar>
                   <Stack direction="row" width="100%" justifyContent="space-between">

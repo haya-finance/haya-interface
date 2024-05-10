@@ -66,26 +66,26 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
 
 
-function formatNumber(num: number) {
+// function formatNumber(num: number) {
 
-  if (num % 1 !== 0) {
-    const decimalPart = num.toString().split('.')[1]
+//   if (num % 1 !== 0) {
+//     const decimalPart = num.toString().split('.')[1]
 
-    for (let i = 0; i < decimalPart.length; i++) {
-      if (Number(decimalPart[i]) !== 0) {
-        num *= 10 ** (i + 4)
-        num = Math.round(num)
-        num /= 10 ** (i + 4)
-        var parts = num.toString().split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
-      }
-    }
-  } else {
-    return num.toLocaleString()
+//     for (let i = 0; i < decimalPart.length; i++) {
+//       if (Number(decimalPart[i]) !== 0) {
+//         num *= 10 ** (i + 4)
+//         num = Math.round(num)
+//         num /= 10 ** (i + 4)
+//         var parts = num.toString().split(".");
+//         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+//         return parts.join(".");
+//       }
+//     }
+//   } else {
+//     return num.toLocaleString()
 
-  }
-}
+//   }
+// }
 
 
 function ValueNumber(num: number) {
@@ -145,6 +145,8 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
   useEffect(() => {
     if (chain?.id !== undefined) {
       setDisable(false)
+    } else {
+      setDisable(true)
     }
 
   }, [chain?.id])
@@ -386,21 +388,25 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
 
 
   useEffect(() => {
-    // console.log('自己账户的钱', balance)
+    console.log('自己账户的钱', balance, reBalance)
 
   }, [balance, reBalance])
 
   useEffect(() => {
     // console.log('自己账户的钱', balance)
+
     if (address !== undefined && pay !== "Select token") {
-      setDisable(false)
+      // setDisable(false)
       const tokens = data.filter(item => item.symbol === pay)
-      const Retokens = data.filter(item => item.symbol === receive)
       setBalance(String(Number(tokens[0]?.balance)))
+    } else if (address !== undefined && receive !== "Select token") {
+      const Retokens = data.filter(item => item.symbol === receive)
       setReBalance(String(Number(Retokens[0]?.balance)))
+
+
     }
 
-  }, [address])
+  }, [address, data])
 
 
 
@@ -450,9 +456,20 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
   const onMax = () => {
     if (pay !== 'Select token') {
       const tokens = data.filter(item => item?.symbol === pay)
-      setInputValue(String(Number(tokens[0]?.balance) / Number(tokens[0]?.decimasl)))
-      setInputShowValue(String(Number(tokens[0]?.balance) / Number(tokens[0]?.decimasl)))
+      setInputValue(String(Number(tokens[0]?.balance)))
+      setInputShowValue(ValueNumber(Number(tokens[0]?.balance)) ?? '0')
     }
+
+  }
+
+
+  const onReMax = () => {
+    if (receive !== 'Select token') {
+      const tokens = data.filter(item => item?.symbol === receive)
+      setInputReValue(String(Number(tokens[0]?.balance)))
+      setInputReShowValue(ValueNumber(Number(tokens[0]?.balance)) ?? '0')
+    }
+
 
   }
 
@@ -498,7 +515,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                   <Box sx={{ position: 'absolute', top: 0, right: '2px', display: pay === 'Select token' ? 'none' : "block" }}>
                     <Stack direction="row" spacing={1}>
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span>{`${formatNumber(Number(balance))}`}</span>
+                        Balance: <span>{`${ValueNumber(Number(balance))}`}</span>
                       </Typography>
                       <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onMax} color="primary">
                         MAX
@@ -576,6 +593,16 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                   <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
                     $ 0.00
                   </Typography>
+                  <Box sx={{ position: 'absolute', top: 0, right: '2px', display: receive === 'Select token' ? 'none' : "block" }}>
+                    <Stack direction="row" spacing={1}>
+                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                        Balance: <span>{`${ValueNumber(Number(reBalance))}`}</span>
+                      </Typography>
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onReMax} color="primary">
+                        MAX
+                      </Typography>
+                    </Stack>
+                  </Box>
                   <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
                       <BootstrapInput disabled={disable} onBlur={handleReBlur} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px', color: '#6f6f6f' }} placeholder="0" />
@@ -646,7 +673,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                       pl: "0.7rem", pr: '0.3rem', backgroundColor: "#fff",
                       width: "600px", margin: "0 auto", marginBottom: "10px"
                     }}
-                  ><ShowSwap windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} /></Box>
+                  ><ShowSwap liquidity={slippage} windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} /></Box>
 
                 )
               }
@@ -740,7 +767,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                 <SelectTOToken windowWidth={windowWeight} open={open} handleClose={handleClose} handleListClose={handleToToken} data={data} />
                 <Box sx={{ position: "relative" }}>
 
-                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-46%', left: '46%', borderRadius: '4px' }}>
+                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-30%', left: '42%', borderRadius: '4px' }}>
                     <Box component="button" sx={{ backgroundColor: '#f6f6f6', m: '5px 6px', p: '5px 6px', borderRadius: '4px', cursor: 'pointer', border: 'none' }} onClick={OnExchange}>
                       <AiOutlineArrowDown color='#333' size={15} />
                     </Box>
@@ -756,7 +783,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                   <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
                     <Stack direction="row" spacing={1}>
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span style={{ color: '#000' }}>{`${balance}`}</span>
+                        Balance: <span style={{ color: '#000' }}>{`${ValueNumber(Number(balance))}`}</span>
                       </Typography>
                       <Typography component={Button} variant='body1' sx={{ textDecoration: "none", fontSize: '11px', minWidth: 0, p: 0 }} onClick={onMax} color="primary">
                         MAX
@@ -831,6 +858,16 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                   <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
                     $ 0.00
                   </Typography>
+                  <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
+                    <Stack direction="row" spacing={1}>
+                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                        Balance: <span style={{ color: '#000' }}>{`${ValueNumber(Number(reBalance))}`}</span>
+                      </Typography>
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", fontSize: '11px', minWidth: 0, p: 0 }} onClick={onReMax} color="primary">
+                        MAX
+                      </Typography>
+                    </Stack>
+                  </Box>
                   <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
                       <BootstrapInput disabled={disable} onBlur={handleReBlur} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px', color: '#6f6f6f' }} placeholder="0" />
@@ -900,7 +937,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                       mt: '10px', mb: 2, pl: '0.7rem', bg: "#fff", pr: "0.3rem",
                       width: "100%"
                     }}
-                  ><ShowSwap windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} /></Box>
+                  ><ShowSwap liquidity={slippage} windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} /></Box>
 
                 )
               }

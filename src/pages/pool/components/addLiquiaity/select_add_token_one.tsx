@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Drawer, Stack, Typography } from '@mui/material';
-import RedeemIndexTokenList from './indexTokenList';
+import OneTokenList from './onetokenList';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '.MuiDialog-paper': {
@@ -29,16 +29,17 @@ interface Props {
   handleListClose: (value: string) => void;
   data: any[];
   windowWidth: number
+
 }
 
-export default function RedeemSelectIndexToken({ open, handleClose, handleListClose, data, windowWidth }: Props) {
+export default function SelectAddOneToken({ open, handleClose, handleListClose, data, windowWidth }: Props) {
   return (
     <>
       {
         windowWidth >= 600 ? (
           <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} sx={{ width: '100%' }}>
             <DialogTitle sx={{ m: 0, p: 2, pr: 4, fontWeight: 700 }} id="customized-dialog-title">
-              Select a Index Token
+              Select a Token
             </DialogTitle>
             <IconButton
               aria-label="close"
@@ -56,14 +57,14 @@ export default function RedeemSelectIndexToken({ open, handleClose, handleListCl
             <DialogContent>
               <Stack direction="row" justifyContent="space-between" sx={{ pr: 2, pl: 2 }}>
                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                  Index Token
+                  Token
                 </Typography>
                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
                   My balance
                 </Typography>
 
               </Stack>
-              <RedeemIndexTokenList onClose={handleListClose} data={data} />
+              <OneTokenList onClose={handleListClose} data={data} />
             </DialogContent>
           </BootstrapDialog>
         ) : (
@@ -71,7 +72,7 @@ export default function RedeemSelectIndexToken({ open, handleClose, handleListCl
             <Box sx={{ width: 'auto', padding: '10px 10px 20px 10px' }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" pb="10px">
                 <Typography sx={{ color: "#464646", fontSize: '17px', fontWeight: 400 }}>
-                  Select a Index Token
+                  Select a Token
                 </Typography>
                 <IconButton
                   aria-label="close"
@@ -82,24 +83,23 @@ export default function RedeemSelectIndexToken({ open, handleClose, handleListCl
                   <CloseIcon />
                 </IconButton>
               </Stack>
-              <Stack direction="row" justifyContent="space-between" sx={{ p: '0 10px' }}>
+              <Stack direction="row" justifyContent="space-between" sx={{ pr: 2, pl: 2 }}>
                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                  Index Token
+                  Token
                 </Typography>
                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
                   My balance
                 </Typography>
 
               </Stack>
-              <RedeemIndexTokenList onClose={handleListClose} data={data} />
-
-
+              <OneTokenList onClose={handleListClose} data={data} />
             </Box>
           </Drawer>
 
-        )
 
+        )
       }
+
     </>
   );
 }

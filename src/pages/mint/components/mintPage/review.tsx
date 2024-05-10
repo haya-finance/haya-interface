@@ -404,7 +404,7 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
           <>
             <ApprovalTokens windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} name={name} inputNum={inputNum} windowWidth={windowWidth} />
 
-            <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff' }, left: '5px', right: '5px', borderRadius: '10px 10px 0 0' }}>
+            <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff', left: '5px', right: '5px', borderRadius: '10px 10px 0 0' } }}>
               <Box width="auto" padding="10px 10px 20px 10px">
                 <Stack direction="row" justifyContent="space-between" alignItems="center" pb="10px">
                   <Typography sx={{ color: "#464646", fontSize: '17px', fontWeight: 400 }}>

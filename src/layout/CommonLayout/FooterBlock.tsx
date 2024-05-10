@@ -100,7 +100,7 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
           </Container>
         ) : (
           <>
-            <Stack sx={{ width: '100%', p: "60px 20px 60px 20px" }}>
+            <Stack sx={{ width: '100%', p: "40px 20px 20px 20px" }}>
               <Box>
                 <FootLogo />
                 <Typography variant="body1" textAlign="start" sx={{ color: '#6F6F6F', fontSize: "14px", fontWeight: '24px' }}  >

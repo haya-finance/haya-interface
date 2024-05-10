@@ -19,7 +19,7 @@ interface Props {
 //   name: string
 // }
 
-const IncomeAreaChart = ({ slot, SpxShow, BtcShow }: Props) => {
+const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
   const [BTCData, setBtcData] = useState<Number[]>([])
   const [H20Data, setH20Data] = useState<Number[]>([])
   const [SPXData, setSPXData] = useState<Number[]>([])
@@ -72,9 +72,10 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow }: Props) => {
       // }
     },
     grid: {
-      left: '4%',
-      right: '4%',
-      botom: '0%',
+      top: windowWidth >= 600 ? '10%' : '10%',
+      left: windowWidth >= 600 ? '4%' : '12%',
+      right: windowWidth >= 600 ? '2%' : '2%',
+      bottom: windowWidth >= 600 ? '10%' : '10%',
       contaionLabel: true
 
     },
@@ -160,9 +161,10 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow }: Props) => {
       // }
     },
     grid: {
-      left: '4%',
-      right: '4%',
-      botom: '0%',
+      top: windowWidth >= 600 ? '10%' : '10%',
+      left: windowWidth >= 600 ? '4%' : '12%',
+      right: windowWidth >= 600 ? '2%' : '2%',
+      bottom: windowWidth >= 600 ? '10%' : '10%',
       contaionLabel: true
 
     },
@@ -236,9 +238,10 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow }: Props) => {
       // }
     },
     grid: {
-      left: '4%',
-      right: '4%',
-      botom: '0%',
+      top: windowWidth >= 600 ? '10%' : '10%',
+      left: windowWidth >= 600 ? '4%' : '12%',
+      right: windowWidth >= 600 ? '2%' : '2%',
+      bottom: windowWidth >= 600 ? '10%' : '10%',
       contaionLabel: true
 
     },
@@ -311,9 +314,10 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow }: Props) => {
       // }
     },
     grid: {
-      left: '4%',
-      right: '4%',
-      botom: '0%',
+      top: windowWidth >= 600 ? '10%' : '10%',
+      left: windowWidth >= 600 ? '4%' : '12%',
+      right: windowWidth >= 600 ? '2%' : '2%',
+      bottom: windowWidth >= 600 ? '10%' : '10%',
       contaionLabel: true
 
     },
@@ -363,28 +367,28 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow }: Props) => {
       <div>
         {
           SpxShow && !BtcShow ? (
-            <ReactEcharts option={SPXoption} style={{ height: 450 }} />
+            <ReactEcharts option={SPXoption} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
           ) : (
             <></>
           )
         }
         {
           !SpxShow && BtcShow ? (
-            <ReactEcharts option={BTCoption} style={{ height: 450 }} />
+            <ReactEcharts option={BTCoption} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
           ) : (
             <></>
           )
         }
         {
           SpxShow && BtcShow ? (
-            <ReactEcharts option={option} style={{ height: 450 }} />
+            <ReactEcharts option={option} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
           ) : (
             <></>
           )
         }
         {
           !SpxShow && !BtcShow ? (
-            <ReactEcharts option={H20option} style={{ height: 450 }} />
+            <ReactEcharts option={H20option} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
           ) : (
             <></>
           )

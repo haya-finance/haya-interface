@@ -156,13 +156,14 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
 
                 </Stack>
                 <Box mt="30px" mb="30px" sx={{ boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.08)', borderRadius: '20px', width: '100%', padding: '10px 0' }}>
-                  <Stack direction="row" justifyContent="space-around" alignItems="center" padding="0 4px">
-                    <Stack spacing="4px" alignItems="center">
+                  {/* <Stack> */}
+                  <Stack direction="row" justifyContent="space-evenly" alignItems="center" padding="0 4px" width="100%" marginBottom="10px">
+                    <Stack spacing="6px" alignItems="center">
 
-                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '11px', lineHeight: '12px' }}  >
+                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '12px' }}  >
                         Current Price
                       </Typography>
-                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '8px', lineHeight: '12px' }}  >
+                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '12px', lineHeight: '12px' }}  >
                         $279.3
                       </Typography>
 
@@ -170,36 +171,39 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                     <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '22px' }}></Box>
 
 
-                    <Stack spacing="4px" alignItems="center">
+                    <Stack spacing="6px" alignItems="center">
 
-                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '11px', lineHeight: '12px' }}  >
+                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '12px' }}  >
                         Market Cap
                       </Typography>
-                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '8px', lineHeight: '12px' }}  >
+                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '12px', lineHeight: '12px' }}  >
                         $13,732,910.1
                       </Typography>
 
                     </Stack>
-                    <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '22px' }}></Box>
 
-                    <Stack spacing="4px" alignItems="center">
 
-                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '11px', lineHeight: '12px' }}  >
+                  </Stack>
+                  <Stack direction="row" justifyContent="space-evenly" alignItems="center" padding="0 4px">
+
+                    <Stack spacing="6px" alignItems="center">
+
+                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '12px' }}  >
                         APY
                       </Typography>
-                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '8px', lineHeight: '12px' }}  >
+                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '12px', lineHeight: '12px' }}  >
                         $105.1%
                       </Typography>
 
                     </Stack>
-                    <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '22px' }}></Box>
+                    <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '22px', marginLeft: "22px" }}></Box>
 
-                    <Stack spacing="4px" alignItems="center">
+                    <Stack spacing="6px" alignItems="center">
 
-                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '11px', lineHeight: '12px' }}  >
+                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '12px' }}  >
                         TVL
                       </Typography>
-                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '8px', lineHeight: '12px' }}  >
+                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '12px', lineHeight: '12px' }}  >
                         $3,732,910.1
                       </Typography>
 
@@ -207,6 +211,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
 
 
                   </Stack>
+                  {/* </Stack> */}
 
                 </Box>
                 <HistoryNotial windowWidth={windowWidth} />

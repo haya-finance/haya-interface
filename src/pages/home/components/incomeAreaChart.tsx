@@ -357,6 +357,10 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
     ]
   };
 
+  useEffect(() => {
+
+  }, [windowWidth])
+
 
 
 

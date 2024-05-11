@@ -11,6 +11,7 @@ import titlePng from 'assets/actionImg/title.png'
 import Methodology from './methodology';
 import HistoryNotial from './growth';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 // third party
 
@@ -42,6 +43,9 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
     navigate('/swap')
 
   }
+  useEffect(() => {
+
+  }, [windowWidth])
 
   return (
     <>

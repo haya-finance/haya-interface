@@ -3,6 +3,7 @@
 // material-ui
 import { Box, Stack, Typography } from '@mui/material';
 import TokenColorIcon from 'assets/tokens';
+import { useEffect } from 'react';
 
 
 
@@ -150,6 +151,9 @@ type TypeProps = {
 }
 
 const Methodology = ({ windowWidth }: TypeProps) => {
+  useEffect(() => {
+
+  }, [windowWidth])
 
   return (
 
@@ -366,167 +370,167 @@ const Methodology = ({ windowWidth }: TypeProps) => {
 
                 </Stack>
               </Box>
-              <Box sx={{ width: '100%' }} mb="40px">
-                <Stack direction="row" width="100%" justifyContent="space-between" padding="0" spacing="20px">
-                  <Stack spacing="10px" width="50%">
-                    {
-                      data.map((item) => {
-                        return (
-                          <>
-                            {
-                              Number(item.key) <= 5 ? (
-                                <Stack direction="row" justifyContent="space-between">
-                                  <Stack direction="row" spacing="5px">
-                                    <TokenColorIcon name={item.name} size={20} />
-                                    <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
-                                      {item.name}
-                                    </Typography>
+              <Box sx={{ width: '100%' }} mb="40px" padding="0 20px">
+                {/* <Stack direction="row" width="100%" justifyContent="space-between" padding="0" spacing="20px"> */}
+                <Stack spacing="10px" marginBottom="10px">
+                  {
+                    data.map((item) => {
+                      return (
+                        <>
+                          {
+                            Number(item.key) <= 5 ? (
+                              <Stack direction="row" justifyContent="space-between">
+                                <Stack direction="row" spacing="10px">
+                                  <TokenColorIcon name={item.name} size={20} />
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                    {item.name}
+                                  </Typography>
 
-                                  </Stack>
-                                  <Stack direction="row" spacing="4px" alignItems="center">
-                                    <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
+                                </Stack>
+                                <Stack direction="row" spacing="6px" alignItems="center">
+                                  <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
 
-                                    </Box>
-                                    <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
-                                      {item.num}
-                                    </Typography>
-
-                                  </Stack>
-
+                                  </Box>
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                    {item.num}
+                                  </Typography>
 
                                 </Stack>
 
-                              ) : (
-                                <></>
-                              )
-                            }
-                          </>
-                        )
-                      })
-                    }
-                  </Stack>
-                  <Stack spacing="10px" width="50%">
-                    {
-                      data.map((item) => {
-                        return (
-                          <>
-                            {
-                              Number(item.key) > 5 && Number(item.key) <= 10 ? (
-                                <Stack direction="row" justifyContent="space-between">
-                                  <Stack direction="row" spacing="5px">
-                                    <TokenColorIcon name={item.name} size={20} />
-                                    <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
-                                      {item.name}
-                                    </Typography>
 
-                                  </Stack>
-                                  <Stack direction="row" spacing="4px">
-                                    <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
+                              </Stack>
 
-                                    </Box>
-                                    <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
-                                      {item.num}
-                                    </Typography>
-
-                                  </Stack>
-
-
-                                </Stack>
-
-                              ) : (
-                                <></>
-                              )
-                            }
-                          </>
-                        )
-                      })
-                    }
-                  </Stack>
-
-
-
-
+                            ) : (
+                              <></>
+                            )
+                          }
+                        </>
+                      )
+                    })
+                  }
                 </Stack>
-                <Stack direction="row" width="100%" padding="0 " spacing="20px" marginTop="10px">
+                <Stack spacing="10px" marginBottom="10px">
+                  {
+                    data.map((item) => {
+                      return (
+                        <>
+                          {
+                            Number(item.key) > 5 && Number(item.key) <= 10 ? (
+                              <Stack direction="row" justifyContent="space-between">
+                                <Stack direction="row" spacing="10px">
+                                  <TokenColorIcon name={item.name} size={20} />
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                    {item.name}
+                                  </Typography>
 
-                  <Stack spacing="10px" width="50%">
-                    {
-                      data.map((item) => {
-                        return (
-                          <>
-                            {
-                              Number(item.key) > 10 && Number(item.key) <= 15 ? (
-                                <Stack direction="row" justifyContent="space-between">
-                                  <Stack direction="row" spacing="5px">
-                                    <TokenColorIcon name={item.name} size={20} />
-                                    <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
-                                      {item.name}
-                                    </Typography>
+                                </Stack>
+                                <Stack direction="row" spacing="6px">
+                                  <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
 
-                                  </Stack>
-                                  <Stack direction="row" spacing="4px">
-                                    <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
-
-                                    </Box>
-                                    <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
-                                      {item.num}
-                                    </Typography>
-
-                                  </Stack>
-
+                                  </Box>
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                    {item.num}
+                                  </Typography>
 
                                 </Stack>
 
-                              ) : (
-                                <></>
-                              )
-                            }
-                          </>
-                        )
-                      })
-                    }
-                  </Stack>
-                  <Stack spacing="10px" width="50%">
-                    {
-                      data.map((item) => {
-                        return (
-                          <>
-                            {
-                              Number(item.key) > 15 && Number(item.key) <= 20 ? (
-                                <Stack direction="row" justifyContent="space-between">
-                                  <Stack direction="row" spacing="5px">
-                                    <TokenColorIcon name={item.name} size={20} />
-                                    <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
-                                      {item.name}
-                                    </Typography>
 
-                                  </Stack>
-                                  <Stack direction="row" spacing="4px">
-                                    <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
+                              </Stack>
 
-                                    </Box>
-                                    <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
-                                      {item.num}
-                                    </Typography>
-
-                                  </Stack>
-
-
-                                </Stack>
-
-                              ) : (
-                                <></>
-                              )
-                            }
-                          </>
-                        )
-                      })
-                    }
-                  </Stack>
-
-
-
+                            ) : (
+                              <></>
+                            )
+                          }
+                        </>
+                      )
+                    })
+                  }
                 </Stack>
+
+
+
+
+                {/* </Stack> */}
+                {/* <Stack direction="row" width="100%" padding="0 " spacing="20px" marginTop="10px"> */}
+
+                <Stack spacing="10px" marginBottom="10px">
+                  {
+                    data.map((item) => {
+                      return (
+                        <>
+                          {
+                            Number(item.key) > 10 && Number(item.key) <= 15 ? (
+                              <Stack direction="row" justifyContent="space-between">
+                                <Stack direction="row" spacing="10px">
+                                  <TokenColorIcon name={item.name} size={20} />
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                    {item.name}
+                                  </Typography>
+
+                                </Stack>
+                                <Stack direction="row" spacing="6px">
+                                  <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
+
+                                  </Box>
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                    {item.num}
+                                  </Typography>
+
+                                </Stack>
+
+
+                              </Stack>
+
+                            ) : (
+                              <></>
+                            )
+                          }
+                        </>
+                      )
+                    })
+                  }
+                </Stack>
+                <Stack spacing="10px" marginBottom="10px">
+                  {
+                    data.map((item) => {
+                      return (
+                        <>
+                          {
+                            Number(item.key) > 15 && Number(item.key) <= 20 ? (
+                              <Stack direction="row" justifyContent="space-between">
+                                <Stack direction="row" spacing="10px">
+                                  <TokenColorIcon name={item.name} size={20} />
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                    {item.name}
+                                  </Typography>
+
+                                </Stack>
+                                <Stack direction="row" spacing="6px">
+                                  <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
+
+                                  </Box>
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                    {item.num}
+                                  </Typography>
+
+                                </Stack>
+
+
+                              </Stack>
+
+                            ) : (
+                              <></>
+                            )
+                          }
+                        </>
+                      )
+                    })
+                  }
+                </Stack>
+
+
+
+                {/* </Stack> */}
               </Box>
 
 

@@ -32,6 +32,10 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
   }, [btcShow, spxShow])
 
+  useEffect(() => {
+
+  }, [windowWidth])
+
 
 
 

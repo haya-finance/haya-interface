@@ -9,6 +9,7 @@ import { pair_Address, sepolia_rpc } from "config";
 import pairAbi from 'abi/pair.json'
 import { useAccount } from "wagmi";
 import PoolDetail from "./PoolDetail";
+import PoolLpDetail from "./poolLPDetail";
 
 const avatarImage = require.context('assets/images/token', true);
 
@@ -194,6 +195,7 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                 </Box>
               </Box>
               <PoolDetail windowWidth={windowWidth} />
+              <PoolLpDetail windowWidth={windowWidth} />
 
             </>
 

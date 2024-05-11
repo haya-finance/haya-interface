@@ -41,7 +41,9 @@ const SwapButton = styled(Button)<ButtonProps>(({ theme }) => ({
   },
 }));
 
-const PoolDetail = ({ windowWidth }: TypepProps) => {
+
+
+const PoolLpDetail = ({ windowWidth }: TypepProps) => {
 
   const addLiquity = () => {
 
@@ -81,35 +83,7 @@ const PoolDetail = ({ windowWidth }: TypepProps) => {
             </Box>
 
           </Stack>
-          {/* <Stack direction="row" alignItems="start" spacing="110px" padding="10px 0" >
-            <Stack alignItems="start" spacing="6px">
-              <Typography sx={{ color: "#9b9b9b", fontSize: '12px', fontWeight: 700 }}>
-                Pool APR 24h
-              </Typography>
-              <Typography sx={{ color: "#000", fontSize: '12px', fontWeight: 700 }}>
-                6.55%
-              </Typography>
 
-            </Stack>
-            <Stack alignItems="start" spacing="6px">
-              <Typography sx={{ color: "#9b9b9b", fontSize: '12px', fontWeight: 700 }}>
-                Pool APR 7d
-              </Typography>
-              <Typography sx={{ color: "#000", fontSize: '12px', fontWeight: 700 }}>
-                36.6%
-              </Typography>
-
-            </Stack>
-            <Stack alignItems="start" spacing="6px">
-              <Typography sx={{ color: "#9b9b9b", fontSize: '12px', fontWeight: 700 }}>
-                Pool APR 30d
-              </Typography>
-              <Typography sx={{ color: "#000", fontSize: '12px', fontWeight: 700 }}>
-                11.49%
-              </Typography>
-
-            </Stack>
-          </Stack> */}
           <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
           <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
             Token rates
@@ -182,15 +156,22 @@ const PoolDetail = ({ windowWidth }: TypepProps) => {
 
 
           </Stack>
-
-
-
-
+        </Box>
+        <Box sx={{ padding: '20px', backgroundColor: '#f6f6f6', borderRadius: '20px', marginTop: '20px' }}>
+          <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500, marginBottom: '10px' }}>
+            My Liquidity
+          </Typography>
+          <Typography sx={{ color: "#000", fontSize: '22px', fontWeight: 700, marginBottom: '10px', lineHeight: '22px' }}>
+            0.026 LP-H20/ETH
+          </Typography>
+          <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+            $ 0.00
+          </Typography>
         </Box>
         <AddButton onClick={addLiquity} sx={{ margin: '20px 0' }}>
-          Add Liquidity
+          Supply More
         </AddButton>
-        <SwapButton onClick={goSwap}>Swap</SwapButton>
+        <SwapButton onClick={goSwap}>Withdraw</SwapButton>
       </Box>
 
 
@@ -199,4 +180,4 @@ const PoolDetail = ({ windowWidth }: TypepProps) => {
 }
 
 
-export default PoolDetail
+export default PoolLpDetail

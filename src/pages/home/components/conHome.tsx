@@ -11,7 +11,11 @@ import titlePng from 'assets/actionImg/title.png'
 import Methodology from './methodology';
 import HistoryNotial from './growth';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { ethers } from 'ethers';
+import { ETH_Price_ARB, pair_Address, sepolia_rpc } from 'config';
+import pairAbi from 'abi/pair.json'
+import PriceFeedAbi from 'abi/priceFeeds.json'
 
 // third party
 
@@ -22,6 +26,29 @@ import { useEffect } from 'react';
 type PropsType = {
   windowWidth: number
 }
+
+function formatNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart?.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.floor(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    return num.toLocaleString()
+
+  }
+}
+
+const provider = new ethers.JsonRpcProvider(sepolia_rpc)
 
 const BuyButton = styled(Button)<ButtonProps>(({ theme }) => ({
   padding: '10px 24px',
@@ -37,6 +64,39 @@ const BuyButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 const HeaderPage = ({ windowWidth }: PropsType) => {
   const navigate = useNavigate()
+
+  const [tvl, setTvl] = useState('0')
+
+  const getData = async () => {
+    const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+    const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
+
+
+    await pairContract.getReserves().then(async (res: any) => {
+      // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+      await priceFeed.latestRoundData().then(async (res1) => {
+        await priceFeed.decimals().then(async (res2) => {
+          const newtvl = String((Number(res[0]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)
+          setTvl(newtvl)
+        })
+
+      })
+
+    }).catch(err => {
+      // console.log('错误输出', err)
+    })
+
+
+  }
+
+  useEffect(() => {
+    getData()
+
+  }, [])
+
+  useEffect(() => {
+
+  }, [tvl])
 
 
   const goToSwap = () => {
@@ -85,7 +145,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                         Current Price
                       </Typography>
                       <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
-                        $279.3
+                        $100.0
                       </Typography>
 
                     </Stack>
@@ -98,13 +158,13 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                         Market Cap
                       </Typography>
                       <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
-                        $13,732,910.1
+                        -----
                       </Typography>
 
                     </Stack>
                     <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '40px' }}></Box>
 
-                    <Stack spacing="10px" alignItems="center">
+                    {/* <Stack spacing="10px" alignItems="center">
 
                       <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '16px', lineHeight: '14px' }}  >
                         APY
@@ -113,8 +173,8 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                         $105.1%
                       </Typography>
 
-                    </Stack>
-                    <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '40px' }}></Box>
+                    </Stack> */}
+                    {/* <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '40px' }}></Box> */}
 
                     <Stack spacing="10px" alignItems="center">
 
@@ -122,7 +182,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                         TVL
                       </Typography>
                       <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
-                        $3,732,910.1
+                        {`$ ${formatNumber(Number(tvl))}`}
                       </Typography>
 
                     </Stack>
@@ -164,7 +224,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                         Current Price
                       </Typography>
                       <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '12px', lineHeight: '12px' }}  >
-                        $279.3
+                        $100.0
                       </Typography>
 
                     </Stack>
@@ -177,7 +237,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                         Market Cap
                       </Typography>
                       <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '12px', lineHeight: '12px' }}  >
-                        $13,732,910.1
+                        ------
                       </Typography>
 
                     </Stack>
@@ -186,7 +246,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                   </Stack>
                   <Stack direction="row" justifyContent="space-evenly" alignItems="center" padding="0 4px">
 
-                    <Stack spacing="6px" alignItems="center">
+                    {/* <Stack spacing="6px" alignItems="center">
 
                       <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '12px' }}  >
                         APY
@@ -196,7 +256,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                       </Typography>
 
                     </Stack>
-                    <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '22px', marginLeft: "22px" }}></Box>
+                    <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '22px', marginLeft: "22px" }}></Box> */}
 
                     <Stack spacing="6px" alignItems="center">
 
@@ -204,7 +264,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                         TVL
                       </Typography>
                       <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '12px', lineHeight: '12px' }}  >
-                        $3,732,910.1
+                        {`$ ${formatNumber(Number(tvl))}`}
                       </Typography>
 
                     </Stack>

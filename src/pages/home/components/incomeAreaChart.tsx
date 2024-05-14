@@ -1,5 +1,6 @@
 
 import ReactEcharts from 'echarts-for-react';
+// import echarts from 'echarts/lib/echarts';
 import { useEffect, useState } from 'react';
 import { BTCNum, BTCYearData, Daydata, H20Num, H20YearData, Spx500Num, SPXYearData, Yeardata } from './data';
 import './index.css'
@@ -360,6 +361,25 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
   useEffect(() => {
 
   }, [windowWidth])
+
+  // const chartRef = useRef<any>(null);
+
+  // useEffect(() => {
+  //   const chartInstance = echarts.getInstanceByDom(chartRef.current);
+
+  //   if (chartInstance) {
+  //     chartInstance.setOption(option);
+  //     chartInstance.on('mouseover', function (params: { componentType?: any; data?: any; seriesIndex?: any; dataIndex?: any; }) {
+  //       if (params.componentType === 'series') {
+  //         const { seriesIndex, dataIndex } = params;
+  //         // 获取鼠标悬停点的数据
+  //         const dataPoint = params.data;
+  //         // 打印或处理数据
+  //         console.log(`Series ${seriesIndex}, Data Index ${dataIndex}:`, dataPoint);
+  //       }
+  //     });
+  //   }
+  // }, []);
 
 
 

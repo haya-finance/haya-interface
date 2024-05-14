@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 // material-ui
 import { Box } from '@mui/material';
-import PoolPage from './components/addLiquiaity/index';
+import PoolPage from './components/index';
 
 // project import
 

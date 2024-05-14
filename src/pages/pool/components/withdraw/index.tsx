@@ -1,0 +1,551 @@
+
+
+import { Avatar, AvatarGroup, Box, Button, ButtonProps, Card, Slider, Stack, Typography } from '@mui/material';
+
+import { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
+// import Web3 from 'web3'
+import { pair_Address, sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
+import { ethers } from 'ethers';
+import pairAbi from 'abi/pair.json'
+import { MdOutlineArrowBackIosNew } from 'react-icons/md';
+import { styled } from '@mui/material/styles';
+import TokenColorIcon from 'assets/tokens';
+import ShowDetail from './showDetail';
+import { useNavigate } from 'react-router';
+import tokenAbi from 'abi/token.json'
+import ReviewWithdraw from './ReviewWithdraw';
+const avatarImage = require.context('assets/images/token', true);
+// import PoolTotal from './pool';
+
+// const web3 = new Web3(sepolia_rpc)
+const provider = new ethers.JsonRpcProvider(sepolia_rpc)
+
+
+
+
+
+
+const PrettoSlider = styled(Slider)({
+  color: '#C0C0C0',
+  height: 5,
+  '& .MuiSlider-rail': {
+    color: '#C0C0C0',
+
+  },
+  '& .MuiSlider-track': {
+    border: 'none',
+    height: 5,
+    color: '#1AAE70'
+  },
+  '& .MuiSlider-thumb.MuiSlider-thumbColorPrimary': {
+    border: 'none',
+    boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.12)',
+
+  },
+  '& .MuiSlider-thumb': {
+    height: 24,
+    width: 24,
+    backgroundColor: '#fff',
+    border: 'none',
+    boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.12)',
+    '&:focus, &:hover, &.Mui-active, &.Mui-focusVisible': {
+      boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.12)',
+    },
+    '&::before': {
+      display: 'none',
+    },
+  },
+  '& .MuiSlider-mark.MuiSlider-markActive': {
+    width: '10px',
+    height: '10px',
+    backgroundColor: '#1aae70',
+    borderWidth: '0px'
+
+  },
+  '& .MuiSlider-mark': {
+    width: '10px',
+    height: '10px',
+    border: 'none',
+    backgroundColor: '#c0c0c0'
+
+  },
+  '& .MuiSlider-valueLabel': {
+    lineHeight: 1.2,
+    fontSize: 12,
+    background: 'unset',
+    padding: 0,
+    width: '0px',
+    height: 32,
+    borderRadius: '50% 50% 50% 0',
+    backgroundColor: '#52af77',
+    transformOrigin: 'bottom left',
+    transform: 'translate(50%, -100%) rotate(-45deg) scale(0)',
+    '&::before': { display: 'none' },
+    '&.MuiSlider-valueLabelOpen': {
+      transform: 'translate(50%, -100%) rotate(-45deg) scale(1)',
+    },
+    '& > *': {
+      transform: 'rotate(45deg)',
+    },
+  },
+});
+
+const WithdrawButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  width: '100%',
+  color: '#fff',
+  // padding: '10px 0',
+  fontWeight: 700,
+  fontSize: '18px',
+  border: 0,
+  backgroundColor: '#1aae70',
+  borderRadius: '20px',
+  '&:hover': {
+    backgroundColor: '#1aae70',
+    color: '#fff',
+  },
+}));
+
+const SelectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  width: '100%',
+  color: '#fff',
+  border: 0,
+  fontWeight: 700,
+  fontSize: '18px',
+  borderRadius: '20px',
+  backgroundColor: '#9b9b9b',
+  '&:hover': {
+    backgroundColor: '#9b9b9b',
+    color: '#fff',
+  },
+}));
+
+const marks = [
+  {
+    value: 0,
+    label: '0%',
+  },
+  {
+    value: 25,
+    label: '25%',
+  },
+  {
+    value: 50,
+    label: '50%',
+  },
+  {
+    value: 75,
+    label: '75%',
+  },
+  {
+    value: 100,
+    label: '100%',
+  },
+];
+
+function ValueNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart?.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.floor(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        // console.log(parts)
+        // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    num *= 10000
+    num = Math.floor(num)
+    num /= 10000
+
+    return String(num)
+
+  }
+}
+
+type DataType = {
+  liq: string;
+  ETHAmount: string;
+  H20Amount: string
+}
+
+// type TokenListType = {
+//   symbol: string;
+//   address: string;
+//   balance: string;
+//   network: string;
+
+// }
+
+
+
+export default function WithdrawPoolPage() {
+
+
+  const { address } = useAccount()
+
+
+
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight)
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      setWindowHeight(window.innerHeight)
+
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize)
+
+  }, [])
+
+  const [data, setData] = useState<DataType[]>([{
+
+    liq: '0',
+    ETHAmount: '0',
+    H20Amount: '0'
+  }])
+
+  const [balance, setBalance] = useState('0')
+
+  const [allowance, setAllowance] = useState<string>('0')
+
+
+  const getPairBalanceOf = async () => {
+    const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+    await pairContract.balanceOf(address).then(async (res1) => {
+      await pairContract.decimals().then((res2) => {
+
+        setBalance(String(Number(res1) / (10 ** Number(res2))))
+      }).catch((err) => {
+
+      })
+
+    }).catch((err) => {
+
+    })
+
+
+
+  }
+
+
+
+  const getData = async () => {
+
+    const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+
+
+    await pairContract.getReserves().then(async (res: any) => {
+      // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+      await pairContract.totalSupply().then(async (res3) => {
+        await pairContract.decimals().then((res4) => {
+          const arr = [{ liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }]
+          // setData((pre) => pre.map((item) => {
+          //   return { tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }
+          // }))
+          setData(arr)
+        })
+      })
+
+    }).catch(err => {
+      // console.log('错误输出', err)
+    })
+
+
+  }
+
+
+  const getAllowance = async () => {
+    const ApproveContract = new ethers.Contract(pair_Address, tokenAbi, provider)
+    await ApproveContract.allowance(address, UniswapSepoliaRouterContract).then((res) => {
+      setAllowance(String(BigInt(res) / BigInt(10 ** 18)))
+
+    })
+
+
+  }
+
+
+  useEffect(() => {
+
+  }, [allowance])
+
+
+
+
+
+
+
+
+
+
+  useEffect(() => {
+
+  }, [data])
+
+
+
+
+
+
+
+  useEffect(() => {
+
+    getData()
+    if (address !== undefined) {
+      getPairBalanceOf()
+      getAllowance()
+    }
+
+
+  }, [address])
+
+  // const [openWallet, setOpenWallet] = useState(false)
+
+
+
+  const OnChange = () => {
+    getAllowance()
+    getData()
+    getPairBalanceOf()
+
+  }
+
+
+
+
+
+
+
+
+  const [inputValue, setInputValue] = useState('0%')
+  const [value, setValue] = useState<number>(0)
+  const [openSwap, setOpenSwap] = useState(false)
+
+
+  useEffect(() => {
+
+  }, [inputValue])
+
+
+
+  const onMax = () => {
+    setInputValue('100%')
+    setValue(100)
+
+  }
+
+
+  const handleSwapClose = () => {
+
+    setOpenSwap(false)
+  }
+
+  const onWithdraw = () => {
+    setOpenSwap(true)
+
+  }
+
+  const navigate = useNavigate()
+
+
+  const goBack = () => {
+    navigate(-1)
+
+  }
+
+  const valuetext = (even: any, newValue: number | number[]) => {
+    console.log(newValue)
+    setInputValue(`${newValue}%`)
+    setValue(newValue as number)
+
+  }
+
+  useEffect(() => {
+
+  }, [value])
+
+  console.log('3333', Number(balance) / Number(data[0]?.liq))
+
+  console.log('222', ValueNumber(Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.ETHAmount) * Number(value / 100))))
+
+
+
+
+
+
+
+  return (
+    <>
+      <Box sx={{ width: '100%' }}>
+        <Box
+          sx={{
+            position: 'relative',
+            bgcolor: "#fff",
+            overflow: 'hidden',
+            height: windowWidth >= 600 ? '8vh' : 0,
+            '&>*': {
+              position: 'relative',
+              zIndex: 5
+            },
+            '&:before': {
+              content: '""',
+              position: 'absolute',
+              width: '100%',
+              boxShadow: 'inherit',
+              top: 0,
+              left: 0,
+              zIndex: 2,
+            }
+          }}
+        >
+
+        </Box>
+        <Box sx={{ paddingTop: windowWidth >= 600 ? '60px' : 0, backgroundColor: '#fff' }}>
+          <Card sx={{ boxShadow: 'none' }}>
+            <ReviewWithdraw open={openSwap} handleSwapClose={handleSwapClose} windowHeight={windowHeight} windowWidth={windowWidth} balance={balance} data={data} num={value} allowance={allowance} onChange={OnChange} />
+            {
+              windowWidth >= 600 ? (
+                <Box sx={{ width: '600px', margin: '0 auto', p: '20px' }}>
+                  <Box component="button" sx={{ cursor: 'pointer', padding: '0', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }} onClick={goBack}>
+                    <Stack direction="row" alignItems="center" spacing="4px">
+                      <MdOutlineArrowBackIosNew />
+                      <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 500 }}>
+                        Widthdraw liquidity
+                      </Typography>
+                    </Stack>
+                  </Box>
+                  <Box sx={{ backgroundColor: '#F6F6F6', padding: '12px 20px', borderRadius: '20px', marginBottom: '10px' }}>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "rgba(0, 0, 0, 0.2)", fontSize: '13px', fontWeight: 700 }}>
+                        You withdraw
+                      </Typography>
+                      <Stack direction="row" alignItems="center" spacing="10px">
+                        <Typography sx={{ color: "rgba(0, 0, 0, 0.2)", fontSize: '12px', fontWeight: 700 }}>
+                          Balance: <span style={{ fontSize: '12px', color: '#000', fontWeight: 700, marginLeft: '2px' }}>{ValueNumber(Number(balance))}</span>
+                        </Typography>
+                        <Typography component="button" variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600, cursor: 'pointer', border: 'none', backgroundColor: 'transparent' }} onClick={onMax} color="primary">
+                          MAX
+                        </Typography>
+                      </Stack>
+
+                    </Stack>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                      {/* <BootstrapInput placeholder='0' /> */}
+                      <Typography sx={{ color: "#000", fontSize: '22px', fontWeight: 700 }}>
+                        {inputValue}
+                      </Typography>
+                      <Box sx={{ backgroundColor: '#fff', borderRadius: '100px', padding: '8px 8px', border: 'none' }}>
+                        <Stack direction="row" alignItems="center" spacing="8px">
+                          <AvatarGroup>
+                            <Avatar alt="H20" src={avatarImage('./H20.png')} sx={{ width: '20px', height: '20px' }} />
+                            <Avatar alt="ETH" src={avatarImage('./ETH.png')} sx={{ width: '20px', height: '20px' }} />
+                          </AvatarGroup>
+                          <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
+                            LP-ETH/H20
+                          </Typography>
+
+                        </Stack>
+
+
+                      </Box>
+                    </Stack>
+
+
+
+                  </Box>
+                  <Box sx={{ padding: '7px 16px', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }}>
+                    <PrettoSlider
+                      // valueLabelDisplay="auto"
+                      onChange={valuetext}
+                      value={value}
+                      aria-label="pretto slider"
+                      defaultValue={0}
+                      marks={marks}
+                    />
+                  </Box>
+                  <Box sx={{ padding: '12px 20px', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }}>
+                    <Typography sx={{ color: "#9B9B9B", fontSize: '12px', textAlign: 'start', fontWeight: 500, marginBottom: '10px' }}>
+                      You receive
+                    </Typography>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Stack direction="row" alignItems="center" spacing="12px">
+                        <TokenColorIcon name="ETH" size={30} />
+                        <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 700 }}>
+                          ETH
+                        </Typography>
+                      </Stack>
+                      <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 700 }}>
+                        {ValueNumber(Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.ETHAmount) * Number(value / 100)))}
+                      </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" >
+                      <Stack direction="row" alignItems="center" spacing="12px">
+                        <TokenColorIcon name="H20" size={30} />
+                        <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 700 }}>
+                          H20
+                        </Typography>
+                      </Stack>
+                      <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 700 }}>
+                        {ValueNumber(Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.H20Amount) * Number(value / 100)))}
+
+                      </Typography>
+                    </Stack>
+
+                  </Box>
+                  <ShowDetail windowWeight={windowWidth} />
+                  {
+                    value == 0 ? (
+                      <>
+                        <SelectButton>Enter an Amount</SelectButton>
+
+                      </>
+                    ) : (
+                      <>
+                        <WithdrawButton onClick={onWithdraw}>Withdraw</WithdrawButton>
+                      </>
+                    )
+                  }
+
+
+
+                </Box>
+              ) : (
+                <Box sx={{ width: '100%', p: '20px 10px' }}>
+                  <Box component="button" sx={{ cursor: 'pointer', padding: '0', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }}>
+                    <Stack direction="row" alignItems="center" spacing="4px">
+                      <MdOutlineArrowBackIosNew />
+                      <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 500 }}>
+                        Pool Detail
+                      </Typography>
+
+                    </Stack>
+                  </Box>
+
+                </Box>
+
+              )
+            }
+
+
+
+          </Card>
+
+        </Box>
+      </Box>
+      {/* <PoolTotal windowHeight={windowHeight} windowWidth={windowWidth} /> */}
+    </>
+  );
+}

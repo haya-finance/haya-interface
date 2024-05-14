@@ -15,7 +15,11 @@ export const UniswapSepoliaRouterContract = "0x03bF31D072F676ee35b3B065a9CDFD808
 export const sepolia_rpc = "https://arbitrum-sepolia-rpc.publicnode.com"
 export const H30_Address = '0xAD400a14150740F276aa8EDb5aF66FD19137520e';
 export const total_Address = "0xd84db6F731964b6ee52F66c7E6e86c2Eb5685894";
-export const pair_Address = "0xc8d5A5b5E59dF02Eb3108158C724ED956b020029"
+// export const pair_Address = "0xc8d5A5b5E59dF02Eb3108158C724ED956b020029";
+export const pair_Address = "0xC35AcCd2E19aA01D3f76fECE52B552A73a3e7CD3";
+export const ETH_Price_ARB = "0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165";
+export const WETH_address = "0x0cE40884F9460593Dd804E346E2fE7CA9b35D3c7"
+
 
 
 // ==============================|| THEME CONFIG  ||============================== //

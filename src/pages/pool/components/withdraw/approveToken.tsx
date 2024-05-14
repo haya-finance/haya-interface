@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import swapabi from 'abi/swap.json'
 import { ethers } from 'ethers'
 import { useAccount } from 'wagmi';
-import { H30_Address, UniswapSepoliaRouterContract, WETH_address } from 'config';
+import { H30_Address, UniswapSepoliaRouterContract } from 'config';
 import InfoIcon from '@mui/icons-material/Info';
 import { FaCheck } from "react-icons/fa";
 import WarningIcon from '@mui/icons-material/Warning';
@@ -61,6 +61,7 @@ type TypeProps = {
   toToken: string;
   fromToken: string;
   inputFromNum: string;
+  slippage: string
 }
 
 
@@ -79,7 +80,7 @@ const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 
 
-export default function ApprovalTokens({ open, handleApprovalClose, data, windowWidth, windowHeight, inputFromNum, inputToNum, toToken, fromToken }: TypeProps) {
+export default function ApprovalTokens({ slippage, open, handleApprovalClose, data, windowWidth, windowHeight, inputFromNum, inputToNum, toToken, fromToken }: TypeProps) {
 
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
@@ -196,13 +197,16 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
     const poolContract = new ethers.Contract(UniswapSepoliaRouterContract, swapabi, await provider)
     // Math.floor(Number(Number(inputToNum) / Number(inputFromNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))
 
-
     if (toToken == "ETH") {
-      setDoneLoading(true)
-      await poolContract.addLiquidity(H30_Address, WETH_address, String(Number(inputFromNum) * (10 ** 18)), String(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+      await poolContract.addLiquidityETH(H30_Address, String(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+        from: address,
+        value: BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))
+
+
+      }).then(async (res) => {
 
         // console.log('结果222222222222', res)
-
+        setDoneLoading(true)
 
 
         const res1 = await res.wait()
@@ -223,12 +227,15 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
       })
 
     } else {
+      console.log(String(Math.floor(Number(inputFromNum) * (10 ** 18))))
       // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.floor(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
-      setDoneLoading(true)
-      await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Number(inputToNum) * (10 ** 18)), BigInt(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+      await poolContract.addLiquidityETH(H30_Address, BigInt(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+        from: address,
+        value: BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))
+      }).then(async (res) => {
 
         // console.log('结果222222222222', res)
-
+        setDoneLoading(true)
 
 
         const res1 = await res.wait()
@@ -249,65 +256,6 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
       })
     }
 
-    // if (toToken == "ETH") {
-    //   await poolContract.addLiquidityETH(H30_Address, String(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
-    //     from: address,
-    //     value: BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))
-
-
-    //   }).then(async (res) => {
-
-    //     // console.log('结果222222222222', res)
-    //     setDoneLoading(true)
-
-
-    //     const res1 = await res.wait()
-
-    //     if (res1.blockNumber == null) {
-    //       // console.log('nulllllllllll')
-    //     } else {
-
-    //       setDoneLoading(false)
-    //       handleApprovalClose()
-    //     }
-
-
-    //   }).catch((err) => {
-    //     // console.log("错误结果", err)
-    //     openNotification('top')
-    //     handleApprovalClose()
-    //   })
-
-    // } else {
-    //   console.log(String(Math.floor(Number(inputFromNum) * (10 ** 18))))
-    //   // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.floor(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
-    //   await poolContract.addLiquidityETH(H30_Address, BigInt(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
-    //     from: address,
-    //     value: BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))
-    //   }).then(async (res) => {
-
-    //     // console.log('结果222222222222', res)
-    //     setDoneLoading(true)
-
-
-    //     const res1 = await res.wait()
-
-    //     if (res1.blockNumber == null) {
-    //       // console.log('nulllllllllll')
-    //     } else {
-
-    //       setDoneLoading(false)
-    //       handleApprovalClose()
-    //     }
-
-
-    //   }).catch((err) => {
-    //     // console.log("错误结果", err)
-    //     openNotification('top')
-    //     handleApprovalClose()
-    //   })
-    // }
-
 
 
 
@@ -326,7 +274,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
 
 
-    const ApproveContract = new ethers.Contract(tokenAddress, tokenAbi, await provider)
+    const ApproveContract = new ethers.Contract(H30_Address, tokenAbi, await provider)
 
     await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
 
@@ -493,7 +441,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
                     data.map((item, index) => {
                       return (
                         <>
-                          {/* {
+                          {
                             item.symbol !== 'ETH' ? (
                               <>
                                 <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
@@ -529,37 +477,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
                             ) : (
                               <></>
                             )
-                          } */}
-
-                          <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
-                            <Stack direction="row" spacing="4px" alignItems="center" key={index}>
-                              <TokenColorIcon name={item.symbol.split('-')[0]} size={30} />
-                              <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
-                                {toToken == "ETH" ? inputFromNum : inputToNum}
-
-                              </Typography>
-                              <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
-                                {item.symbol.split('-')[0]}
-                              </Typography>
-
-                            </Stack>
-                            {
-                              !approval[index] ? (
-                                <ApprovalButton key={index} loading={loading[index]} onClick={() => OnApproval(index, item.num, item.address)}>Approval</ApprovalButton>
-
-                              ) : (
-                                <Stack direction="row" spacing="8px" alignItems="center" key={index}>
-                                  <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
-                                    Approved
-                                  </Typography>
-                                  <FaCheck color='#1AAE70' size={20} />
-                                </Stack>
-
-
-                              )
-                            }
-
-                          </Stack>
+                          }
                         </>
                       )
                     })

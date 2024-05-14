@@ -4,12 +4,12 @@ import Button, { ButtonProps } from '@mui/material/Button';
 import poolImg from 'assets/images/Union.png'
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { pair_Address, sepolia_rpc } from "config";
+import { ETH_Price_ARB, pair_Address, sepolia_rpc } from "config";
 
 import pairAbi from 'abi/pair.json'
 import { useAccount } from "wagmi";
-import PoolDetail from "./PoolDetail";
-import PoolLpDetail from "./poolLPDetail";
+import PriceFeedAbi from 'abi/priceFeeds.json'
+import { useNavigate } from "react-router";
 
 const avatarImage = require.context('assets/images/token', true);
 
@@ -19,6 +19,7 @@ type PropsType = {
   windowWidth: number;
   windowHeight: number
 }
+
 
 const provider = new ethers.JsonRpcProvider(sepolia_rpc)
 
@@ -35,25 +36,52 @@ const AddButton = styled(Button)<ButtonProps>(({ theme }) => ({
   },
 }));
 
+
+function formatNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart?.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.floor(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    return num.toLocaleString()
+
+  }
+}
+
+
+
 const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
   const [value, setValue] = useState(0)
 
+
+
+
   const OnCheckTitel = (v: number) => {
     setValue(v)
-
   }
 
-  const { address } = useAccount()
+  const [tvl, setTvl] = useState('0')
 
+  const { address } = useAccount()
   const [balance, setBalance] = useState('0')
 
 
   const getPairBalanceOf = async () => {
     const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+    await pairContract.balanceOf(address).then(async (res1) => {
+      await pairContract.decimals().then((res2) => {
 
-    await pairContract.balanceOf(address).then(async (res) => {
-      await pairContract.decimals().then((res1) => {
-        setBalance(String(Number(res) / (10 ** Number(res1))))
+        setBalance(String(Number(res1) / (10 ** Number(res2))))
       }).catch((err) => {
 
       })
@@ -61,7 +89,37 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
     }).catch((err) => {
 
     })
+
+
+
   }
+
+  const getData = async () => {
+    const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+    const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
+
+
+    await pairContract.getReserves().then(async (res: any) => {
+      // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+      await priceFeed.latestRoundData().then(async (res1) => {
+        await priceFeed.decimals().then(async (res2) => {
+          const newtvl = String((Number(res[0]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)
+          setTvl(newtvl)
+        })
+
+      })
+
+    }).catch(err => {
+      // console.log('错误输出', err)
+    })
+
+
+  }
+
+  useEffect(() => {
+    console.log(tvl)
+
+  }, [tvl])
 
   useEffect(() => {
 
@@ -69,16 +127,29 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
 
 
   useEffect(() => {
+    getData()
     if (address !== undefined) {
       getPairBalanceOf()
     }
 
   }, [address])
 
+  const navigate = useNavigate()
+
 
 
   const GoTODetail = () => {
+    navigate('/pool_detail')
 
+  }
+
+  const GoTOLpDetail = () => {
+    navigate('/pool_lp_detail')
+
+  }
+
+  const AddLiquidity = () => {
+    navigate('/add_pool')
   }
   return (
     <Box sx={{ paddingTop: windowWidth >= 600 ? '60px' : 0, backgroundColor: '#fff' }}>
@@ -94,7 +165,7 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                       <Typography sx={{ color: "#000", fontSize: '35px', lineHeight: '50px', fontWeight: 700 }}>
                         Provide liquidity and earn fees
                       </Typography>
-                      <AddButton> Add Liquidity</AddButton>
+                      <AddButton onClick={AddLiquidity}> Add Liquidity</AddButton>
                     </Stack>
                   </Box>
 
@@ -144,7 +215,7 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                             </Stack>
                           </Stack>
                           <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
-                            $151,225,4
+                            {`$ ${formatNumber(Number(tvl))}`}
                           </Typography>
 
 
@@ -154,7 +225,7 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                       <>
                         {
                           Number(balance) > 0 ? (
-                            <Box component="button" sx={{ cursor: 'pointer', backgroundColor: 'transparent', border: 'none', width: '100%' }} onClick={GoTODetail}>
+                            <Box component="button" sx={{ cursor: 'pointer', backgroundColor: 'transparent', border: 'none', width: '100%' }} onClick={GoTOLpDetail}>
                               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ padding: '12px 20px' }}>
                                 <Stack direction="row" alignItems="center" spacing="2px">
                                   <AvatarGroup>
@@ -171,7 +242,7 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                                   </Stack>
                                 </Stack>
                                 <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
-                                  $151,225,4
+                                  {`$ ${formatNumber(Number(tvl))}`}
                                 </Typography>
 
 
@@ -194,8 +265,6 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
 
                 </Box>
               </Box>
-              <PoolDetail windowWidth={windowWidth} />
-              <PoolLpDetail windowWidth={windowWidth} />
 
             </>
 

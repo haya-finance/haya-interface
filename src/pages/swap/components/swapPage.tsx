@@ -711,7 +711,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                             pay === "Select token" ? (
                               <>
                                 <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                  <SelectButton >Select a token</SelectButton>
+                                  <SelectButton >Select a Token</SelectButton>
                                 </Box>
                               </>
 
@@ -720,7 +720,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                                 {
                                   inputToValue === '' && inputReValue === '' ? (
                                     <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                      <SelectButton >Enter amount</SelectButton>
+                                      <SelectButton >Enter an Amount</SelectButton>
                                     </Box>
 
                                   ) : (
@@ -965,7 +965,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                             pay === "Select token" ? (
                               <>
                                 <Box sx={{ width: '100%' }}>
-                                  <SelectButton>Select a token</SelectButton>
+                                  <SelectButton>Select a Token</SelectButton>
                                 </Box>
                               </>
 
@@ -974,7 +974,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                                 {
                                   inputToValue === '' && inputReValue === '' ? (
                                     <Box sx={{ width: '100%' }}>
-                                      <SelectButton >Enter amount</SelectButton>
+                                      <SelectButton >Enter an Amount</SelectButton>
                                     </Box>
 
                                   ) : (

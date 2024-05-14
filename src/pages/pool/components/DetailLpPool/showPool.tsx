@@ -1,27 +1,93 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import React from 'react';
-import { InfoIcon } from '@chakra-ui/icons';
+import React, { useEffect } from 'react';
 import Button, { ButtonProps } from '@mui/material/Button';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { MdInfo } from "react-icons/md";
+
+type DataType = {
+  tvl: string;
+  price: string;
+  liq: string;
+  ETHAmount: string;
+  H20Amount: string
+}
 
 
 type DataProps = {
   windowWeight: number,
-  LpToken: string
+  data: DataType[],
+  balanceOf: string
+
 
 
 }
 
+
+function ValueNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart?.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.floor(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        // console.log(parts)
+        // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    num *= 10000
+    num = Math.floor(num)
+    num /= 10000
+
+    return String(num)
+
+  }
+}
+
+function formatNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart?.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.floor(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    return num.toLocaleString()
+
+  }
+}
+
 const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  color: '#1AAE70',
+  color: '#464646',
   boxShadow: 'none',
+  fontSize: '12px',
+  fontWeight: 600,
   '&:hover': {
     backgroundColor: "#fff",
-    color: '#1aae70',
+    color: '#464646',
   },
+  "&:active": {
+    boxShadow: 'none',
+  },
+  "&:focus": {
+    boxShadow: 'none',
+  }
 }));
 
 
@@ -31,85 +97,86 @@ const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 
 
-export default function ShowPool({ windowWeight, LpToken }: DataProps) {
+export default function ShowPool({ windowWeight, balanceOf, data }: DataProps) {
 
   const [hidden, setHidden] = React.useState(true)
   const handleChange = () => {
     setHidden(!hidden)
   }
 
+  useEffect(() => {
+    console.log(data, balanceOf)
+
+  }, [data, balanceOf])
+
   return (
     <>
       <Box sx={{
         p: '0px 20px', backgroundColor: "#fff",
-        width: "600px", margin: "0 auto", marginBottom: "20px"
+        marginTop: "20px"
       }}>
 
         <Box sx={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography sx={{ color: '#464646', fontWeight: 600 }}>Prices and pool share</Typography>
-            <ShowButton endIcon={!hidden ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />} onClick={handleChange}>Uniswap</ShowButton>
+            <Stack direction="row" alignItems="center" spacing="6px">
+              <Typography sx={{ color: '#464646', fontWeight: 600 }}>In the pool  </Typography>
+              <MdInfo color='#6F6F6F' style={{ width: '16px', height: '16px', marginTop: '2px' }} />
+
+            </Stack>
+            <ShowButton endIcon={!hidden ? <KeyboardArrowUpIcon style={{ width: '20px', height: '20px' }} /> : <KeyboardArrowDownIcon />} onClick={handleChange}>{`$ ${formatNumber(Number(data[0]?.tvl))}`}</ShowButton>
           </Stack>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
-                ETH per H30
-              </Typography>
+          <Box width="100%" sx={{ display: hidden ? 'none' : 'block' }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
+                  Pool share
+                </Typography>
+              </Stack>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 600 }}>
+                  0.05%
+                </Typography>
+              </Stack>
             </Stack>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                2898.44
-              </Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
+                  ETH provided
+                </Typography>
+              </Stack>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 600 }}>
+                  {ValueNumber(Number(Number(balanceOf) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount)))}
+                </Typography>
+              </Stack>
             </Stack>
-          </Stack>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
-                ETH per H30
-              </Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
+                  H20 provided
+                </Typography>
+              </Stack>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 600 }}>
+                  {ValueNumber(Number(Number(balanceOf) / Number(data[0]?.liq) * Number(data[0]?.H20Amount)))}
+                </Typography>
+              </Stack>
             </Stack>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                2898.44
-              </Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
+                  LP tokens
+                </Typography>
+              </Stack>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 600 }}>
+                  {ValueNumber(Number(balanceOf))}
+                </Typography>
+              </Stack>
             </Stack>
-          </Stack>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
-                H30 per ETH
-              </Typography>
-            </Stack>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                0.0000353014
-              </Typography>
-            </Stack>
-          </Stack>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
-                Share of Pool
-              </Typography>
-            </Stack>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                13.5%
-              </Typography>
-            </Stack>
-          </Stack>
+          </Box>
         </Box>
 
-      </Box>
-      <Box>
-        <Stack direction="row" spacing="6px" pb="12px" pt='8px' alignItems="center">
-          <InfoIcon sx={{ color: '#6f6f6f', width: '20px', height: '20px' }} />
-          <Typography sx={{ color: '#6f6f6f', fontSize: windowWeight >= 600 ? '14px' : '11px' }}>
-            Tip: When you add liquidity,you will receive pool tokens representing your position.
-            These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at time.
-          </Typography>
-
-        </Stack>
       </Box>
     </>
 

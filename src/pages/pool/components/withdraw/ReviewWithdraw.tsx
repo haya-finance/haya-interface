@@ -16,10 +16,10 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // import Web3 from 'web3';
 import { useEffect, useState } from 'react';
-import { H30_Address, UniswapSepoliaRouterContract, WETH_address } from 'config';
+import { H30_Address, pair_Address, UniswapSepoliaRouterContract, WETH_address } from 'config';
 import { LoadingButton } from '@mui/lab';
 import { MdAdd } from 'react-icons/md';
-import ApprovalTokens from './approveToken';
+import tokenAbi from 'abi/token.json'
 import { useAccount } from 'wagmi';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
@@ -39,7 +39,15 @@ const avatarImage = require.context('assets/images/token', true);
 // const sepolia_rpc = "https://sepolia.infura.io/v3/0edd253962184b628e0cfabc2f91b0ae"
 
 
+type DataType = {
+  liq: string;
+  ETHAmount: string;
+  H20Amount: string
+}
+
+
 function ValueNumber(num: number) {
+  console.log('num', num)
 
   if (num % 1 !== 0) {
     const decimalPart = num.toString().split('.')[1]
@@ -115,14 +123,13 @@ const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
 type TypeProps = {
   open: boolean;
   handleSwapClose: () => void;
-  data: any[];
-  inputToNum: string;
-  inputFromNum: string;
-  toToken: string;
-  fromToken: string;
+  data: DataType[];
   windowWidth: number;
   windowHeight: number;
-  onChange: (update: boolean) => void;
+  onChange: () => void;
+  balance: string;
+  allowance: string
+  num: number
 }
 
 const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
@@ -139,7 +146,9 @@ const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 
 
-export default function ReviewSupply({ open, windowWidth, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onChange }: TypeProps) {
+export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, data, windowHeight, onChange, allowance, num, balance }: TypeProps) {
+
+
 
 
   const [hidder, setHidder] = useState(false)
@@ -194,7 +203,6 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
   };
 
 
-  const [openApproval, setOpenApproval] = useState(false)
 
 
   // const { address } = useAccount();
@@ -208,166 +216,59 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
     const provider = getEthersSigner(config)
     const poolContract = new ethers.Contract(UniswapSepoliaRouterContract, swapabi, await provider)
 
-    // const signer = await provider.getSigner()
+    if (BigInt(allowance) > BigInt(Math.floor(Number(Number(balance) * (num / 100)) * (10 ** 18)))) {
+      setDoneLoading(true)
+      await poolContract.removeLiquidity(H30_Address, WETH_address, String(Number(Number(balance) * (num / 100)) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then((res: any) => {
+        console.log('结果', res)
+        // setInputReValue(String(Number(res[1]) / (10 ** 18)))
 
-    if (toToken == 'ETH') {
-      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
-        // console.log('111111111111111111111')
-        setDoneLoading(true)
-        await poolContract.addLiquidity(H30_Address, WETH_address, String(Number(inputFromNum) * (10 ** 18)), String(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
-
-          // console.log('结果222222222222', res)
-
-
-
-          const res1 = await res.wait()
-
-          if (res1.blockNumber == null) {
-            // console.log('nulllllllllll')
-          } else {
-
-            setDoneLoading(false)
-            handleSwapClose()
-            setUpdate(!update)
-            onChange(update)
-          }
-
-
-        }).catch((err) => {
-          // console.log("错误结果", err)
-          openNotification('top')
-          handleSwapClose()
-        })
-
-
-
-
-      } else {
+        setDoneLoading(false)
         handleSwapClose()
-        setOpenApproval(true)
+        // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+      }).catch(err => {
+        openNotification('top')
+        handleSwapClose()
+      })
 
-      }
     } else {
-      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
-        // console.log('111111111111111111111')
+      const ApproveContract = new ethers.Contract(pair_Address, tokenAbi, await provider)
+
+
+      await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
         setDoneLoading(true)
-        await poolContract.addLiquidity(H30_Address, WETH_address, String(Number(inputToNum) * (10 ** 18)), String(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
-
-          // console.log('结果222222222222', res)
 
 
 
-          const res1 = await res.wait()
+        await res.wait()
 
-          if (res1.blockNumber == null) {
-            // console.log('nulllllllllll')
-          } else {
+        await poolContract.removeLiquidity(H30_Address, WETH_address, String(Number(Number(balance) * (num / 100)) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then((res2: any) => {
+          console.log('结果', res)
+          // setInputReValue(String(Number(res[1]) / (10 ** 18)))
 
-            setDoneLoading(false)
-            handleSwapClose()
-            setUpdate(!update)
-            onChange(update)
-          }
-
-
-        }).catch((err) => {
-          // console.log("错误结果", err)
+          setDoneLoading(false)
+          handleSwapClose()
+          onChange()
+        }).catch(err => {
           openNotification('top')
           handleSwapClose()
         })
 
 
 
-
-      } else {
+      }).catch((err) => {
+        // console.log('err', err)
+        openNotification('top')
         handleSwapClose()
-        setOpenApproval(true)
 
-      }
+      })
+
 
     }
 
-    // if (toToken == 'ETH') {
-    //   if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
-    //     // console.log('111111111111111111111')
-    //     await poolContract.addLiquidityETH(H30_Address, String(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
-    //       from: address,
-    //       value: BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))
-
-
-    //     }).then(async (res) => {
-
-    //       // console.log('结果222222222222', res)
-    //       setDoneLoading(true)
-
-
-    //       const res1 = await res.wait()
-
-    //       if (res1.blockNumber == null) {
-    //         // console.log('nulllllllllll')
-    //       } else {
-
-    //         setDoneLoading(false)
-    //         handleSwapClose()
-    //         setUpdate(!update)
-    //         onChange(update)
-    //       }
-
-
-    //     }).catch((err) => {
-    //       // console.log("错误结果", err)
-    //       openNotification('top')
-    //       handleSwapClose()
-    //     })
 
 
 
-
-    //   } else {
-    //     handleSwapClose()
-    //     setOpenApproval(true)
-
-    //   }
-
-    // } else {
-    //   if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
-    //     // console.log('111111111111111111111')
-
-    //     await poolContract.addLiquidityETH(H30_Address, BigInt(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
-    //       from: address,
-    //       value: BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))
-    //     }).then(async (res) => {
-
-    //       // console.log('结果222222222222', res)
-    //       setDoneLoading(true)
-
-
-    //       const res1 = await res.wait()
-
-    //       if (res1.blockNumber == null) {
-    //         // console.log('nulllllllllll')
-    //       } else {
-
-    //         setDoneLoading(false)
-    //         handleSwapClose()
-    //         setUpdate(!update)
-    //         onChange(update)
-    //       }
-
-
-    //     }).catch((err) => {
-    //       // console.log("错误结果", err)
-    //       openNotification('top')
-    //       handleSwapClose()
-    //     })
-
-
-    //   } else {
-    //     handleSwapClose()
-    //     setOpenApproval(true)
-
-    //   }
-    // }
+    // const signer = await provider.getSigner()
 
 
 
@@ -376,23 +277,23 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
 
   useEffect(() => {
+    console.log(doneLoading)
 
   }, [doneLoading])
 
-  const [update, setUpdate] = useState(false)
 
-
-
-  const handleApprovalClose = () => {
-    setOpenApproval(false)
-    setUpdate(!update)
-    onChange(update)
-  }
 
 
   const gotoContract = () => {
     window.location.assign(`https://sepolia.etherscan.io/address/${UniswapSepoliaRouterContract}`)
   }
+
+  useEffect(() => {
+
+  }, [data, balance, allowance, windowHeight, windowWidth])
+
+  console.log(Number(balance) * (num / 100))
+  console.log(Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.ETHAmount) * Number(num / 100)))
 
 
 
@@ -401,7 +302,6 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
   return (
     <>
-      <ApprovalTokens windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} toToken={toToken} fromToken={fromToken} inputFromNum={inputFromNum} inputToNum={inputToNum} windowWidth={windowWidth} />
       {contextHolder}
 
       {
@@ -414,7 +314,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
               open={open}
             >
               <DialogTitle sx={{ m: 0, p: 2, color: '#000', fontWeight: 700, fontSize: '18px', backgroundColor: 'transparent' }} id="customized-dialog-title">
-                Review Supply
+                Review Withdraw
               </DialogTitle>
               <IconButton
                 aria-label="close"
@@ -431,52 +331,15 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
               <DialogContent >
 
                 <Box sx={{ marginBottom: '10px' }}>
-                  <Stack alignItems="start" spacing="10px" width="100%" >
-                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      You pay
-                    </Typography>
-
-                    <Stack width="100%" alignItems="center" direction="row" justifyContent="space-between">
-
-                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
-                        {ValueNumber(Number(inputToNum))} {toToken}
-                      </Typography>
-
-                      <TokenColorIcon name={toToken} size={40} />
-
-
-
-                    </Stack>
-                    <Stack width="100%" alignItems="center" direction="row" justifyContent="space-between">
-
-                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
-                        {ValueNumber(Number(inputFromNum))} {fromToken}
-                      </Typography>
-
-                      <TokenColorIcon name={fromToken} size={40} />
-
-
-
-                    </Stack>
-
-                  </Stack>
-                </Box>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
-                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
-                  <MdAdd color='#333' style={{ padding: '0 1px' }} />
-                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
-                </Stack>
-
-                <Box sx={{ marginBottom: '10px', marginTop: '10px' }}>
                   <Box position="relative">
                     <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      You receive
+                      You withdraw
                     </Typography>
 
                     <Stack alignItems="center" direction="row" justifyContent="space-between" pt="20px">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
-                        {ValueNumber(Number(Math.sqrt(Number(inputToNum) * Number(inputFromNum))))} H20/ETH
+                        {ValueNumber(balance == '0' ? 0 : Number(balance) * (num / 100))} LP-H20/ETH
                       </Typography>
 
                       <AvatarGroup>
@@ -486,6 +349,48 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                     </Stack>
                   </Box>
                 </Box>
+
+
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
+                  <MdAdd color='#333' style={{ padding: '0 1px' }} />
+                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
+                </Stack>
+
+                <Box sx={{ marginBottom: '10px', marginTop: '10px' }}>
+                  <Stack alignItems="start" spacing="10px" width="100%" >
+                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                      You receive
+                    </Typography>
+
+                    <Stack width="100%" alignItems="center" direction="row" justifyContent="space-between">
+
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
+                        {ValueNumber(balance !== '0' && data[0].ETHAmount !== '0' && data[0]?.liq !== "0" ? Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.ETHAmount) * Number(num / 100)) : 0)}ETH
+
+                      </Typography>
+
+                      <TokenColorIcon name="ETH" size={40} />
+
+
+
+                    </Stack>
+                    <Stack width="100%" alignItems="center" direction="row" justifyContent="space-between">
+
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
+                        {ValueNumber(balance !== '0' && data[0].H20Amount !== '0' && data[0]?.liq !== "0" ? Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.H20Amount) * Number(num / 100)) : 0)} H20
+                      </Typography>
+
+                      <TokenColorIcon name="H20" size={40} />
+
+
+
+                    </Stack>
+
+                  </Stack>
+                </Box>
+
+
 
 
                 <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -554,7 +459,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
               </DialogContent>
               <DialogActions>
                 <SwapButton loading={doneLoading} onClick={handleSwap}>
-                  Confirm Swap
+                  Confirm Withdraw
                 </SwapButton>
               </DialogActions>
             </BootstrapDialog>
@@ -566,7 +471,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
               <Box sx={{ width: '100%' }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" pb="10px">
                   <Typography sx={{ color: "#464646", fontSize: '17px', fontWeight: 700 }}>
-                    Review Supply
+                    Review Withdraw
                   </Typography>
                   <IconButton
                     aria-label="close"
@@ -576,54 +481,17 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                     <CloseIcon />
                   </IconButton>
                 </Stack>
-
                 <Box sx={{ marginBottom: '10px' }}>
-                  <Stack alignItems="start" spacing="6px" width='100%'>
-                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      You pay
-                    </Typography>
-
-
-                    <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0 0', width: '100%' }} justifyContent="space-between">
-
-                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
-                        {ValueNumber(Number(inputToNum))} {toToken}
-                      </Typography>
-
-                      <TokenColorIcon name={toToken} size={30} />
-
-
-
-                    </Stack>
-                    <Stack alignItems="center" direction="row" sx={{ padding: '10px 0', width: '100%' }} justifyContent="space-between">
-
-                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
-                        {ValueNumber(Number(inputFromNum))} {fromToken}
-                      </Typography>
-
-                      <TokenColorIcon name={fromToken} size={30} />
-
-
-
-                    </Stack>
-                  </Stack>
-                </Box>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
-                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
-                  <ArrowDownwardIcon sx={{ color: '#1aae70', padding: '0 1px' }} />
-                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
-                </Stack>
-
-                <Box sx={{ marginBottom: '10px', marginTop: '10px' }}>
                   <Box position="relative">
                     <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      You receive
+                      You withdraw
                     </Typography>
 
                     <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
-                        {ValueNumber(Number(Math.sqrt(Number(inputToNum) * Number(inputFromNum))))} {`${toToken} / ${fromToken}`}
+                        {ValueNumber(Number(balance) * (num / 100) ?? 0)} LP-H20/ETH
+
                       </Typography>
 
                       <AvatarGroup>
@@ -632,6 +500,46 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                       </AvatarGroup>
                     </Stack>
                   </Box>
+                </Box>
+
+
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
+                  <ArrowDownwardIcon sx={{ color: '#1aae70', padding: '0 1px' }} />
+                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
+                </Stack>
+
+
+                <Box sx={{ marginBottom: '10px', marginTop: '10px' }}>
+                  <Stack alignItems="start" spacing="6px" width='100%'>
+                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                      You receive
+                    </Typography>
+
+
+                    <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0 0', width: '100%' }} justifyContent="space-between">
+
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
+                        {ValueNumber(Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.ETHAmount) * Number(num / 100)) ?? 0)} ETH
+                      </Typography>
+
+                      <TokenColorIcon name="ETH" size={30} />
+
+
+
+                    </Stack>
+                    <Stack alignItems="center" direction="row" sx={{ padding: '10px 0', width: '100%' }} justifyContent="space-between">
+
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
+                        {ValueNumber(Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.H20Amount) * Number(num / 100)) ?? 0)} H20
+                      </Typography>
+
+                      <TokenColorIcon name="H20" size={30} />
+
+
+
+                    </Stack>
+                  </Stack>
                 </Box>
 
 
@@ -699,7 +607,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
 
                 <SwapButton loading={doneLoading} onClick={handleSwap}>
-                  Confirm Swap
+                  Confirm Withdraw
                 </SwapButton>
 
               </Box>

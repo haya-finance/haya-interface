@@ -17,7 +17,7 @@ import { ButtonProps } from '@mui/material/Button';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // import Web3 from 'web3';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ethers } from 'ethers'
 import SwapAbi from 'abi/swap.json'
 import { useAccount } from 'wagmi';
@@ -28,6 +28,7 @@ import { LoadingButton } from '@mui/lab';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
 import wethAbi from 'abi/weth.json'
+import ApprovalTokens from './approve';
 
 
 function formatNumber(num: number) {
@@ -75,7 +76,8 @@ const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '.MuiDialog-paper': {
-    width: '100%'
+    width: '600px',
+    borderRadius: '20px'
 
 
   },
@@ -106,17 +108,7 @@ const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 
 
-const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
-  width: '100%',
-  backgroundColor: '#1AAE70',
-  borderRadius: '10px',
-  color: '#fff',
-  boxShadow: 'none',
-  '&:hover': {
-    backgroundColor: "#1AAE70",
-    color: '#fff',
-  },
-}));
+
 
 
 type TypeProps = {
@@ -128,12 +120,41 @@ type TypeProps = {
   toToken: string;
   fromToken: string;
   windowWidth: number;
-  slippage: string
+  slippage: string;
+  windowHeight: number;
+  onUpdate: () => void
 }
 
 
 
-export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken }: TypeProps) {
+export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onUpdate }: TypeProps) {
+
+
+  const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    lineHeight: '20px',
+    fontWeight: 500,
+    width: '100%',
+    backgroundColor: '#1AAE70',
+    color: '#fff',
+    boxShadow: 'none',
+    ".MuiLoadingButton-loadingIndicator": {
+      color: '#fff'
+
+    },
+    "&.MuiLoadingButton-loading": {
+      zIndex: 100,
+      opacity: 'inherit',
+      backgroundColor: '#1AAE70',
+
+    },
+    '&:hover': {
+      backgroundColor: "#19A56A",
+      color: '#fff',
+    },
+  }));
 
 
   const [hidder, setHidder] = useState(false)
@@ -204,30 +225,10 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
 
     if (toToken !== 'ETH' && fromToken !== 'ETH') {
       if (BigInt(data.filter(item => item.symbol === toToken)[0].allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))))) {
-        await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
-          setLoading(true)
-          await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
-            // console.log('结果swap', res)
-            await res.wait()
-            setLoading(false)
-            handleSwapClose()
-          }).catch((err) => {
-            openNotification('top')
-            handleSwapClose()
-            setLoading(false)
-            // console.log('错误1', err)
-          })
+        handleSwapClose()
+        setOpenApproval(true)
 
-          await res.wait()
-
-        }).catch((err) => {
-          openNotification('top')
-          handleSwapClose()
-          setLoading(false)
-          // console.log('错误1', err)
-
-        })
       } else {
         setLoading(true)
         await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
@@ -236,6 +237,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
           await res.wait()
           setLoading(false)
           handleSwapClose()
+          onUpdate()
         }).catch((err) => {
           openNotification('top')
           handleSwapClose()
@@ -265,6 +267,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                 await res2.wait()
                 setLoading(false)
                 handleSwapClose()
+                onUpdate()
 
 
 
@@ -306,6 +309,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                 await res2.wait()
                 setLoading(false)
                 handleSwapClose()
+                onUpdate()
 
 
 
@@ -351,6 +355,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                 await res.wait()
                 setLoading(false)
                 handleSwapClose()
+                onUpdate()
               }).catch((err) => {
                 openNotification('top')
                 handleSwapClose()
@@ -372,6 +377,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
               await res.wait()
               setLoading(false)
               handleSwapClose()
+              onUpdate()
             }).catch((err) => {
               openNotification('top')
               handleSwapClose()
@@ -424,10 +430,23 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
 
   }
 
+  const [openApproval, setOpenApproval] = useState(false)
+
 
   const gotoContract = () => {
     window.location.assign(`https://sepolia.etherscan.io/address/${UniswapSepoliaRouterContract}`)
   }
+
+  const handleApprovalClose = () => {
+    setOpenApproval(false)
+  }
+
+  useEffect(() => {
+
+  }, [data])
+
+
+
 
 
 
@@ -436,6 +455,8 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
 
   return (
     <>
+      <ApprovalTokens onUpdate={onUpdate} slippage={slippage} windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} toToken={toToken} fromToken={fromToken} inputFromNum={inputFromNum} inputToNum={inputToNum} windowWidth={windowWidth} />
+
       {contextHolder}
       {
         windowWidth >= 600 ? (

@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import swapabi from 'abi/swap.json'
 import { ethers } from 'ethers'
 import { useAccount } from 'wagmi';
-import { H30_Address, UniswapSepoliaRouterContract } from 'config';
+import { UniswapSepoliaRouterContract } from 'config';
 import InfoIcon from '@mui/icons-material/Info';
 import { FaCheck } from "react-icons/fa";
 import WarningIcon from '@mui/icons-material/Warning';
@@ -24,7 +24,8 @@ import { NotificationPlacement } from 'antd/es/notification/interface';
 import { LoadingButton } from '@mui/lab';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
-import tokenAbi from 'abi/token.json'
+import tokenAbi from 'abi/token.json';
+import wethAbi from 'abi/weth.json'
 
 
 // const sepolia_rpc = "https://sepolia.infura.io/v3/0edd253962184b628e0cfabc2f91b0ae"
@@ -42,26 +43,21 @@ import tokenAbi from 'abi/token.json'
 
 
 
-type dataType = {
-  num: string;
-  symbol: string;
-  address: string;
-  balance: string;
-  allowance: string
-}
+
 
 
 type TypeProps = {
   open: boolean;
   handleApprovalClose: () => void;
-  data: dataType[];
+  data: any[];
   windowWidth: number;
   windowHeight: number;
   inputToNum: string;
   toToken: string;
   fromToken: string;
   inputFromNum: string;
-  slippage: string
+  slippage: string;
+  onUpdate: () => void
 }
 
 
@@ -80,21 +76,21 @@ const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 
 
-export default function ApprovalTokens({ slippage, open, handleApprovalClose, data, windowWidth, windowHeight, inputFromNum, inputToNum, toToken, fromToken }: TypeProps) {
+export default function ApprovalTokens({ open, handleApprovalClose, data, windowWidth, windowHeight, inputFromNum, inputToNum, toToken, fromToken, slippage, onUpdate }: TypeProps) {
 
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
     '.MuiDialog-paper': {
-      width: '100%',
-      padding: windowWidth >= 600 ? '10px 19px' : '5px 8px',
-      borderRadius: '10px'
+      width: '600px',
+      borderRadius: '20px',
+      padding: '20px 20px'
     },
 
     '& .MuiDialogContent-root': {
-      padding: windowWidth >= 600 ? "14px 24px" : '10px 14px',
+      padding: "0",
     },
     '& .MuiDialogActions-root': {
-      padding: theme.spacing(1),
+      padding: 0,
     },
     '& .customized-dialog-title': {
       borderBottom: 0
@@ -161,7 +157,7 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
 
 
 
-  const [disable, setDisabled] = useState<boolean>(false)
+  const [disable, setDisabled] = useState<boolean>(true)
 
   const [approval, setApproval] = useState<boolean[]>([])
   const [loading, setLoading] = useState<boolean[]>([])
@@ -177,14 +173,31 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
 
 
   const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
     width: '100%',
     backgroundColor: disable ? '#9B9B9B' : '#1AAE70',
-
-    borderRadius: '10px',
     color: '#fff',
     boxShadow: 'none',
-    '&:hover': {
+    "&.Mui-disabled": {
+      color: '#fff',
+
+    },
+    ".MuiLoadingButton-loadingIndicator": {
+      color: '#fff'
+
+    },
+    "&.MuiLoadingButton-loading": {
+      opacity: 'inherit',
+      zIndex: 100,
       backgroundColor: '#1AAE70',
+
+    },
+    '&:hover': {
+      backgroundColor: '#19A56A',
       color: '#fff',
     },
   }));
@@ -194,67 +207,115 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
   const handleDone = async () => {
     // const signer = await provider.getSigner()
     const provider = getEthersSigner(config)
-    const poolContract = new ethers.Contract(UniswapSepoliaRouterContract, swapabi, await provider)
     // Math.floor(Number(Number(inputToNum) / Number(inputFromNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))
 
-    if (toToken == "ETH") {
-      await poolContract.addLiquidityETH(H30_Address, String(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
-        from: address,
-        value: BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))
+    const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, swapabi, await provider)
+    // BigInt(Number(inputToNum) * (10 ** 18))
+
+    // console.log(new Date().getTime() + 10000)
 
 
-      }).then(async (res) => {
+    if (toToken !== 'ETH' && fromToken !== 'ETH') {
+      setDoneLoading(true)
+      await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
-        // console.log('结果222222222222', res)
-        setDoneLoading(true)
-
-
-        const res1 = await res.wait()
-
-        if (res1.blockNumber == null) {
-          // console.log('nulllllllllll')
-        } else {
-
-          setDoneLoading(false)
-          handleApprovalClose()
-        }
-
-
+        // console.log('结果swap', res)
+        await res.wait()
+        setDoneLoading(false)
+        handleApprovalClose()
+        onUpdate()
       }).catch((err) => {
-        // console.log("错误结果", err)
         openNotification('top')
         handleApprovalClose()
+        setDoneLoading(false)
+        // console.log('错误1', err)
       })
+
 
     } else {
-      console.log(String(Math.floor(Number(inputFromNum) * (10 ** 18))))
-      // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.floor(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
-      await poolContract.addLiquidityETH(H30_Address, BigInt(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
-        from: address,
-        value: BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))
-      }).then(async (res) => {
+      if (toToken !== 'ETH') {
+        await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))),
+          BigInt(Math.floor((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))),
+          [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address],
+          address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+            setDoneLoading(true)
 
-        // console.log('结果222222222222', res)
-        setDoneLoading(true)
-
-
-        const res1 = await res.wait()
-
-        if (res1.blockNumber == null) {
-          // console.log('nulllllllllll')
-        } else {
-
-          setDoneLoading(false)
-          handleApprovalClose()
-        }
+            console.log('结果swap', res)
+            // await res.wait()
+            const tokenContract = new ethers.Contract(data.filter(item => item.symbol === fromToken)[0].address, wethAbi, await provider)
+            await tokenContract.withdraw(BigInt(Math.floor((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl))))).then(async (res2) => {
+              await res2.wait()
+              setDoneLoading(false)
+              handleApprovalClose()
+              onUpdate()
 
 
-      }).catch((err) => {
-        // console.log("错误结果", err)
-        openNotification('top')
-        handleApprovalClose()
-      })
+
+            }).catch((err) => {
+              // console.log(err)
+              openNotification('top')
+              handleApprovalClose()
+              setDoneLoading(false)
+
+            })
+
+
+          }).catch((err) => {
+            openNotification('top')
+            handleApprovalClose()
+            setDoneLoading(false)
+            // console.log('错误1', err)
+          })
+
+      } else {
+        const tokenContract = new ethers.Contract(data.filter(item => item.symbol === toToken)[0].address, wethAbi, await provider)
+
+        await tokenContract.deposit({
+          from: address,
+          value: String(Number(inputToNum) * (10 ** 18))
+        }).then(async (result) => {
+          setDoneLoading(true)
+          await result.wait()
+          await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+
+            // console.log('结果swap', res)
+            await res.wait()
+            setDoneLoading(false)
+            handleApprovalClose()
+            onUpdate()
+          }).catch((err) => {
+            openNotification('top')
+            handleApprovalClose()
+            setDoneLoading(false)
+            // console.log('错误1', err)
+          })
+
+
+
+        })
+
+
+
+
+        // await swapContract.swapExactETHForTokens(String(Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl))), ['0x0000D00000000000000000000000000000000000', data.filter(item => item.symbol == fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5, {
+        //   from: address,
+        //   value: String(Number(inputToNum) * (10 ** 18))
+        // }).then((res: any) => {
+        //   // console.log('结果swap', res)
+        //   res.wait()
+        //   setLoading(false)
+        //   handleSwapClose()
+        // }).catch((err) => {
+        //   console.log('错误2', err)
+        //   openNotification('top')
+        //   handleSwapClose()
+        // })
+
+      }
+
     }
+
+
 
 
 
@@ -266,15 +327,10 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
 
   const OnApproval = async (index: number, num: string, tokenAddress: any) => {
 
-    // const number = String((Number(num) * Number(inputNum)) * (10 ** 18))
-    // console.log(number)
-
-    // const signer = await provider.getSigner()
     const provider = getEthersSigner(config)
+    const ApproveContract = new ethers.Contract(tokenAddress, tokenAbi, await provider)
 
 
-
-    const ApproveContract = new ethers.Contract(H30_Address, tokenAbi, await provider)
 
     await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
 
@@ -289,7 +345,6 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
       const res1 = await res.wait()
 
       if (res1.blockNumber == null) {
-        // console.log('nulllllllllll')
       } else {
 
         setLoading((pre) => {
@@ -307,7 +362,6 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
       }
 
     }).catch((err) => {
-      // console.log('err', err)
       openNotification('top')
       handleApprovalClose()
 
@@ -337,7 +391,10 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
   }, [doneLoading])
 
   useEffect(() => {
+    console.log('approve', approval)
     if (approval.length == data.length && data.length !== 0) {
+
+
 
       if (approval.every(item => item == true)) {
         setDisabled(false)
@@ -349,31 +406,13 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
 
 
   useEffect(() => {
+    console.log('data1', data)
 
     for (let i = 0; i < data.length; i++) {
-      if (toToken == 'ETH') {
-        if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
+      if (inputToNum !== '' && inputFromNum !== '') {
+        if (BigInt(data.filter((item) => item.symbol == toToken)[0]?.allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter((item) => item.symbol == toToken)[0]?.decimasl))))) {
           // console.log('111111111111111111111')
-
-          setApproval((pre) => {
-            const newPre = [...pre]
-            newPre[i] = true;
-            return newPre
-          })
-
-
-        } else {
-          setApproval((pre) => {
-            const newPre = [...pre]
-            newPre[i] = false;
-            return newPre
-          })
-
-        }
-
-      } else {
-        if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
-          // console.log('111111111111111111111')
+          console.log('data', data)
 
           setApproval((pre) => {
             const newPre = [...pre]
@@ -394,7 +433,7 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
 
     }
 
-  }, [data])
+  }, [data, inputFromNum, inputToNum])
 
   // console.log(toToken, inputFromNum, inputToNum, fromToken)
 
@@ -420,7 +459,7 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
               open={open}
             >
 
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Stack direction="row" justifyContent="space-between" alignItems="center" padding="0 10px">
                 <Typography sx={{ color: "#464646", fontSize: '20px', fontWeight: 700 }}>
                   Approve Your Tokens
                 </Typography>
@@ -442,9 +481,9 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
                       return (
                         <>
                           {
-                            item.symbol !== 'ETH' ? (
+                            item.symbol == toToken ? (
                               <>
-                                <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
+                                <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '20px', p: '12px 20px' }}>
                                   <Stack direction="row" spacing="4px" alignItems="center" key={index}>
                                     <TokenColorIcon name={item.symbol.split('-')[0]} size={30} />
                                     <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
@@ -490,7 +529,7 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
               </DialogContent>
               <DialogActions>
                 <Stack width="100%">
-                  <Stack direction="row" spacing="6px" pb="12px" pt='8px' alignItems="center">
+                  <Stack direction="row" spacing="6px" pb="20px" pt='20px' alignItems="center">
                     <InfoIcon sx={{ color: '#6f6f6f', width: '20px', height: '20px' }} />
                     <Typography sx={{ color: '#6f6f6f', fontSize: windowWidth >= 600 ? '14px' : '11px' }}>
                       Tip: Approve your tokens before use. Each Token requires a separate one-time approval.
@@ -530,7 +569,7 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
                       return (
                         <>
                           {
-                            item.symbol !== 'ETH' ? (
+                            item.symbol == toToken ? (
                               <>
                                 <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
                                   <Stack direction="row" spacing="4px" alignItems="center" key={index}>
@@ -565,6 +604,7 @@ export default function ApprovalTokens({ slippage, open, handleApprovalClose, da
                               <></>
                             )
                           }
+
                         </>
                       )
                     })

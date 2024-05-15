@@ -1,11 +1,10 @@
 
-import { SettingOutlined } from '@ant-design/icons';
 import { Box, Card, IconButton, InputAdornment, Popover, Stack, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Button, { ButtonProps } from '@mui/material/Button';
 
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
 import SwapSons from './swapPage';
 // import Web3 from 'web3'
@@ -13,6 +12,7 @@ import tokenAbi from 'abi/token.json'
 import { H30_Address, sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
 import { ethers } from 'ethers';
 import { PiWarningBold } from "react-icons/pi";
+import Setting from 'assets/images/icon/Setting.svg'
 
 // const web3 = new Web3(sepolia_rpc)
 const provider = new ethers.JsonRpcProvider(sepolia_rpc)
@@ -183,17 +183,23 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       }
     }
 
-  }, [address])
+  }, [address, chain])
 
   const [openWallet, setOpenWallet] = useState(false)
 
 
   const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    lineHeight: '20px',
+    fontWeight: 500,
     width: '100%',
     color: '#fff',
     backgroundColor: '#1AAE70',
     '&:hover': {
-      backgroundColor: '#1AAE70',
+      backgroundColor: '#19A56A',
+      color: '#fff',
     },
   }));
 
@@ -275,6 +281,15 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
   const id = open ? 'simple-popover' : undefined;
 
 
+  const { switchChain } = useSwitchChain()
+
+
+  const onChangeNetwork = () => {
+    switchChain({ chainId: 421614 })
+
+  }
+
+
 
 
 
@@ -283,19 +298,19 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
   return (
     <>
       <Box sx={{ paddingTop: windowWidth >= 600 ? '60px' : 0, backgroundColor: '#fff' }}>
-        <Card sx={{ p: windowWidth >= 600 ? 1 : '14px', boxShadow: 'none' }}>
+        <Card sx={{ p: windowWidth >= 600 ? "20px 20px" : '20px 10px', boxShadow: 'none' }}>
           {
             windowWidth >= 600 ? (
-              <Stack direction="row" justifyContent="space-between" width="600px" margin="0 auto" mb={1}>
+              <Stack direction="row" justifyContent="space-between" width="600px" margin="0 auto" mb="20px">
                 <Stack direction="row" spacing={1}>
-                  <Box sx={{ border: 0, backgroundColor: 'transparent' }} component="button" onClick={() => OnCheckTitel(0)}>
+                  <Box sx={{ p: '4px 12px', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '13px', fontWeight: 600, borderRadius: "20px", cursor: 'pointer', border: 0 }} component="button" onClick={() => OnCheckTitel(0)}>
                     Swap
                   </Box>
                 </Stack>
                 <Box >
 
 
-                  <IconButton onClick={handleClick} aria-describedby={id}><SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} /></IconButton>
+                  <IconButton onClick={handleClick} aria-describedby={id}><img src={Setting} /></IconButton>
                   <Popover
                     id={id}
                     open={open}
@@ -359,16 +374,16 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
                 </Box>
               </Stack>
             ) : (
-              <Stack direction="row" justifyContent="space-between" mb={1}>
+              <Stack direction="row" justifyContent="space-between" mb="10px">
                 <Stack direction="row" spacing={1}>
-                  <Box sx={{ border: 0, backgroundColor: 'transparent' }} component="button" onClick={() => OnCheckTitel(0)}>
+                  <Box sx={{ border: 0, backgroundColor: '#f6f6f6', color: '#1aae70', fontSize: '14px', borderRadius: '20px', padding: '0px 14px', lineHeight: '12px', fontWeight: 500 }} component="button" onClick={() => OnCheckTitel(0)}>
                     Swap
                   </Box>
                 </Stack>
                 <Box >
 
 
-                  <IconButton onClick={handleClick} aria-describedby={id}><SettingOutlined onPointerOverCapture={undefined} onPointerMoveCapture={undefined} /></IconButton>
+                  <IconButton onClick={handleClick} aria-describedby={id}><img src={Setting} /></IconButton>
                   <Popover
                     id={id}
                     open={open}
@@ -439,22 +454,67 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
                 <SwapSons slippage={inputValue !== '' ? inputValue : '0.5'} data={tokenList} windowHeight={windowHeight} windowWeight={windowWidth} OnChange={OnChange} />
                 {
                   address !== undefined ? (
-                    <></>
+                    <>
+                      {
+                        windowWidth >= 600 ? (
+                          <>
+                            {
+                              chain?.id === undefined ? (
+                                <>
+                                  <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                    <ConnectButton onClick={onChangeNetwork}>
+                                      Switch to Arbitrum Sepolia
+                                    </ConnectButton>
+                                  </Box>
+                                </>
+
+                              ) : (
+                                <></>
+                              )
+                            }
+                          </>
+                        ) : (
+                          <>
+                            {
+                              chain?.id === undefined ? (
+                                <Box sx={{ width: "100%" }}>
+                                  <ConnectButton onClick={onChangeNetwork}>
+                                    Switch to Arbitrum Sepolia
+                                  </ConnectButton>
+                                </Box>
+
+
+                              ) : (
+                                <>
+                                </>
+                              )
+                            }
+                          </>
+
+                        )
+                      }
+
+                    </>
 
 
                   ) : (
                     <>
                       {
                         windowWidth >= 600 ? (
-                          <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
-                            <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect wallet</ConnectButton>
-                          </Box>
+                          <>
+                            <Box sx={{ width: "600px", margin: '0 auto' }}>
+                              <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
+                              <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
+                            </Box>
+                          </>
                         ) : (
-                          <Box sx={{ width: '100%', mt: 1 }}>
-                            <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect wallet</ConnectButton>
-                          </Box>
+                          <>
+                            <Box sx={{ width: '100%' }}>
+                              <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
+                              <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
+                            </Box>
+                          </>
+
                         )
                       }
                     </>

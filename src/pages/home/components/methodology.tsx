@@ -161,7 +161,7 @@ const Methodology = ({ windowWidth }: TypeProps) => {
       {
         windowWidth >= 600 ? (
           <Box sx={{ width: '100%', backgroundColor: '#fff' }}>
-            <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontWeight: 700, ml: '20px', mb: '20px', fontSize: '18px' }}  >
+            <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontWeight: 700, ml: '20px', mb: '20px', fontSize: '20px', mt: '60px' }}  >
               Methodology
             </Typography>
             <Box sx={{ height: '30px', width: '100%', backgroundColor: 'transparent', mb: '20px' }}>

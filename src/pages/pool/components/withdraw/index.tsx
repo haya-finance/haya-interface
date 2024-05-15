@@ -1,6 +1,6 @@
 
 
-import { Avatar, AvatarGroup, Box, Button, ButtonProps, Card, Slider, Stack, Typography } from '@mui/material';
+import { Box, Button, ButtonProps, Card, Slider, Stack, Typography } from '@mui/material';
 
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
@@ -15,7 +15,7 @@ import ShowDetail from './showDetail';
 import { useNavigate } from 'react-router';
 import tokenAbi from 'abi/token.json'
 import ReviewWithdraw from './ReviewWithdraw';
-const avatarImage = require.context('assets/images/token', true);
+import ETHH20 from 'assets/images/token/selETH_H20.svg'
 // import PoolTotal from './pool';
 
 // const web3 = new Web3(sepolia_rpc)
@@ -91,34 +91,7 @@ const PrettoSlider = styled(Slider)({
   },
 });
 
-const WithdrawButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  width: '100%',
-  color: '#fff',
-  // padding: '10px 0',
-  fontWeight: 700,
-  fontSize: '18px',
-  border: 0,
-  backgroundColor: '#1aae70',
-  borderRadius: '20px',
-  '&:hover': {
-    backgroundColor: '#1aae70',
-    color: '#fff',
-  },
-}));
 
-const SelectButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  width: '100%',
-  color: '#fff',
-  border: 0,
-  fontWeight: 700,
-  fontSize: '18px',
-  borderRadius: '20px',
-  backgroundColor: '#9b9b9b',
-  '&:hover': {
-    backgroundColor: '#9b9b9b',
-    color: '#fff',
-  },
-}));
 
 const marks = [
   {
@@ -209,6 +182,46 @@ export default function WithdrawPoolPage() {
     return () => window.removeEventListener('resize', handleResize)
 
   }, [])
+
+  const WithdrawButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    width: '100%',
+    color: '#fff',
+    textTransform: 'none',
+    // padding: '10px 0',
+    fontWeight: 500,
+    fontSize: '18px',
+    lineHeight: '20px',
+    border: 0,
+    backgroundColor: '#1aae70',
+    borderRadius: '20px',
+    '&:hover': {
+      backgroundColor: '#19A56A',
+      color: '#fff',
+    },
+  }));
+
+  const SelectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    width: '100%',
+    color: '#fff',
+    border: 0,
+    fontWeight: 500,
+    fontSize: '18px',
+    lineHeight: '20px',
+    borderRadius: '20px',
+    backgroundColor: '#9b9b9b',
+    textTransform: 'none',
+    "&.Mui-disabled": {
+      zIndex: 100,
+      color: '#fff',
+
+    },
+    '&:hover': {
+      backgroundColor: '#9b9b9b',
+      color: '#fff',
+    },
+  }));
 
   const [data, setData] = useState<DataType[]>([{
 
@@ -422,18 +435,18 @@ export default function WithdrawPoolPage() {
                   <Box component="button" sx={{ cursor: 'pointer', padding: '0', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }} onClick={goBack}>
                     <Stack direction="row" alignItems="center" spacing="4px">
                       <MdOutlineArrowBackIosNew />
-                      <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 500 }}>
+                      <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
                         Widthdraw liquidity
                       </Typography>
                     </Stack>
                   </Box>
                   <Box sx={{ backgroundColor: '#F6F6F6', padding: '12px 20px', borderRadius: '20px', marginBottom: '10px' }}>
                     <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
-                      <Typography sx={{ color: "rgba(0, 0, 0, 0.2)", fontSize: '13px', fontWeight: 700 }}>
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '13px', fontWeight: 600 }}>
                         You withdraw
                       </Typography>
                       <Stack direction="row" alignItems="center" spacing="10px">
-                        <Typography sx={{ color: "rgba(0, 0, 0, 0.2)", fontSize: '12px', fontWeight: 700 }}>
+                        <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 600 }}>
                           Balance: <span style={{ fontSize: '12px', color: '#000', fontWeight: 700, marginLeft: '2px' }}>{ValueNumber(Number(balance))}</span>
                         </Typography>
                         <Typography component="button" variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600, cursor: 'pointer', border: 'none', backgroundColor: 'transparent' }} onClick={onMax} color="primary">
@@ -449,12 +462,9 @@ export default function WithdrawPoolPage() {
                       </Typography>
                       <Box sx={{ backgroundColor: '#fff', borderRadius: '100px', padding: '8px 8px', border: 'none' }}>
                         <Stack direction="row" alignItems="center" spacing="8px">
-                          <AvatarGroup>
-                            <Avatar alt="H20" src={avatarImage('./H20.png')} sx={{ width: '20px', height: '20px' }} />
-                            <Avatar alt="ETH" src={avatarImage('./ETH.png')} sx={{ width: '20px', height: '20px' }} />
-                          </AvatarGroup>
+                          <img src={ETHH20} />
                           <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
-                            LP-ETH/H20
+                            ETH/H20
                           </Typography>
 
                         </Stack>
@@ -523,16 +533,105 @@ export default function WithdrawPoolPage() {
 
                 </Box>
               ) : (
-                <Box sx={{ width: '100%', p: '20px 10px' }}>
-                  <Box component="button" sx={{ cursor: 'pointer', padding: '0', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }}>
+                <Box sx={{ width: `${windowWidth}px`, p: '20px 10px' }}>
+                  <Box component="button" sx={{ cursor: 'pointer', padding: '0', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '10px' }} onClick={goBack}>
                     <Stack direction="row" alignItems="center" spacing="4px">
                       <MdOutlineArrowBackIosNew />
-                      <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 500 }}>
-                        Pool Detail
+                      <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
+                        Widthdraw liquidity
                       </Typography>
-
                     </Stack>
                   </Box>
+                  <Box sx={{ backgroundColor: '#F6F6F6', padding: '12px 12px', borderRadius: '20px', marginBottom: '10px' }}>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '13px', fontWeight: 600 }}>
+                        You withdraw
+                      </Typography>
+                      <Stack direction="row" alignItems="center" spacing="10px">
+                        <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 600 }}>
+                          Balance: <span style={{ fontSize: '12px', color: '#000', fontWeight: 700, marginLeft: '2px' }}>{ValueNumber(Number(balance))}</span>
+                        </Typography>
+                        <Typography component="button" variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600, cursor: 'pointer', border: 'none', backgroundColor: 'transparent' }} onClick={onMax} color="primary">
+                          MAX
+                        </Typography>
+                      </Stack>
+
+                    </Stack>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                      {/* <BootstrapInput placeholder='0' /> */}
+                      <Typography sx={{ color: "#000", fontSize: '30px', lineHeight: '22px', fontWeight: 700 }}>
+                        {inputValue}
+                      </Typography>
+                      <Box sx={{ backgroundColor: '#fff', borderRadius: '100px', padding: '8px 8px', border: 'none' }}>
+                        <Stack direction="row" alignItems="center" spacing="8px">
+                          <img src={ETHH20} />
+                          <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
+                            ETH/H20
+                          </Typography>
+
+                        </Stack>
+
+
+                      </Box>
+                    </Stack>
+
+
+
+                  </Box>
+                  <Box sx={{ padding: '7px 16px', width: '100%', backgroundColor: 'transparent', border: 'none' }}>
+                    <PrettoSlider
+                      // valueLabelDisplay="auto"
+                      onChange={valuetext}
+                      value={value}
+                      aria-label="pretto slider"
+                      defaultValue={0}
+                      marks={marks}
+                    />
+                  </Box>
+                  <Box sx={{ padding: '12px 12px', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '10px' }}>
+                    <Typography sx={{ color: "#9B9B9B", fontSize: '12px', textAlign: 'start', fontWeight: 500, marginBottom: '10px' }}>
+                      You receive
+                    </Typography>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Stack direction="row" alignItems="center" spacing="12px">
+                        <TokenColorIcon name="ETH" size={30} />
+                        <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 700 }}>
+                          ETH
+                        </Typography>
+                      </Stack>
+                      <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 700 }}>
+                        {ValueNumber(Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.ETHAmount) * Number(value / 100)))}
+                      </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" >
+                      <Stack direction="row" alignItems="center" spacing="12px">
+                        <TokenColorIcon name="H20" size={30} />
+                        <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 700 }}>
+                          H20
+                        </Typography>
+                      </Stack>
+                      <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 700 }}>
+                        {ValueNumber(Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.H20Amount) * Number(value / 100)))}
+
+                      </Typography>
+                    </Stack>
+
+                  </Box>
+                  <ShowDetail windowWeight={windowWidth} />
+                  {
+                    value == 0 ? (
+                      <>
+                        <SelectButton>Enter an Amount</SelectButton>
+
+                      </>
+                    ) : (
+                      <>
+                        <WithdrawButton onClick={onWithdraw}>Withdraw</WithdrawButton>
+                      </>
+                    )
+                  }
+
+
 
                 </Box>
 
@@ -544,7 +643,7 @@ export default function WithdrawPoolPage() {
           </Card>
 
         </Box>
-      </Box>
+      </Box >
       {/* <PoolTotal windowHeight={windowHeight} windowWidth={windowWidth} /> */}
     </>
   );

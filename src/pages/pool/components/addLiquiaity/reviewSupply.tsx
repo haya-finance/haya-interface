@@ -68,7 +68,8 @@ function ValueNumber(num: number) {
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '.MuiDialog-paper': {
-    width: '100%'
+    width: '600px',
+    borderRadius: '20px',
 
 
   },
@@ -99,17 +100,7 @@ const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 
 
-const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
-  width: '100%',
-  backgroundColor: '#1AAE70',
-  borderRadius: '10px',
-  color: '#fff',
-  boxShadow: 'none',
-  '&:hover': {
-    backgroundColor: "#1AAE70",
-    color: '#fff',
-  },
-}));
+
 
 
 type TypeProps = {
@@ -140,6 +131,32 @@ const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 
 export default function ReviewSupply({ open, windowWidth, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onChange }: TypeProps) {
+
+
+  const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
+    width: '100%',
+    backgroundColor: '#1AAE70',
+    color: '#fff',
+    boxShadow: 'none',
+    ".MuiLoadingButton-loadingIndicator": {
+      color: '#fff'
+
+    },
+    "&.MuiLoadingButton-loading": {
+      zIndex: 100,
+      backgroundColor: '#1AAE70',
+
+    },
+    '&:hover': {
+      backgroundColor: "#19A56A",
+      color: '#fff',
+    },
+  }));
 
 
   const [hidder, setHidder] = useState(false)
@@ -237,6 +254,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
           // console.log("错误结果", err)
           openNotification('top')
           handleSwapClose()
+          setDoneLoading(false)
         })
 
 
@@ -274,6 +292,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
           // console.log("错误结果", err)
           openNotification('top')
           handleSwapClose()
+          setDoneLoading(false)
         })
 
 
@@ -480,8 +499,8 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                       </Typography>
 
                       <AvatarGroup>
-                        <Avatar alt="H20" src={avatarImage('./H20.png')} />
-                        <Avatar alt="ETH" src={avatarImage('./ETH.png')} />
+                        <Avatar alt="H20" src={avatarImage('./H20.svg')} />
+                        <Avatar alt="ETH" src={avatarImage('./ETH.svg')} />
                       </AvatarGroup>
                     </Stack>
                   </Box>
@@ -627,8 +646,8 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                       </Typography>
 
                       <AvatarGroup>
-                        <Avatar alt="H20" src={avatarImage('./H20.png')} sx={{ width: '30px', height: '30px' }} />
-                        <Avatar alt="ETH" src={avatarImage('./ETH.png')} sx={{ width: '30px', height: '30px' }} />
+                        <Avatar alt="H20" src={avatarImage('./H20.svg')} sx={{ width: '30px', height: '30px' }} />
+                        <Avatar alt="ETH" src={avatarImage('./ETH.svg')} sx={{ width: '30px', height: '30px' }} />
                       </AvatarGroup>
                     </Stack>
                   </Box>

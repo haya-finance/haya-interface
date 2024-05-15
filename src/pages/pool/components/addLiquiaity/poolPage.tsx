@@ -35,12 +35,14 @@ type typeProps = {
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
 
+
   '& .MuiInputBase-input': {
     backgroundColor: 'transparent',
     border: 'none',
-    fontSize: '26px',
+    fontSize: '30px',
     fontWeight: 700,
     width: '100%',
+    height: '30px',
     // Use the system font instead of the default Roboto font.
     fontFamily: [
       '-apple-system',
@@ -243,9 +245,20 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
   }));
 
   const SelectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    padding: windowWeight >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
+    textTransform: 'none',
     width: '100%',
     color: '#fff',
     border: 0,
+    "&.Mui-disabled": {
+      zIndex: 100,
+      color: '#fff',
+
+    },
     backgroundColor: '#9b9b9b',
     '&:hover': {
       backgroundColor: '#9b9b9b',
@@ -255,22 +268,33 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
 
   const EnterButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    padding: windowWeight >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
     width: '100%',
     color: '#fff',
     border: 0,
     backgroundColor: '#1aae70',
     '&:hover': {
-      backgroundColor: '#1aae70',
+      backgroundColor: '#19A56A',
       color: '#fff',
     },
   }));
 
   const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    padding: windowWeight >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
     width: '100%',
     color: '#fff',
     backgroundColor: '#1AAE70',
     '&:hover': {
-      backgroundColor: '#1AAE70',
+      backgroundColor: '#19A56A',
+      color: '#fff',
     },
   }));
 
@@ -422,11 +446,12 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                     </Box>
 
                   </Box>
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You add
-                  </Typography>
-                  <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
-                    <Stack direction="row" spacing={1}>
+
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                      You add
+                    </Typography>
+                    <Stack direction="row" spacing="12px" alignItems="center">
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
                         Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${formatNumber(Number(balance))}`}</span>
                       </Typography>
@@ -434,7 +459,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                         MAX
                       </Typography>
                     </Stack>
-                  </Box>
+                  </Stack>
 
 
 
@@ -560,14 +585,14 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                       chain?.id === undefined ? (
                         <>
                           <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
-                            <ConnectButton onClick={onChangeNetwork} >Connect to Arbitrum Sepolia</ConnectButton>
+                            <ConnectButton onClick={onChangeNetwork} >Switch to Arbitrum Sepolia</ConnectButton>
                           </Box>
                         </>
                       ) : (
                         <>
                           <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
                             <ConnectWallet windowWidth={windowWeight} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect wallet</ConnectButton>
+                            <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
                           </Box>
                         </>
                       )
@@ -584,24 +609,25 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
             <>
               <Box
                 sx={{
-                  p: "12px 10px", backgroundColor: "#f6f6f6", borderRadius: "20px",
+                  p: "12px 12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
                   width: "100%", marginBottom: "10px"
                 }}
               >
                 <SelectAddOneToken windowWidth={windowWeight} open={open} handleClose={handleClose} handleListClose={handleToToken} data={data} />
                 <Box sx={{ position: "relative" }}>
 
-                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-72%', left: '44%', borderRadius: '10px' }}>
-                    <Box sx={{ backgroundColor: '#f6f6f6', m: '5px 4px', p: '4px 5px', borderRadius: '6px', border: 'none' }}>
-                      < MdAdd color='#333' />
+                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-47%', left: '44%', borderRadius: '10px' }}>
+                    <Box sx={{ backgroundColor: '#f6f6f6', m: '3px 5px', p: '4px 10px', borderRadius: '6px', border: 'none' }}>
+                      < MdAdd color='#333' style={{ margin: '-2px' }} />
                     </Box>
 
                   </Box>
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You add
-                  </Typography>
-                  <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
-                    <Stack direction="row" spacing={1}>
+
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" >
+                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                      You add
+                    </Typography>
+                    <Stack direction="row" spacing="12px" alignItems="center">
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
                         Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${formatNumber(Number(balance))}`}</span>
                       </Typography>
@@ -609,13 +635,13 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                         MAX
                       </Typography>
                     </Stack>
-                  </Box>
+                  </Stack>
 
 
 
-                  <Stack alignItems="center" direction="row" sx={{ padding: '38px 0 14px 0', height: '46px' }} justifyContent="space-between" spacing={2}>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0px 0', height: '46px' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1} >
-                      <BootstrapInput onBlur={handleBlur} disabled={disable} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} />
+                      <BootstrapInput onBlur={handleBlur} disabled={disable} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#000' : '#EE3354', fontSize: '26px' }} />
                     </Stack>
                     <IndexTokenButton
                       variant="text"
@@ -640,30 +666,32 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
               </Box>
               <Box
                 sx={{
-                  p: "12px 10px", backgroundColor: "#f6f6f6", borderRadius: "20px",
+                  p: "12px 12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
                   width: "100%", marginBottom: "10px",
                 }}
               >
                 <SelectAddTwoToken windowWidth={windowWeight} open={reOpen} handleClose={handleReClose} handleListClose={handleFromToken} data={data} />
-                <Box sx={{ position: "relative" }}>
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You add
-                  </Typography>
-                  <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
-                    <Stack direction="row" spacing={1}>
+                <Box>
+
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                      You add
+                    </Typography>
+                    <Stack direction="row" alignItems="center" spacing="12px">
                       <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
                         Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${formatNumber(Number(reBalance))}`}</span>
                       </Typography>
                       <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onReMax} color="primary">
                         MAX
                       </Typography>
+
                     </Stack>
-                  </Box>
+                  </Stack>
 
 
-                  <Stack alignItems="center" direction="row" sx={{ padding: '38px 0 14px 0', height: '46px' }} justifyContent="space-between" spacing={2}>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0 0', height: '46px' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
-                      <BootstrapInput onBlur={handleReBlur} disabled={disable} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', color: Number(reBalance) >= Number(inputReValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} placeholder="0" />
+                      <BootstrapInput onBlur={handleReBlur} disabled={disable} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', color: Number(reBalance) >= Number(inputReValue) ? '#000' : '#EE3354', fontSize: '26px' }} placeholder="0" />
                     </Stack>
                     <IndexTokenButton
                       variant="text"
@@ -741,7 +769,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                         <>
                           <Box sx={{ width: '100%' }}>
                             <ConnectButton onClick={onChangeNetwork}>
-                              Connect to Arbitrum Sepolia
+                              Switch to Arbitrum Sepolia
                             </ConnectButton>
                           </Box>
 
@@ -750,7 +778,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                         <>
                           <Box sx={{ width: '100%' }}>
                             <ConnectWallet windowWidth={windowWeight} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect wallet</ConnectButton>
+                            <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
                           </Box>
 
                         </>

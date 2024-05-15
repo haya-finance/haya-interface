@@ -1,20 +1,21 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { Button, Stack, Typography, Box } from '@mui/material';
+import { Button, Stack, Typography, Box, IconButton } from '@mui/material';
 import TokenColorIcon from 'assets/tokens';
 import React, { useEffect, useState } from 'react';
-import { useAccount, useSwitchChain } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { styled } from '@mui/material/styles';
 import { ButtonProps } from '@mui/material/Button';
 
 import SelectTOToken from './select_to_token';
 import SelectFromToken from './select_from_token';
-import { AiOutlineArrowDown } from "react-icons/ai";
 import InputBase from '@mui/material/InputBase';
 import ShowSwap from './showSwap';
 import SwapReviewSwap from './ReviewSwap';
 import { ethers } from 'ethers';
 import SwapAbi from 'abi/swap.json'
 import { sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
+
+import swap from 'assets/images/icon/swap.svg'
 
 // import Select, { components } from 'react-select'
 
@@ -35,14 +36,15 @@ type typeProps = {
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   'label + &': {
-    marginTop: theme.spacing(3),
+    marginTop: 0,
   },
   '& .MuiInputBase-input': {
     borderRadius: 4,
     backgroundColor: 'transparent',
     border: 'none',
-    fontSize: 22,
     fontWeight: 700,
+    height: '30px',
+    padding: 0,
     width: '100%',
     // Use the system font instead of the default Roboto font.
     fontFamily: [
@@ -120,7 +122,7 @@ function ValueNumber(num: number) {
 
 
 
-const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
+const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: typeProps) => {
 
   // console.log('data', data)
 
@@ -183,14 +185,21 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
     setOpenSwap(true)
   }
 
-
-  const handleSwapClose = () => {
+  const onUpdate = () => {
     OnChange()
-    setOpenSwap(false)
     setInputValue('')
     setInputReValue('')
     setInputShowValue('')
     setInputReShowValue('')
+
+
+  }
+
+
+  const handleSwapClose = () => {
+
+    setOpenSwap(false)
+
   }
 
   const handleClickFromOpen = () => {
@@ -240,6 +249,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
 
   const IndexTokenButton = styled(Button)<ButtonProps>(({ theme }) => ({
     // width: '%',
+    padding: '6px 8px 6px 10px',
     color: '#fff',
     backgroundColor: '#9b9b9b',
     border: 0,
@@ -247,14 +257,16 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
     '.MuiStack-root>:not(style)+:not(style)': {
       marginRight: 0,
       zIndex: 10
-    },
-    '&:hover': {
-      backgroundColor: '#9b9b9b',
-      color: '#fff'
-    },
+    }
   }));
 
   const SelectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    textTransform: 'none',
+    padding: windowWeight >= 600 ? '18px 0' : '15px 0',
+    fontSize: '18px',
+    lineHeight: '20px',
+    borderRadius: '20px',
+    fontWeight: 500,
     width: '100%',
     color: '#fff',
     border: 0,
@@ -267,6 +279,12 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
 
 
   const EnterButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    textTransform: 'none',
+    padding: windowWeight >= 600 ? '18px 0' : '15px 0',
+    fontSize: '18px',
+    lineHeight: '20px',
+    borderRadius: '20px',
+    fontWeight: 500,
     width: '100%',
     color: '#fff',
     border: 0,
@@ -277,15 +295,6 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
     },
   }));
 
-
-  const ConnectNetorkButton = styled(Button)<ButtonProps>(({ theme }) => ({
-    width: '100%',
-    color: '#fff',
-    backgroundColor: '#1AAE70',
-    '&:hover': {
-      backgroundColor: '#1AAE70',
-    },
-  }));
 
   const Swap = async (value: any) => {
 
@@ -436,20 +445,25 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
       const tokens = data.filter(item => item.symbol === pay)
       // console.log('tokens', tokens)
       setBalance(String(Number(tokens[0]?.balance)))
+    } else {
+      setBalance('0')
     }
 
     if (receive !== "Select token" && address !== undefined) {
       const tokens = data.filter(item => item.symbol === receive)
       // console.log('tokens', tokens)
       setReBalance(String(Number(tokens[0]?.balance)))
+    } else {
+      setReBalance('0')
+
     }
 
     if (pay !== 'Select token' && receive !== 'Select token') {
 
       OneSwap()
-      if (inputToValue !== "") {
+      if (inputToValue !== "" && inputReValue == "") {
         Swap(inputToValue)
-      } else if (inputReValue !== "") {
+      } else if (inputReValue !== "" && inputToValue == "") {
         ReSwap(inputReValue)
 
       }
@@ -472,6 +486,11 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
       const tokens = data.filter(item => item?.symbol === pay)
       setInputValue(String(Number(tokens[0]?.balance)))
       setInputShowValue(ValueNumber(Number(tokens[0]?.balance)) ?? '0')
+      Swap(String(Number(tokens[0]?.balance)))
+    } else {
+      setInputValue('0')
+      setInputShowValue('0')
+
     }
 
   }
@@ -482,66 +501,63 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
       const tokens = data.filter(item => item?.symbol === receive)
       setInputReValue(String(Number(tokens[0]?.balance)))
       setInputReShowValue(ValueNumber(Number(tokens[0]?.balance)) ?? '0')
+      ReSwap(String(Number(tokens[0]?.balance)))
+
+    } else {
+      setInputReValue('0')
+      setInputReShowValue('0')
+
     }
 
 
   }
 
-  const { switchChain } = useSwitchChain()
-
-
-  const onChangeNetwork = () => {
-    switchChain({ chainId: 421614 })
-
-  }
 
 
   return (
     <>
 
       <Box sx={{ width: '100%' }}>
-        <SwapReviewSwap slippage={slippage} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
+        <SwapReviewSwap onUpdate={onUpdate} windowHeight={windowHeight} slippage={slippage} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
         {
           windowWeight >= 600 ? (
             <>
               <Box
                 sx={{
-                  p: "0.5rem", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
-                  width: "600px", margin: "0 auto", marginBottom: "9px"
+                  p: "12px 20px", backgroundColor: "#f6f6f6", borderRadius: "20px",
+                  width: "600px", margin: "0 auto", marginBottom: "10px"
                 }}
               >
                 <SelectTOToken windowWidth={windowWeight} open={open} handleClose={handleClose} handleListClose={handleToToken} data={data} />
                 <Box sx={{ position: "relative" }}>
+                  <IconButton onClick={OnExchange} sx={{ position: 'absolute', bottom: '-46%', left: '46%' }}>
+                    <img src={swap} />
 
-                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-46%', left: '46%', borderRadius: '4px' }}>
-                    <Box component="button" sx={{ backgroundColor: '#f6f6f6', m: '5px 6px', p: '5px 6px', borderRadius: '4px', cursor: 'pointer', border: 'none' }} onClick={OnExchange}>
-                      <AiOutlineArrowDown color='#333' size={15} />
-                    </Box>
+                  </IconButton>
 
-                  </Box>
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You pay
-                  </Typography>
 
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 0.00
-                  </Typography>
-                  <Box sx={{ position: 'absolute', top: 0, right: '2px', display: pay === 'Select token' ? 'none' : "block" }}>
-                    <Stack direction="row" spacing={1}>
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span>{`${ValueNumber(Number(balance))}`}</span>
+
+                  <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      You pay
+                    </Typography>
+
+                    <Stack direction="row" spacing="10px" alignItems="center">
+                      <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                        Balance: <span style={{ color: '#000', fontWeight: 700, fontSize: '13px' }}>{`${ValueNumber(Number(balance))}`}</span>
                       </Typography>
-                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onMax} color="primary">
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '12px', fontWeight: 700 }} onClick={onMax} color="primary">
                         MAX
                       </Typography>
                     </Stack>
-                  </Box>
+
+                  </Stack>
 
 
 
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1} >
-                      <BootstrapInput disabled={disable} onBlur={handleBlur} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '22px' }} />
+                      <BootstrapInput onBlur={handleBlur} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#000' : '#EE3354', fontSize: '32px' }} />
                     </Stack>
 
                     {
@@ -550,17 +566,19 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                           <IndexTokenButton
                             variant="text"
                             sx={{
-                              borderRadius: '1.12rem',
-                              backgroundColor: '#1AAE70',
-                              fontWeight: '500',
+                              borderRadius: '100px',
+                              backgroundColor: address !== undefined && chain?.id == undefined ? '#9B9B9B' : '#1AAE70',
+                              fontWeight: 500,
                               color: '#fff',
                               fontSize: '14px',
+                              "&:hover": {
+                                backgroundColor: address !== undefined && chain?.id == undefined ? '#9B9B9B' : '#1AAE70',
+                                color: '#fff',
+                              }
                             }}
-                            disabled={disable}
                             onClick={handleClickToOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                            endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                           >
-                            {pay === 'Select token' ? <></> : <TokenColorIcon size={20} name={pay} />}
                             {pay}
                           </IndexTokenButton>
                         </>
@@ -570,17 +588,21 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                           <IndexTokenButton
                             variant="text"
                             sx={{
-                              borderRadius: '1.12rem',
+                              borderRadius: '100px',
                               backgroundColor: '#fff',
                               border: 'none',
                               color: '#000',
+                              fontWeight: 600,
                               fontSize: '14px',
+                              "&:hover": {
+                                backgroundColor: '#fff',
+                                color: '#000',
+                              }
                             }}
-                            disabled={disable}
                             onClick={handleClickToOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                            startIcon={<TokenColorIcon size={22} name={pay} />}
+                            endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                           >
-                            {pay === 'Select token' ? <></> : <TokenColorIcon size={20} name={pay} />}
                             {pay}
                           </IndexTokenButton>
                         </>
@@ -590,36 +612,43 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                     }
 
                   </Stack>
+
+                  <Stack direction="row" alignItems="start">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      $ 0.00
+                    </Typography>
+
+                  </Stack>
                 </Box>
               </Box>
               <Box
                 sx={{
-                  p: "0.5rem", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
+                  p: "12px 20px", backgroundColor: "#f6f6f6", borderRadius: "20px",
                   width: "600px", margin: "0 auto", marginBottom: "10px"
                 }}
               >
                 <SelectFromToken windowWidth={windowWeight} open={reOpen} handleClose={handleReClose} handleListClose={handleFromToken} data={data} />
-                <Box sx={{ position: "relative" }}>
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You receive
-                  </Typography>
+                <Box>
 
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 0.00
-                  </Typography>
-                  <Box sx={{ position: 'absolute', top: 0, right: '2px', display: receive === 'Select token' ? 'none' : "block" }}>
-                    <Stack direction="row" spacing={1}>
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span>{`${ValueNumber(Number(reBalance))}`}</span>
+
+
+                  <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      You receive
+                    </Typography>
+                    <Stack direction="row" spacing="10px">
+                      <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                        Balance: <span style={{ color: '#000', fontWeight: 700, fontSize: '13px' }}>{`${ValueNumber(Number(reBalance))}`}</span>
                       </Typography>
-                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onReMax} color="primary">
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '12px', fontWeight: 700 }} onClick={onReMax} color="primary">
                         MAX
                       </Typography>
                     </Stack>
-                  </Box>
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
+
+                  </Stack>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
-                      <BootstrapInput disabled={disable} onBlur={handleReBlur} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px', color: '#6f6f6f' }} placeholder="0" />
+                      <BootstrapInput onBlur={handleReBlur} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '32px', color: '#000' }} placeholder="0" />
                     </Stack>
 
                     {
@@ -628,18 +657,20 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                           <IndexTokenButton
                             variant="text"
                             sx={{
-                              borderRadius: '1.12rem',
+                              borderRadius: '100px',
                               backgroundColor: '#1AAE70',
-                              fontWeight: '500',
-
+                              fontWeight: 500,
                               color: '#fff',
                               fontSize: '14px',
+                              "&:hover": {
+                                backgroundColor: '#1AAE70',
+                                color: '#fff',
+
+                              }
                             }}
-                            disabled={disable}
                             onClick={handleClickFromOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                            endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                           >
-                            {receive === 'Select token' ? <></> : <TokenColorIcon size={20} name={receive} />}
                             {receive}
                           </IndexTokenButton>
                         </>
@@ -649,17 +680,22 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                           <IndexTokenButton
                             variant="text"
                             sx={{
-                              borderRadius: '1.12rem',
+                              borderRadius: '100px',
                               backgroundColor: '#fff',
                               border: 'none',
                               color: '#000',
+                              fontWeight: 600,
                               fontSize: '14px',
+                              "&:hover": {
+                                backgroundColor: '#fff',
+                                color: '#000',
+
+                              }
                             }}
-                            disabled={disable}
                             onClick={handleClickFromOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                            startIcon={<TokenColorIcon size={22} name={receive} />}
+                            endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                           >
-                            {receive === 'Select token' ? <></> : <TokenColorIcon size={20} name={receive} />}
                             {receive}
                           </IndexTokenButton>
                         </>
@@ -668,6 +704,11 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
 
                     }
 
+                  </Stack>
+                  <Stack direction="row" alignItems="start">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      $ 0.00
+                    </Typography>
                   </Stack>
                 </Box>
 
@@ -679,81 +720,57 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
               </Box>
 
               {
-                pay === "Select token" ? (
+                pay === "Select token" || receive === "Select token" ? (
                   <></>
-                ) : (
-                  <Box
-                    sx={{
-                      pl: "0.7rem", pr: '0.3rem', backgroundColor: "#fff",
-                      width: "600px", margin: "0 auto", marginBottom: "10px"
-                    }}
-                  ><ShowSwap liquidity={slippage} windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} /></Box>
+                ) : (<ShowSwap liquidity={slippage} windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} />
 
                 )
               }
               {
-                address !== undefined ? (
+                address !== undefined && chain?.id !== undefined ? (
                   <>
                     {
-                      chain?.id === undefined ? (
+                      pay === "Select token" || receive === "Select token" ? (
                         <>
                           <Box sx={{ width: "600px", margin: '0 auto' }}>
-                            <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Connect to Arbitrum Sepolia
-                            </ConnectNetorkButton>
+                            <SelectButton >Select a Token</SelectButton>
                           </Box>
-
                         </>
 
                       ) : (
                         <>
                           {
-                            pay === "Select token" ? (
-                              <>
-                                <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                  <SelectButton >Select a Token</SelectButton>
-                                </Box>
-                              </>
+                            inputToValue === '' || inputReValue === '' ? (
+                              <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                <SelectButton >Enter an Amount</SelectButton>
+                              </Box>
 
                             ) : (
                               <>
                                 {
-                                  inputToValue === '' && inputReValue === '' ? (
+                                  Number(balance) >= Number(inputToValue) ? (
                                     <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                      <SelectButton >Enter an Amount</SelectButton>
+                                      <EnterButton onClick={handleSwapOpen}>Swap</EnterButton>
                                     </Box>
 
                                   ) : (
-                                    <>
-                                      {
-                                        Number(balance) >= Number(inputToValue) ? (
-                                          <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                            <EnterButton onClick={handleSwapOpen}>Swap</EnterButton>
-                                          </Box>
-
-                                        ) : (
-                                          <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                            <SelectButton >Insufficient balane</SelectButton>
-                                          </Box>
-
-                                        )
-
-                                      }
-
-                                    </>
+                                    <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                      <SelectButton >Insufficient balane</SelectButton>
+                                    </Box>
 
                                   )
+
                                 }
 
                               </>
 
                             )
-
                           }
 
                         </>
 
                       )
+
                     }
 
                   </>
@@ -774,39 +791,35 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
             <>
               <Box
                 sx={{
-                  p: "0.5rem", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
-                  width: "100%", marginBottom: "9px"
+                  p: "12px 12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
+                  width: "100%", marginBottom: "10px"
                 }}
               >
                 <SelectTOToken windowWidth={windowWeight} open={open} handleClose={handleClose} handleListClose={handleToToken} data={data} />
                 <Box sx={{ position: "relative" }}>
+                  <IconButton onClick={OnExchange} sx={{ position: 'absolute', bottom: '-30%', left: '42%' }}>
+                    <img src={swap} />
+                  </IconButton>
 
-                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-30%', left: '42%', borderRadius: '4px' }}>
-                    <Box component="button" sx={{ backgroundColor: '#f6f6f6', m: '5px 6px', p: '5px 6px', borderRadius: '4px', cursor: 'pointer', border: 'none' }} onClick={OnExchange}>
-                      <AiOutlineArrowDown color='#333' size={15} />
-                    </Box>
 
-                  </Box>
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You pay
-                  </Typography>
-
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 0.00
-                  </Typography>
-                  <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
-                    <Stack direction="row" spacing={1}>
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span style={{ color: '#000' }}>{`${ValueNumber(Number(balance))}`}</span>
+                  <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      You pay
+                    </Typography>
+                    <Stack direction="row" spacing="10px">
+                      <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                        Balance: <span style={{ color: '#000', fontWeight: 700, fontSize: '13px' }}>{`${ValueNumber(Number(balance))}`}</span>
                       </Typography>
-                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", fontSize: '11px', minWidth: 0, p: 0 }} onClick={onMax} color="primary">
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", fontSize: '12px', minWidth: 0, p: 0, fontWeight: 700 }} onClick={onMax} color="primary">
                         MAX
                       </Typography>
                     </Stack>
-                  </Box>
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
+
+
+                  </Stack>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0' }} justifyContent="space-between">
                     <Stack flex={1} >
-                      <BootstrapInput disabled={disable} onBlur={handleBlur} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', fontSize: '22px', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354' }} />
+                      <BootstrapInput onBlur={handleBlur} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', fontSize: '32px', color: Number(balance) >= Number(inputToValue) ? '#000' : '#EE3354' }} />
                     </Stack>
 
                     {
@@ -815,17 +828,21 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                           <IndexTokenButton
                             variant="text"
                             sx={{
-                              borderRadius: '1.12rem',
+                              borderRadius: '100px',
                               backgroundColor: '#1AAE70',
+
                               fontSize: '14px',
-                              fontWeight: '500',
+                              fontWeight: 500,
                               color: '#fff',
+                              "&:hover": {
+                                backgroundColor: '#1AAE70',
+                                color: '#fff',
+
+                              }
                             }}
-                            disabled={disable}
                             onClick={handleClickToOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                            endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                           >
-                            {pay === 'Select token' ? <></> : <TokenColorIcon size={20} name={pay} />}
                             {pay}
                           </IndexTokenButton>
                         </>
@@ -835,17 +852,23 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                           <IndexTokenButton
                             variant="text"
                             sx={{
-                              borderRadius: '1.12rem',
+                              borderRadius: '100px',
                               backgroundColor: '#fff',
                               border: 'none',
                               fontSize: '14px',
                               color: '#000',
+                              fontWeight: 600,
+                              "&:hover": {
+                                backgroundColor: '#fff',
+                                color: '#000',
+
+                              }
                             }}
                             disabled={disable}
                             onClick={handleClickToOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                            startIcon={<TokenColorIcon size={22} name={pay} />}
+                            endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                           >
-                            {pay === 'Select token' ? <></> : <TokenColorIcon size={20} name={pay} />}
                             {pay}
                           </IndexTokenButton>
                         </>
@@ -855,36 +878,43 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                     }
 
                   </Stack>
+                  <Stack direction="row" alignItems="start">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      $ 0.00
+                    </Typography>
+
+
+                  </Stack>
                 </Box>
               </Box>
               <Box
                 sx={{
-                  p: "0.5rem", backgroundColor: "#f6f6f6", borderRadius: "0.7rem",
-                  width: "100%", marginBottom: "9px"
+                  p: "12px 12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
+                  width: "100%", marginBottom: "10px"
                 }}
               >
                 <SelectFromToken windowWidth={windowWeight} open={reOpen} handleClose={handleReClose} handleListClose={handleFromToken} data={data} />
-                <Box sx={{ position: "relative" }}>
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You receive
-                  </Typography>
+                <Box >
 
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    $ 0.00
-                  </Typography>
-                  <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
-                    <Stack direction="row" spacing={1}>
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
-                        Balance: <span style={{ color: '#000' }}>{`${ValueNumber(Number(reBalance))}`}</span>
+
+
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      You receive
+                    </Typography>
+                    <Stack direction="row" spacing="10px">
+                      <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                        Balance: <span style={{ color: '#000', fontSize: '13px', fontWeight: 700 }}>{`${ValueNumber(Number(reBalance))}`}</span>
                       </Typography>
-                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", fontSize: '11px', minWidth: 0, p: 0 }} onClick={onReMax} color="primary">
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", fontSize: '12px', minWidth: 0, p: 0, fontWeight: 700 }} onClick={onReMax} color="primary">
                         MAX
                       </Typography>
                     </Stack>
-                  </Box>
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between" spacing={2}>
+
+                  </Stack>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0' }} justifyContent="space-between" >
                     <Stack flex={1}>
-                      <BootstrapInput disabled={disable} onBlur={handleReBlur} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '22px', color: '#6f6f6f' }} placeholder="0" />
+                      <BootstrapInput onBlur={handleReBlur} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', fontSize: '32px', color: '#000' }} placeholder="0" />
                     </Stack>
 
                     {
@@ -893,17 +923,20 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                           <IndexTokenButton
                             variant="text"
                             sx={{
-                              borderRadius: '1.12rem',
+                              borderRadius: '100px',
                               backgroundColor: '#1AAE70',
                               fontSize: '14px',
-                              fontWeight: '500',
+                              fontWeight: 500,
                               color: '#fff',
+                              "&:hover": {
+                                backgroundColor: '#1AAE70',
+                                color: '#fff',
+                              }
+
                             }}
-                            disabled={disable}
                             onClick={handleClickFromOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                            endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                           >
-                            {receive === 'Select token' ? <></> : <TokenColorIcon size={20} name={receive} />}
                             {receive}
                           </IndexTokenButton>
                         </>
@@ -913,17 +946,21 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
                           <IndexTokenButton
                             variant="text"
                             sx={{
-                              borderRadius: '1.12rem',
+                              borderRadius: '100px',
                               backgroundColor: '#fff',
                               fontSize: '14px',
+                              fontWeight: 600,
                               border: 'none',
                               color: '#000',
+                              "&:hover": {
+                                backgroundColor: '#fff',
+                                color: '#000',
+                              }
                             }}
-                            disabled={disable}
+                            startIcon={<TokenColorIcon size={22} name={receive} />}
                             onClick={handleClickFromOpen}
-                            endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                            endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                           >
-                            {receive === 'Select token' ? <></> : <TokenColorIcon size={20} name={receive} />}
                             {receive}
                           </IndexTokenButton>
                         </>
@@ -932,6 +969,11 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
 
                     }
 
+                  </Stack>
+                  <Stack direction="row" alignItems="start">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      $ 0.00
+                    </Typography>
                   </Stack>
                 </Box>
 
@@ -943,79 +985,58 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage }: typeProps) => {
               </Box>
 
               {
-                pay === "Select token" ? (
+                pay === "Select token" || receive === "Select token" ? (
                   <></>
                 ) : (
-                  <Box
-                    pl="0.7rem" sx={{
-                      mt: '10px', mb: 2, pl: '0.7rem', bg: "#fff", pr: "0.3rem",
-                      width: "100%"
-                    }}
-                  ><ShowSwap liquidity={slippage} windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} /></Box>
+                  <ShowSwap liquidity={slippage} windowWeight={windowWeight} toToken={pay} fromToken={receive} oneSwap={oneValue} />
 
                 )
               }
               {
-                address !== undefined ? (
+                address !== undefined && chain?.id !== undefined ? (
                   <>
                     {
-                      chain?.id !== undefined ? (
+                      pay === "Select token" || receive === "Select token" ? (
+                        <>
+                          <Box sx={{ width: '100%' }}>
+                            <SelectButton>Select a Token</SelectButton>
+                          </Box>
+                        </>
+
+                      ) : (
                         <>
                           {
-                            pay === "Select token" ? (
-                              <>
-                                <Box sx={{ width: '100%' }}>
-                                  <SelectButton>Select a Token</SelectButton>
-                                </Box>
-                              </>
+                            inputToValue === '' || inputReValue === '' ? (
+                              <Box sx={{ width: '100%' }}>
+                                <SelectButton >Enter an Amount</SelectButton>
+                              </Box>
 
                             ) : (
                               <>
                                 {
-                                  inputToValue === '' && inputReValue === '' ? (
+                                  Number(balance) >= Number(inputToValue) ? (
                                     <Box sx={{ width: '100%' }}>
-                                      <SelectButton >Enter an Amount</SelectButton>
+                                      <EnterButton onClick={handleSwapOpen}>Swap</EnterButton>
                                     </Box>
 
                                   ) : (
-                                    <>
-                                      {
-                                        Number(balance) >= Number(inputToValue) ? (
-                                          <Box sx={{ width: '100%' }}>
-                                            <EnterButton onClick={handleSwapOpen}>Swap</EnterButton>
-                                          </Box>
-
-                                        ) : (
-                                          <Box sx={{ width: '100%' }}>
-                                            <SelectButton >Insufficient balane</SelectButton>
-                                          </Box>
-
-                                        )
-
-                                      }
-
-                                    </>
+                                    <Box sx={{ width: '100%' }}>
+                                      <SelectButton >Insufficient balane</SelectButton>
+                                    </Box>
 
                                   )
+
                                 }
 
                               </>
 
                             )
-
                           }
-                        </>
-                      ) : (
-                        <>
-                          <Box sx={{ width: '100%' }}>
-                            <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Connect to Arbitrum Sepolia
-                            </ConnectNetorkButton>
-                          </Box>
-
 
                         </>
+
                       )
+
                     }
                   </>
 

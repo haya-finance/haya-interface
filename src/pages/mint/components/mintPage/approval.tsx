@@ -105,9 +105,9 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
     '.MuiDialog-paper': {
-      width: '100%',
+      width: '600px',
+      borderRadius: '20px',
       padding: windowWidth >= 600 ? '10px 19px' : '5px 8px',
-      borderRadius: '10px'
     },
 
     '& .MuiDialogContent-root': {
@@ -199,12 +199,31 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
 
   const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
+
+
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
     width: '100%',
     backgroundColor: disable ? '#9B9B9B' : '#1AAE70',
-
-    borderRadius: '10px',
     color: '#fff',
     boxShadow: 'none',
+    "&.Mui-disabled": {
+      zIndex: 100,
+      color: '#fff',
+
+    },
+    ".MuiLoadingButton-loadingIndicator": {
+      color: '#fff'
+
+    },
+    "&.MuiLoadingButton-loading": {
+      zIndex: 100,
+      backgroundColor: '#1AAE70',
+
+    },
     '&:hover': {
       backgroundColor: '#1AAE70',
       color: '#fff',
@@ -217,10 +236,11 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
     // const signer = await provider.getSigner()
     const provider = getEthersSigner(config)
     const MintContract = new ethers.Contract(BasicIssuanceModule, basicIssAbi, await provider)
+    setDoneLoading(true)
     MintContract.issue(H30_Address, String(Number(inputNum) * (10 ** 18)), address).then(async (res) => {
 
       // console.log('结果222222222222', res)
-      setDoneLoading(true)
+
 
 
       const res1 = await res.wait()
@@ -238,6 +258,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
       // console.log("错误结果", err)
       openNotification('top')
       handleApprovalClose()
+      setDoneLoading(false)
     })
 
 
@@ -343,9 +364,6 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
   }, [approval, disable, data])
 
-  useEffect(() => {
-
-  }, [data])
 
 
 

@@ -47,9 +47,12 @@ export default function ShowDetail({ windowWeight, LpToken }: DataProps) {
 
   return (
     <>
-      <Box sx={{
-        p: '0px 20px', backgroundColor: "#fff",
+      <Box sx={windowWeight >= 600 ? {
+        p: '10px 20px', backgroundColor: "#fff",
         marginBottom: "20px"
+      } : {
+        p: '10px 10px', backgroundColor: "#fff",
+        marginBottom: "10px"
       }}>
 
         <Box sx={{ width: '100%' }}>
@@ -63,19 +66,19 @@ export default function ShowDetail({ windowWeight, LpToken }: DataProps) {
           <Box width="100%" sx={{ display: hidden ? 'none' : 'block' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
+                <Typography sx={{ color: '#9B9B9B', fontSize: '12px', fontWeight: 600 }}>
                   Price
                 </Typography>
               </Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 600 }}>
-                  1ETH = 100.234 H20
+                  1ETH ≈ 100.234 H20
                 </Typography>
               </Stack>
             </Stack>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
+                <Typography sx={{ color: '#9B9B9B', fontSize: '12px', fontWeight: 600 }}>
                   Estimated Gas fee
                 </Typography>
               </Stack>

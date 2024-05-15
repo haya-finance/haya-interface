@@ -43,9 +43,9 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
     <>
       {
         windowWidth >= 600 ? (
-          <Box sx={{ width: '100%', backgroundColor: '#fff', mb: "60px" }}>
+          <Box sx={{ width: '100%', backgroundColor: '#fff', m: "30px 0" }}>
             <Stack direction="row" justifyContent="space-between" sx={{ borderBottom: '2px solid #CCD5E0', paddingBottom: '10px' }}>
-              <Typography variant="body1" textAlign="center" sx={{ color: '#000', fontWeight: 700, fontSize: '18px' }}  >
+              <Typography variant="body1" textAlign="center" sx={{ color: '#000', fontWeight: 700, fontSize: '20px' }}  >
                 Growth of $H20
               </Typography>
               <Stack direction="row" alignItems="center" spacing="12px">
@@ -71,7 +71,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
 
                 </Stack> */}
-                <Stack direction="row" alignItems="center">
+                {/* <Stack direction="row" alignItems="center">
                   <Box width='8px' height="8px" borderRadius="8px" sx={{ backgroundColor: '#01D57E', display: slot === 'Year' ? 'block' : 'none' }}>
 
 
@@ -81,7 +81,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                   </Typography>
 
 
-                </Stack>
+                </Stack> */}
                 <Stack direction="row" alignItems="center">
                   <Box width='8px' height="8px" borderRadius="8px" sx={{ backgroundColor: '#01D57E', display: slot === 'allTime' ? 'block' : 'none' }}>
 
@@ -100,7 +100,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
             </Stack>
             <IncomeAreaChart SpxShow={spxShow} BtcShow={btcShow} windowWidth={windowWidth} slot={slot} />
-            <Typography sx={{ fontSize: '12px', color: '#717E91', marginBottom: '10px' }}>
+            <Typography sx={{ fontSize: '14px', color: '#717E91', marginBottom: '10px' }}>
               Compare to:
             </Typography>
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb="10px">
@@ -112,7 +112,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
                   </Box>
                   <TokenColorIcon name="BTC" size={20} />
-                  <Typography sx={{ fontSize: '12px', color: '#F7931A' }}>
+                  <Typography sx={{ fontSize: '14px', color: '#F7931A' }}>
                     BTC
                   </Typography>
 
@@ -124,7 +124,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
                   </Box>
                   <TokenColorIcon name="SPX" size={20} />
-                  <Typography sx={{ fontSize: '12px', color: '#C4162E' }}>
+                  <Typography sx={{ fontSize: '14px', color: '#C4162E' }}>
                     spx500
                   </Typography>
 
@@ -140,26 +140,26 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
             <Box sx={{ backgroundColor: '#F8FCF5', borderRadius: '20px', padding: '9px 10px' }}>
               <Stack direction="row" spacing="64px">
                 <Stack>
-                  <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
+                  <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
                     $H20 Performance
                   </Typography>
-                  <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
+                  <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
                     818.35%
                   </Typography>
                 </Stack>
                 <Stack>
-                  <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
+                  <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
                     $BTC Performance
                   </Typography>
-                  <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
+                  <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
                     818.35%
                   </Typography>
                 </Stack>
                 <Stack>
-                  <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
+                  <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
                     $SPY Performance
                   </Typography>
-                  <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
+                  <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
                     818.35%
                   </Typography>
                 </Stack>
@@ -172,7 +172,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
         ) : (
           <Box sx={{ width: '100%', backgroundColor: '#fff', mb: "30px" }}>
             <Stack direction="row" justifyContent="space-between" sx={{ borderBottom: '2px solid #CCD5E0', paddingBottom: '10px' }}>
-              <Typography variant="body1" textAlign="center" sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}  >
+              <Typography variant="body1" textAlign="center" sx={{ color: '#000', fontWeight: 700, fontSize: '18px' }}  >
                 Growth of $H20
               </Typography>
               <Stack direction="row" alignItems="center" spacing="4px">
@@ -198,7 +198,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
 
                 </Stack> */}
-                <Stack direction="row" alignItems="center">
+                {/* <Stack direction="row" alignItems="center">
                   <Box width='8px' height="8px" borderRadius="8px" sx={{ backgroundColor: '#01D57E', display: slot === 'Year' ? 'block' : 'none' }}>
 
 
@@ -208,13 +208,13 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                   </Typography>
 
 
-                </Stack>
+                </Stack> */}
                 <Stack direction="row" alignItems="center">
                   <Box width='8px' height="8px" borderRadius="8px" sx={{ backgroundColor: '#01D57E', display: slot === 'allTime' ? 'block' : 'none' }}>
 
 
                   </Box>
-                  <Typography onClick={() => setSlot('allTime')} component="button" sx={{ cursor: 'pointer', fontSize: '11px', color: '#667085', padding: '0 4px', border: 0, backgroundColor: 'transparent' }}>
+                  <Typography onClick={() => setSlot('allTime')} component="button" sx={{ cursor: 'pointer', fontSize: '14px', color: '#667085', padding: '0 4px', border: 0, backgroundColor: 'transparent' }}>
                     All Time
                   </Typography>
 
@@ -227,65 +227,67 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
             </Stack>
             <IncomeAreaChart SpxShow={spxShow} BtcShow={btcShow} windowWidth={windowWidth} slot={slot} />
-            <Typography sx={{ fontSize: '13px', color: '#A9A9A9', textAlign: 'end', lineHeight: '16px' }}>
-              *Past performance is not indicative of future results
-            </Typography>
-            <Typography sx={{ fontSize: '13px', color: '#717E91', marginBottom: '10px' }}>
-              Compare to:
-            </Typography>
-            <Stack direction="row" alignItems="center" justifyContent="space-around">
-              <Stack direction="row" alignItems="center" spacing="6px">
-                <Box component='button' onClick={onCheckBTC} sx={{ cursor: 'pointer', position: 'relative', width: '22px', borderRadius: '7px', height: '22px', border: btcShow ? '1px solid #5EAE4A' : 'none', backgroundColor: btcShow ? 'transparent' : '#E3E8EF' }}>
-                  <MdOutlineCheck size={20} color="#5EAE4A" style={{ position: 'absolute', top: '0', right: '-1px', display: btcShow ? 'block' : 'none' }} />
 
 
-                </Box>
-                <TokenColorIcon name="BTC" size={20} />
-                <Typography sx={{ fontSize: '12px', color: '#F7931A' }}>
-                  BTC
-                </Typography>
-
-              </Stack>
-              <Stack direction="row" alignItems="center" spacing="6px">
-                <Box component="button" onClick={onCheckSPX} sx={{ cursor: 'pointer', position: 'relative', width: '22px', height: '22px', borderRadius: '7px', border: spxShow ? '1px solid #5EAE4A' : 'none', backgroundColor: spxShow ? 'transparent' : '#E3E8EF' }}>
-                  <MdOutlineCheck size={20} color="#5EAE4A" style={{ position: 'absolute', top: '0', right: '-1px', display: spxShow ? 'block' : 'none' }} />
+            <Stack padding="16px 16px">
+              <Typography sx={{ fontSize: '13px', color: '#717E91', marginBottom: '10px' }}>
+                Compare to:
+              </Typography>
+              <Stack direction="row" alignItems="center" spacing="30px">
+                <Stack direction="row" alignItems="center" spacing="6px">
+                  <Box component='button' onClick={onCheckBTC} sx={{ cursor: 'pointer', position: 'relative', width: '22px', borderRadius: '7px', height: '22px', border: btcShow ? '1px solid #5EAE4A' : 'none', backgroundColor: btcShow ? 'transparent' : '#E3E8EF' }}>
+                    <MdOutlineCheck size={20} color="#5EAE4A" style={{ position: 'absolute', top: '0', right: '-1px', display: btcShow ? 'block' : 'none' }} />
 
 
-                </Box>
-                <TokenColorIcon name="SPX" size={20} />
-                <Typography sx={{ fontSize: '12px', color: '#C4162E' }}>
-                  spx500
-                </Typography>
+                  </Box>
+                  <TokenColorIcon name="BTC" size={20} />
+                  <Typography sx={{ fontSize: '12px', color: '#F7931A' }}>
+                    BTC
+                  </Typography>
 
+                </Stack>
+                <Stack direction="row" alignItems="center" spacing="6px">
+                  <Box component="button" onClick={onCheckSPX} sx={{ cursor: 'pointer', position: 'relative', width: '22px', height: '22px', borderRadius: '7px', border: spxShow ? '1px solid #5EAE4A' : 'none', backgroundColor: spxShow ? 'transparent' : '#E3E8EF' }}>
+                    <MdOutlineCheck size={20} color="#5EAE4A" style={{ position: 'absolute', top: '0', right: '-1px', display: spxShow ? 'block' : 'none' }} />
+
+
+                  </Box>
+                  <TokenColorIcon name="SPX" size={20} />
+                  <Typography sx={{ fontSize: '12px', color: '#C4162E' }}>
+                    spx500
+                  </Typography>
+
+                </Stack>
               </Stack>
             </Stack>
-            <Box sx={{ backgroundColor: '#F8FCF5', borderRadius: '20px', padding: '9px 10px', marginTop: '10px' }}>
-              <Stack direction="row" justifyContent="space-between" marginBottom="10px">
-                <Stack>
-                  <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
-                    $H20 Performance
-                  </Typography>
-                  <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
-                    818.35%
-                  </Typography>
-                </Stack>
-                <Stack>
-                  <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
-                    $BTC Performance
-                  </Typography>
-                  <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
-                    818.35%
-                  </Typography>
-                </Stack>
 
-
-
+            <Box sx={{ backgroundColor: '#F8F8F8', borderRadius: '8px', padding: '5px 14px', m: '10px 16px' }}>
+              <Typography sx={{ fontSize: '12px', color: '#A9A9A9', lineHeight: '16px' }}>
+                *Past performance is not indicative of future results
+              </Typography>
+            </Box>
+            <Box sx={{ backgroundColor: '#F8FCF5', borderRadius: '20px', padding: '9px 16px', marginTop: '10px' }}>
+              <Stack marginBottom="10px">
+                <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
+                  $H20 Performance
+                </Typography>
+                <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
+                  818.35%
+                </Typography>
+              </Stack>
+              <Stack marginBottom="10px">
+                <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
+                  $BTC Performance
+                </Typography>
+                <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
+                  818.35%
+                </Typography>
               </Stack>
               <Stack>
-                <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
+                <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
                   $SPY Performance
                 </Typography>
-                <Typography sx={{ fontSize: '12px', color: '#717E91' }}>
+                <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
                   818.35%
                 </Typography>
               </Stack>

@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Box, Stack, Typography } from "@mui/material"
+import { Box, Card, Stack, Typography } from "@mui/material"
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
 import { styled } from '@mui/material/styles';
@@ -11,7 +11,7 @@ import { ethers } from "ethers";
 import { useNavigate } from "react-router";
 
 
-const avatarImage = require.context('assets/images/token', true);
+import ETHH20 from 'assets/images/token/H20_ETH.svg'
 
 
 type DataType = {
@@ -26,35 +26,7 @@ type DataType = {
 const provider = new ethers.JsonRpcProvider(sepolia_rpc)
 
 
-const AddButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  width: '100%',
-  color: '#fff',
-  // padding: '10px 0',
-  fontWeight: 700,
-  fontSize: '18px',
-  border: 0,
-  backgroundColor: '#1aae70',
-  borderRadius: '20px',
-  '&:hover': {
-    backgroundColor: '#1aae70',
-    color: '#fff',
-  },
-}));
 
-const SwapButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  width: '100%',
-  color: '#000',
-  // padding: '10px 0',
-  fontWeight: 700,
-  fontSize: '18px',
-  border: 0,
-  borderRadius: '20px',
-  backgroundColor: '#F6F6F6',
-  '&:hover': {
-    backgroundColor: '#F6F6F6',
-    color: '#000',
-  },
-}));
 
 function ValueNumber(num: number) {
 
@@ -164,6 +136,46 @@ const PoolDetail = () => {
 
   }, [])
 
+  const AddButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    width: '100%',
+    color: '#fff',
+    // padding: '10px 0',
+    fontWeight: 500,
+    fontSize: '18px',
+    lineHeight: '20px',
+    border: 0,
+    backgroundColor: '#1aae70',
+    borderRadius: '20px',
+    '&:hover': {
+      backgroundColor: '#19A56A',
+      color: '#fff',
+    },
+  }));
+
+  const SwapButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    width: '100%',
+    color: '#000',
+    // padding: '10px 0',
+    fontWeight: 500,
+    fontSize: '18px',
+    lineHeight: '20px',
+    border: 0,
+    borderRadius: '20px',
+    backgroundColor: '#F6F6F6',
+    "&.Mui-disabled": {
+      zIndex: 100,
+      color: '#fff',
+
+    },
+
+    '&:hover': {
+      backgroundColor: '#F6F6F6',
+      color: '#000',
+    },
+  }));
+
 
 
 
@@ -217,35 +229,36 @@ const PoolDetail = () => {
 
       </Box>
       <Box sx={{ paddingTop: windowWidth >= 600 ? '60px' : 0, backgroundColor: '#fff' }}>
-        <Box sx={{ padding: "20px", width: "600px", margin: "0 auto" }}>
-          <Box component="button" sx={{ cursor: 'pointer', padding: '0', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }} onClick={GoBack}>
-            <Stack direction="row" alignItems="center" spacing="4px">
-              <MdOutlineArrowBackIosNew />
-              <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 500 }}>
-                Pool Detail
-              </Typography>
+        <Card sx={{ boxShadow: 'none' }}>
+          {
+            windowWidth >= 600 ? (
+              <>
+                <Box sx={{ padding: "20px", width: "600px", margin: "0 auto" }}>
+                  <Box component="button" sx={{ cursor: 'pointer', padding: '0', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }} onClick={GoBack}>
+                    <Stack direction="row" alignItems="center" spacing="4px">
+                      <MdOutlineArrowBackIosNew />
+                      <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
+                        Pool Detail
+                      </Typography>
 
-            </Stack>
-          </Box>
-          <Box sx={{ padding: '20px', backgroundColor: '#f6f6f6', borderRadius: '20px' }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" padding="10px 0 20px 0">
-              <Stack direction="row" alignItems="center" spacing="12px">
-                <AvatarGroup>
-                  <Avatar alt="H20" src={avatarImage('./H20.png')} sx={{ width: '30px', height: '30px' }} />
-                  <Avatar alt="ETH" src={avatarImage('./ETH.png')} sx={{ width: '30px', height: '30px' }} />
-                </AvatarGroup>
-                <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
-                  H20/ETH
-                </Typography>
-              </Stack>
-              <Box sx={{ backgroundColor: 'transparent', border: '1px solid rgba(192, 192, 192, 0.5)', borderRadius: '20px', padding: '4px' }}>
-                <Typography sx={{ color: "#9b9b9b", fontSize: '12px', fontWeight: 700 }}>
-                  LP fee 0.1%
-                </Typography>
-              </Box>
+                    </Stack>
+                  </Box>
+                  <Box sx={{ padding: '20px', backgroundColor: '#f6f6f6', borderRadius: '20px' }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" padding="10px 0 20px 0">
+                      <Stack direction="row" alignItems="center" spacing="12px">
+                        <img src={ETHH20} />
+                        <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
+                          H20/ETH
+                        </Typography>
+                      </Stack>
+                      <Box sx={{ backgroundColor: 'transparent', border: '1px solid rgba(192, 192, 192, 0.5)', borderRadius: '20px', padding: '4px' }}>
+                        <Typography sx={{ color: "#9b9b9b", fontSize: '12px', fontWeight: 700 }}>
+                          LP fee 0.1%
+                        </Typography>
+                      </Box>
 
-            </Stack>
-            {/* <Stack direction="row" alignItems="start" spacing="110px" padding="10px 0" >
+                    </Stack>
+                    {/* <Stack direction="row" alignItems="start" spacing="110px" padding="10px 0" >
             <Stack alignItems="start" spacing="6px">
               <Typography sx={{ color: "#9b9b9b", fontSize: '12px', fontWeight: 700 }}>
                 Pool APR 24h
@@ -274,88 +287,203 @@ const PoolDetail = () => {
 
             </Stack>
           </Stack> */}
-            <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
-            <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
-              Token rates
-            </Typography>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
-              <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
-                ETH per H20
-              </Typography>
-              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                {ValueNumber(Number((1 * Number(data[0]?.ETHAmount)) / Number(data[0]?.H20Amount)))}
-              </Typography>
+                    <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
+                    <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
+                      Token rates
+                    </Typography>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        ETH per H20
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {ValueNumber(Number((1 * Number(data[0]?.ETHAmount)) / Number(data[0]?.H20Amount)))}
+                      </Typography>
 
 
-            </Stack>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
-              <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
-                H20 per ETH
-              </Typography>
-              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                {ValueNumber(Number((1 * Number(data[0]?.H20Amount)) / Number(data[0]?.ETHAmount)))}
-              </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        H20 per ETH
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {ValueNumber(Number((1 * Number(data[0]?.H20Amount)) / Number(data[0]?.ETHAmount)))}
+                      </Typography>
 
 
-            </Stack>
-            <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
-            <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
-              Token rates
-            </Typography>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
-              <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
-                TVL
-              </Typography>
-              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                {`$ ${ValueNumber(Number(data[0]?.tvl))}`}
-              </Typography>
+                    </Stack>
+                    <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
+                    <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
+                      Token rates
+                    </Typography>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        TVL
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {`$ ${ValueNumber(Number(data[0]?.tvl))}`}
+                      </Typography>
 
 
-            </Stack>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
-              <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
-                Volume
-              </Typography>
-              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                {`$ ${ValueNumber(Number(Number(data[0]?.tvl) / 2))}`}
-              </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        Volume
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {`$ ${ValueNumber(Number(Number(data[0]?.tvl) / 2))}`}
+                      </Typography>
 
 
-            </Stack>
-            <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
-            <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
-              Pool reserve
-            </Typography>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
-              <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
-                H20
-              </Typography>
-              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                {formatNumber(Number(data[0]?.H20Amount))}
-              </Typography>
+                    </Stack>
+                    <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
+                    <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
+                      Pool reserve
+                    </Typography>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        H20
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {formatNumber(Number(data[0]?.H20Amount))}
+                      </Typography>
 
 
-            </Stack>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
-              <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
-                ETH
-              </Typography>
-              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                {formatNumber(Number(data[0]?.ETHAmount))}
-              </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        ETH
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {formatNumber(Number(data[0]?.ETHAmount))}
+                      </Typography>
 
 
-            </Stack>
+                    </Stack>
 
 
 
 
-          </Box>
-          <AddButton onClick={addLiquity} sx={{ margin: '20px 0' }}>
-            Add Liquidity
-          </AddButton>
-          <SwapButton onClick={goSwap}>Swap</SwapButton>
-        </Box>
+                  </Box>
+                  <AddButton onClick={addLiquity} sx={{ margin: '20px 0' }}>
+                    Add Liquidity
+                  </AddButton>
+                  <SwapButton onClick={goSwap}>Swap</SwapButton>
+                </Box>
+              </>
+            ) : (
+              <>
+                <Box sx={{ padding: "20px 10px", width: `${windowWidth}px` }}>
+                  <Box component="button" sx={{ cursor: 'pointer', padding: '0', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '10px' }} onClick={GoBack}>
+                    <Stack direction="row" alignItems="center" spacing="4px">
+                      <MdOutlineArrowBackIosNew />
+                      <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
+                        Pool Detail
+                      </Typography>
+
+                    </Stack>
+                  </Box>
+                  <Box sx={{ padding: '20px 10px', backgroundColor: '#f6f6f6', borderRadius: '20px' }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" padding="12px 0 22px 0">
+                      <Stack direction="row" alignItems="center" spacing="12px">
+                        <img src={ETHH20} />
+                        <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
+                          H20/ETH
+                        </Typography>
+                      </Stack>
+                      <Box sx={{ backgroundColor: 'transparent', border: '1px solid rgba(192, 192, 192, 0.5)', borderRadius: '20px', padding: '4px' }}>
+                        <Typography sx={{ color: "#9b9b9b", fontSize: '12px', fontWeight: 700 }}>
+                          LP fee 0.1%
+                        </Typography>
+                      </Box>
+
+                    </Stack>
+                    <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
+                    <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
+                      Token rates
+                    </Typography>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        ETH per H20
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {ValueNumber(Number((1 * Number(data[0]?.ETHAmount)) / Number(data[0]?.H20Amount)))}
+                      </Typography>
+
+
+                    </Stack>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        H20 per ETH
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {ValueNumber(Number((1 * Number(data[0]?.H20Amount)) / Number(data[0]?.ETHAmount)))}
+                      </Typography>
+
+
+                    </Stack>
+                    <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
+                    <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
+                      Token rates
+                    </Typography>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        TVL
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {`$ ${ValueNumber(Number(data[0]?.tvl))}`}
+                      </Typography>
+
+
+                    </Stack>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        Volume
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {`$ ${ValueNumber(Number(Number(data[0]?.tvl) / 2))}`}
+                      </Typography>
+
+
+                    </Stack>
+                    <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
+                    <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
+                      Pool reserve
+                    </Typography>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        H20
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {formatNumber(Number(data[0]?.H20Amount))}
+                      </Typography>
+
+
+                    </Stack>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                      <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
+                        ETH
+                      </Typography>
+                      <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
+                        {formatNumber(Number(data[0]?.ETHAmount))}
+                      </Typography>
+
+
+                    </Stack>
+
+
+
+
+                  </Box>
+                  <AddButton onClick={addLiquity} sx={{ margin: '20px 0' }}>
+                    Add Liquidity
+                  </AddButton>
+                  <SwapButton onClick={goSwap}>Swap</SwapButton>
+                </Box>
+              </>
+            )
+          }
+
+        </Card>
 
 
       </Box >

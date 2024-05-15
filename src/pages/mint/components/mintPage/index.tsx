@@ -51,8 +51,10 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
     borderRadius: 4,
     backgroundColor: 'transparent',
+    fontSize: '32px',
+    lineHeight: '25px',
+    height: '30px',
     border: 'none',
-    fontSize: 22,
     fontWeight: 700,
     width: '99%',
     textAlign: 'start',
@@ -201,17 +203,24 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
   }
 
   const ConnectNetorkButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    textTransform: 'none',
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
     width: '100%',
     color: '#fff',
     backgroundColor: '#1AAE70',
     '&:hover': {
-      backgroundColor: '#1AAE70',
+      backgroundColor: '#19A56A',
     },
   }));
 
 
   const IndexTokenButton = styled(Button)<ButtonProps>(({ theme }) => ({
     // width: '%',
+    padding: '6px 8px 6px 10px',
     color: '#fff',
     backgroundColor: '#9b9b9b',
     border: 0,
@@ -227,10 +236,21 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
   }));
 
   const SelectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    textTransform: 'none',
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
     width: '100%',
     color: '#fff',
     border: 0,
     backgroundColor: '#9b9b9b',
+    "&.Mui-disabled": {
+      zIndex: 100,
+      color: '#fff',
+
+    },
     '&:hover': {
       backgroundColor: '#9b9b9b',
       color: '#fff',
@@ -239,12 +259,18 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
 
 
   const EnterButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    textTransform: 'none',
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
     width: '100%',
     color: '#fff',
     border: 0,
     backgroundColor: '#1aae70',
     '&:hover': {
-      backgroundColor: '#1aae70',
+      backgroundColor: '#19A56A',
       color: '#fff',
     },
   }));
@@ -265,6 +291,10 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
   }
 
   const [disable, setDisable] = React.useState(true)
+
+  useEffect(() => {
+
+  }, [disable])
 
 
 
@@ -328,23 +358,23 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                 }}
               >
                 <SelectIndexToken open={open} handleClose={handleClose} handleListClose={handleListIndexToken} data={H30Data} windowWidth={windowWidth} />
-                <Box position="relative">
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
+                <Box>
+
+
+
+                  <Typography variant='body1' sx={{ textAlign: 'start', fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
                     You mint
                   </Typography>
 
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
-                    $ 0.00
-                  </Typography>
-                  <Stack alignItems="center" direction="row" sx={{ padding: '12px 0' }} justifyContent="space-between" spacing={2}>
-                    <BootstrapInput disabled={disable} value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: '#464646' }} placeholder="0" />
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0' }} justifyContent="space-between" >
+                    <BootstrapInput value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: '#464646' }} placeholder="0" />
 
                     {/* <Stack flex={1} direction="row" alignItems="center" spacing="2px">
                       <IconButton onClick={onDec} size="large" sx={{ p: 0, width: '30px', height: '30px' }}><MdIndeterminateCheckBox color="#9b9b9b" size={30} /></IconButton>
                       <BootstrapInput minRows={0} value={inputValue} onChange={InputChange} sx={{ color: '#464646' }} placeholder="0" />
                       <IconButton onClick={onInc} size="large" sx={{ p: 0, width: '30px', height: '30px' }}><MdAddBox color="#9b9b9b" size={30} /></IconButton>
                     </Stack> */}
-                    <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onMax} color="primary">
+                    <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, mr: "10px", fontSize: '13px', color: '#007AFF', fontWeight: 600, "&:hover": { backgroundColor: 'transparent', color: '#007AFF' } }} onClick={onMax} color="primary">
                       MAX
                     </Typography>
 
@@ -353,21 +383,29 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                     <IndexTokenButton
                       variant="text"
                       sx={{
-                        borderRadius: '1.12rem',
+                        borderRadius: '100px',
                         backgroundColor: '#fff',
                         border: 'none',
                         color: '#000',
                         fontSize: '14px',
-                        padding: '4px 8px'
+                        fontWeight: 600,
+                        "&:hover": {
+                          backgroundColor: '#fff',
+                          color: '#000',
+
+                        }
+
                       }}
-                      disabled={disable}
                       onClick={handleClickOpen}
-                      startIcon={<TokenColorIcon size={20} name={indexToken} />}
-                      endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                      startIcon={<TokenColorIcon size={22} name={indexToken} />}
+                      endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                     >
                       {indexToken}
                     </IndexTokenButton>
                   </Stack>
+                  <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                    $ 0.00
+                  </Typography>
                 </Box>
 
 
@@ -379,9 +417,9 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                     {
                       chain?.id === undefined ? (
                         <>
-                          <Box sx={{ width: "600px", margin: '0 auto' }}>
+                          <Box sx={{ width: "600px", margin: '0 auto', mt: "20px" }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Connect to Arbitrum Sepolia
+                              Switch to Arbitrum Sepolia
                             </ConnectNetorkButton>
                           </Box>
                         </>
@@ -390,7 +428,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                           {
                             inputValue == '' ? (
                               <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                                <SelectButton disabled>Enter amount</SelectButton>
+                                <SelectButton disabled>Enter an Amount</SelectButton>
                               </Box>
 
                             ) : (
@@ -457,22 +495,21 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
               >
                 <SelectIndexToken open={open} handleClose={handleClose} handleListClose={handleListIndexToken} data={H30Data} windowWidth={windowWidth} />
                 <Box position="relative">
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
+
+
+
+                  <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
                     You mint
                   </Typography>
-
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
-                    $ 0.00
-                  </Typography>
-                  <Stack alignItems="center" direction="row" sx={{ padding: '12px 0' }} justifyContent="space-between" spacing="4px">
-                    <BootstrapInput disabled={disable} minRows={0} value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: '#464646', fontSize: '20px' }} placeholder="0" />
+                  <Stack alignItems="center" direction="row" sx={{ padding: '6px 0' }} justifyContent="space-between" >
+                    <BootstrapInput minRows={0} value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: '#000', fontSize: '20px' }} placeholder="0" />
 
                     {/* <Stack flex={1} direction="row" alignItems="center" spacing="2px">
                       <IconButton onClick={onDec} size="large" sx={{ p: 0, width: '20px', height: '20px' }}><MdIndeterminateCheckBox color="#9b9b9b" size={30} /></IconButton>
                       <BootstrapInput value={inputValue} onChange={InputChange} sx={{ color: '#464646', fontSize: '20px' }} placeholder="0" />
                       <IconButton onClick={onInc} size="large" sx={{ p: 0, width: '20px', height: '20px' }}><MdAddBox color="#9b9b9b" size={30} /></IconButton>
                     </Stack> */}
-                    <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onMax} color="primary">
+                    <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, mr: "10px", fontSize: '13px', color: '#007AFF', fontWeight: 600, "&:hover": { backgroundColor: 'transparent', color: '#007AFF' } }} onClick={onMax} color="primary">
                       MAX
                     </Typography>
 
@@ -482,21 +519,28 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                     <IndexTokenButton
                       variant="text"
                       sx={{
-                        borderRadius: '1.12rem',
+                        borderRadius: '100px',
                         backgroundColor: '#fff',
                         border: 'none',
                         color: '#000',
                         fontSize: '14px',
-                        padding: '4px 8px'
+                        fontWeight: 600,
+                        "&:hover": {
+                          backgroundColor: '#fff',
+                          color: '#000',
+
+                        }
                       }}
-                      disabled={disable}
                       onClick={handleClickOpen}
-                      startIcon={<TokenColorIcon size={20} name={indexToken} />}
-                      endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                      startIcon={<TokenColorIcon size={22} name={indexToken} />}
+                      endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                     >
                       {indexToken}
                     </IndexTokenButton>
                   </Stack>
+                  <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                    $ 0.00
+                  </Typography>
                 </Box>
 
 
@@ -508,9 +552,9 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                     {
                       chain?.id === undefined ? (
                         <>
-                          <Box sx={{ width: '100%' }}>
+                          <Box sx={{ width: '100%', mt: '10px' }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Connect to Arbitrum Sepolia
+                              Switch to Arbitrum Sepolia
                             </ConnectNetorkButton>
                           </Box>
                         </>
@@ -519,7 +563,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                           {
                             inputValue == '' ? (
                               <Box sx={{ width: '100%', mt: '10px' }}>
-                                <SelectButton disabled>Enter amount</SelectButton>
+                                <SelectButton disabled>Enter an Amount</SelectButton>
                               </Box>
 
                             ) : (

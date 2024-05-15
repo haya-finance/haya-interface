@@ -46,9 +46,9 @@ const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '.MuiDialog-paper': {
-    width: '100%',
-    padding: '10px 19px',
-    borderRadius: '10px'
+    width: '600px',
+    borderRadius: '20px',
+    padding: '10px 19px'
 
 
   },
@@ -75,17 +75,7 @@ const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 
 
-const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
-  width: '100%',
-  backgroundColor: '#1AAE70',
-  borderRadius: '10px',
-  color: '#fff',
-  boxShadow: 'none',
-  '&:hover': {
-    backgroundColor: "#1AAE70",
-    color: '#fff',
-  },
-}));
+
 
 
 type dataType = {
@@ -136,6 +126,36 @@ function ChangeNumber(num: number) {
 
 
 export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum, name, windowWidth, windowHeight }: TypeProps) {
+
+
+  const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
+    textTransform: 'none',
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
+    width: '100%',
+    backgroundColor: '#1AAE70',
+    color: '#fff',
+    boxShadow: 'none',
+    ".MuiLoadingButton-loadingIndicator": {
+      color: '#fff'
+
+    },
+    "&.MuiLoadingButton-loading": {
+      backgroundColor: "#1AAE70"
+
+    },
+    // "& .MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root": {
+
+
+    // },
+    '&:hover': {
+      backgroundColor: "#19A56A",
+      color: '#fff',
+    },
+  }));
 
 
   const [hidder, setHidder] = useState(false)
@@ -195,10 +215,11 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
 
 
     const MintContract = new ethers.Contract(BasicIssuanceModule, basicIssAbi, await provider)
+    setLoading(true)
 
     await MintContract.redeem(H30_Address, BigInt(Number(inputNum) * (10 ** 18)), address).then(async (res) => {
 
-      setLoading(true)
+
 
       const res1 = await res.wait()
 
@@ -217,6 +238,7 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
       // console.log("错误结果", err)
       handleSwapClose()
       openNotification('top')
+      setLoading(false)
     })
 
 

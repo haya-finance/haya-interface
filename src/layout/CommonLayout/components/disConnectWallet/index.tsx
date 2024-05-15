@@ -13,6 +13,12 @@ import { MdCheck } from "react-icons/md";
 const avatarImage = require.context('assets/wallet', true);
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '.MuiDialog-paper': {
+    width: '600px',
+    borderRadius: '20px'
+
+
+  },
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2)
   },
@@ -77,7 +83,7 @@ export default function DisConnectWallet({ open, handleClose, windowWidth }: Pro
       {
         windowWidth >= 600 ? (
           <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth="xs" sx={{ width: '100%' }}>
-            <Box sx={{ backgroundColor: '#0f1717', borderBottom: '1px solid #1e1f1f', width: '20rem' }}>
+            <Box sx={{ backgroundColor: '#0f1717', borderBottom: '1px solid #1e1f1f', width: '100%' }}>
               <IconButton
                 aria-label="close"
                 onClick={handleClose}
@@ -179,7 +185,7 @@ export default function DisConnectWallet({ open, handleClose, windowWidth }: Pro
             </Box>
           </BootstrapDialog>
         ) : (
-          <Drawer anchor='bottom' open={open} onClose={handleClose} sx={{ left: '5px', right: '5px', '& .MuiDrawer-paper': { backgroundColor: '#0f1717' }, borderRadius: '10px 10px 0 0' }}>
+          <Drawer anchor='bottom' open={open} onClose={handleClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#0f1717', left: '5px', right: '5px', borderRadius: '10px 10px 0 0' } }}>
             <Box sx={{ width: 'auto', padding: '10px 10px 20px 10px' }}>
               <Box sx={{ backgroundColor: '#0f1717', borderBottom: '1px solid #1e1f1f', width: '100%' }}>
                 <IconButton

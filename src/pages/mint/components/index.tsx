@@ -65,7 +65,7 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
 
   const [openWallet, setOpenWallet] = useState(false)
 
-  const { address } = useAccount();
+  const { address, } = useAccount();
 
   // const [resData, setResData] = useState<any>({})
 
@@ -252,11 +252,17 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
 
 
   const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    lineHeight: '20px',
+    fontWeight: 500,
     width: '100%',
     color: '#fff',
     backgroundColor: '#1AAE70',
     '&:hover': {
-      backgroundColor: '#1AAE70',
+      backgroundColor: '#19A56A',
+      color: '#fff',
     },
   }));
 
@@ -277,12 +283,12 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
         <Card sx={{ p: 1, boxShadow: 'none' }}>
           {
             windowWidth >= 600 ? (
-              <Stack direction="row" justifyContent="space-between" width="600px" margin="0 auto" mb={1}>
+              <Stack direction="row" justifyContent="space-between" width="600px" margin="0 auto" mb="20px">
                 <Stack direction="row" spacing={1}>
-                  <Box sx={value == 0 ? ({ p: '0 0.7rem', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '12px', borderRadius: 8, cursor: 'pointer', border: 0 }) : ({ p: '0 0.7rem', backgroundColor: '#fff', color: '#6F6F6F', fontSize: '12px', cursor: 'pointer', border: 0 })} component="button" onClick={() => OnCheckTitel(0)}>
+                  <Box sx={value == 0 ? ({ p: '4px 12px', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '13px', fontWeight: 600, borderRadius: "20px", cursor: 'pointer', border: 0 }) : ({ p: '4px 12px', backgroundColor: '#fff', color: '#6F6F6F', fontSize: '13px', cursor: 'pointer', border: 0 })} component="button" onClick={() => OnCheckTitel(0)}>
                     Mint
                   </Box>
-                  <Box sx={value == 1 ? ({ p: '0 0.5rem', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '12px', borderRadius: 8, cursor: 'pointer', border: 0 }) : ({ p: '0 0.5rem', backgroundColor: '#fff', color: '#6F6F6F', fontSize: '12px', cursor: 'pointer', border: 0 })} component="button" onClick={() => OnCheckTitel(1)}>
+                  <Box sx={value == 1 ? ({ p: '4px 12px', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '13px', fontWeight: 600, borderRadius: "20px", cursor: 'pointer', border: 0 }) : ({ p: '4px 12px', backgroundColor: '#fff', color: '#6F6F6F', fontSize: '13px', cursor: 'pointer', border: 0 })} component="button" onClick={() => OnCheckTitel(1)}>
                     Redeem
                   </Box>
                 </Stack>
@@ -291,12 +297,12 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
                 </Box>
               </Stack>
             ) : (
-              <Stack direction="row" justifyContent="space-between" mb={1}>
+              <Stack direction="row" justifyContent="space-between" mb="10px">
                 <Stack direction="row" spacing={1}>
-                  <Box sx={value == 0 ? ({ p: '0 0.7rem', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '12px', borderRadius: 8, cursor: 'pointer', border: 0 }) : ({ p: '0 0.7rem', backgroundColor: '#fff', color: '#6F6F6F', fontSize: '12px', cursor: 'pointer', border: 0 })} component="button" onClick={() => OnCheckTitel(0)}>
+                  <Box sx={value == 0 ? ({ p: '4px 12px', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '13px', fontWeight: 600, borderRadius: "20px", cursor: 'pointer', border: 0 }) : ({ p: '4px 12px', backgroundColor: '#fff', color: '#6F6F6F', fontSize: '13px', cursor: 'pointer', border: 0 })} component="button" onClick={() => OnCheckTitel(0)}>
                     Mint
                   </Box>
-                  <Box sx={value == 1 ? ({ p: '0 0.5rem', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '12px', borderRadius: 8, cursor: 'pointer', border: 0 }) : ({ p: '0 0.5rem', backgroundColor: '#fff', color: '#6F6F6F', fontSize: '12px', cursor: 'pointer', border: 0 })} component="button" onClick={() => OnCheckTitel(1)}>
+                  <Box sx={value == 1 ? ({ p: '4px 12px', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '13px', fontWeight: 600, borderRadius: "20px", cursor: 'pointer', border: 0 }) : ({ p: '4px 12px', backgroundColor: '#fff', color: '#6F6F6F', fontSize: '13px', cursor: 'pointer', border: 0 })} component="button" onClick={() => OnCheckTitel(1)}>
                     Redeem
                   </Box>
                 </Stack>
@@ -319,12 +325,12 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
                         windowWidth >= 600 ? (
                           <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
                             <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect wallet</ConnectButton>
+                            <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
                           </Box>
                         ) : (
                           <Box sx={{ width: '100%', mt: '10px' }}>
                             <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect wallet</ConnectButton>
+                            <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
                           </Box>
                         )
                       }
@@ -347,12 +353,12 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
                         windowWidth >= 600 ? (
                           <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
                             <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect wallet</ConnectButton>
+                            <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
                           </Box>
                         ) : (
                           <Box sx={{ width: '100%', mt: 1 }}>
                             <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect wallet</ConnectButton>
+                            <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
                           </Box>
                         )
                       }

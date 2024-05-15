@@ -10,7 +10,8 @@ import RedeemIndexTokenList from './indexTokenList';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '.MuiDialog-paper': {
-    width: '100%'
+    width: '600px',
+    borderRadius: '20px',
 
 
   },

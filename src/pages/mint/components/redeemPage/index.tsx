@@ -52,8 +52,10 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     borderRadius: 4,
     backgroundColor: 'transparent',
     border: 'none',
-    fontSize: '25px',
+    fontSize: '32px',
     lineHeight: '25px',
+    height: '30px',
+    padding: 0,
     fontWeight: 700,
     width: '99%',
     textAlign: 'start',
@@ -120,11 +122,18 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
   }
 
   const ConnectNetorkButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    textTransform: 'none',
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
     width: '100%',
     color: '#fff',
     backgroundColor: '#1AAE70',
     '&:hover': {
-      backgroundColor: '#1AAE70',
+      backgroundColor: '#19A56A',
+      color: '#fff'
     },
   }));
 
@@ -232,6 +241,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
 
   const IndexTokenButton = styled(Button)<ButtonProps>(({ theme }) => ({
     // width: '%',
+    padding: '6px 8px 6px 10px',
     color: '#fff',
     border: 0,
 
@@ -249,9 +259,20 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
   }));
 
   const SelectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    textTransform: 'none',
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
     width: '100%',
     color: '#fff',
     border: 0,
+    "&.Mui-disabled": {
+      zIndex: 100,
+      color: '#fff',
+
+    },
     backgroundColor: '#9b9b9b',
     '&:hover': {
       backgroundColor: '#9b9b9b',
@@ -261,12 +282,17 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
 
 
   const EnterButton = styled(Button)<ButtonProps>(({ theme }) => ({
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
     width: '100%',
     color: '#fff',
     border: 0,
     backgroundColor: '#1aae70',
     '&:hover': {
-      backgroundColor: '#1aae70',
+      backgroundColor: '#19A56A',
       color: '#fff',
     },
   }));
@@ -330,33 +356,32 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
               >
                 <RedeemSelectIndexToken open={open} handleClose={handleClose} handleListClose={handleListIndexToken} data={H30Data} windowWidth={windowWidth} />
                 <Box position="relative">
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
-                    You redeem
-                  </Typography>
 
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
-                    $ 0.00
-                  </Typography>
 
-                  <Box sx={{ position: 'absolute', top: 0, right: '4px' }}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                  <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      You redeem
+                    </Typography>
+                    <Stack direction="row" spacing="10px" alignItems="center">
+                      <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
                         Balance:
                       </Typography>
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#464646">
+                      <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 700 }} color="#464646">
                         {`${formatNumber(Number(H30Data[0]?.balance))}`}
                       </Typography>
                     </Stack>
-                  </Box>
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0 18px' }} justifyContent="space-between" spacing="4px">
-                    <BootstrapInput disabled={disable} minRows={0} value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: Number(inputValue) <= Number(H30Data[0]?.balance) ? '#464646' : '#ee3354', fontSize: '20px' }} placeholder="0" />
+
+
+                  </Stack>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0' }} justifyContent="space-between" >
+                    <BootstrapInput minRows={0} value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: Number(inputValue) <= Number(H30Data[0]?.balance) ? '#000' : '#ee3354', fontSize: '20px' }} placeholder="0" />
 
                     {/* <Stack flex={1} direction="row" alignItems="center" spacing="2px">
                       <IconButton onClick={onDec} size="large" sx={{ p: 0, width: '30px', height: '30px' }}><MdIndeterminateCheckBox color="#9b9b9b" size={30} /></IconButton>
                       <BootstrapInput  value={inputValue} onChange={InputChange} sx={{ color: Number(inputValue) <= Number(H30Data[0]?.balance) ? '#464646' : '#ee3354', fontSize: '20px' }} placeholder="0" />
                       <IconButton onClick={onInc} size="large" sx={{ p: 0, width: '30px', height: '30px' }}><MdAddBox color="#9b9b9b" size={30} /></IconButton>
                     </Stack> */}
-                    <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onMax} color="primary">
+                    <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, mr: '10px', fontSize: '13px', fontWeight: 600, color: '#007AFF', "&:hover": { backgroundColor: 'transparent', color: '#007AFF' } }} onClick={onMax} color="primary">
                       MAX
                     </Typography>
 
@@ -366,20 +391,31 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                     <IndexTokenButton
                       variant="text"
                       sx={{
-                        borderRadius: '1.12rem',
+                        borderRadius: '100px',
                         backgroundColor: '#fff',
                         border: 'none',
                         color: '#000',
                         fontSize: '14px',
-                        padding: '4px 8px'
+                        fontWeight: 600,
+                        "&:hover": {
+                          backgroundColor: '#fff',
+                          color: '#000',
+
+                        }
+
                       }}
-                      disabled={disable}
                       onClick={handleClickOpen}
-                      startIcon={<TokenColorIcon size={20} name={indexToken} />}
-                      endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                      startIcon={<TokenColorIcon size={22} name={indexToken} />}
+                      endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                     >
                       {indexToken}
                     </IndexTokenButton>
+                  </Stack>
+                  <Stack direction="row" alignItems="start">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      $ 0.00
+                    </Typography>
+
                   </Stack>
                 </Box>
 
@@ -392,7 +428,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                 ) : (
                   <Box
                     sx={{
-                      width: "600px", margin: "0 auto", mt: '8px'
+                      width: "600px", margin: "0 auto", mt: '20px'
                     }}
                   ><RedeemTokensList data={tokensData} inputNum={inputValue} windowWidth={windowWidth} /></Box>
 
@@ -401,12 +437,13 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
               {
                 address !== undefined ? (
                   <>
+
                     {
                       chain?.id === undefined ? (
                         <>
-                          <Box sx={{ width: "600px", margin: '0 auto' }}>
+                          <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Connect to Arbitrum Sepolia
+                              Switch to Arbitrum Sepolia
                             </ConnectNetorkButton>
                           </Box>
                         </>
@@ -414,20 +451,20 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                         <>
                           {
                             inputValue == '' ? (
-                              <Box sx={{ width: "600px", margin: '0 auto', mt: '8px' }}>
-                                <SelectButton disabled>Enter amount</SelectButton>
+                              <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
+                                <SelectButton disabled>Enter an Amount</SelectButton>
                               </Box>
 
                             ) : (
                               <>
                                 {
                                   Number(H30Data[0]?.balance) >= Number(inputValue) ? (
-                                    <Box sx={{ width: "600px", margin: '0 auto', mt: '8px' }}>
+                                    <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
                                       <EnterButton onClick={handleSwapOpen}> {`Redeem H20`}</EnterButton>
                                     </Box>
 
                                   ) : (
-                                    <Box sx={{ width: "600px", margin: '0 auto', mt: '8px' }}>
+                                    <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
                                       <SelectButton disabled>Insufficient balane</SelectButton>
                                     </Box>
 
@@ -438,6 +475,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
 
                             )
                           }
+
                         </>
                       )
                     }
@@ -464,39 +502,39 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
               <RedeemReviewSwap windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} name='H20' windowWidth={windowWidth} />
               <Box
                 sx={{
-                  p: "10px 12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
+                  p: "12px 12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
                   width: "100%"
                 }}
               >
                 <RedeemSelectIndexToken open={open} handleClose={handleClose} handleListClose={handleListIndexToken} data={H30Data} windowWidth={windowWidth} />
-                <Box position="relative">
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
-                    You redeem
-                  </Typography>
+                <Box >
 
-                  <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '10px', fontWeight: 600 }} color="#979797">
-                    $ 0.00
-                  </Typography>
 
-                  <Box sx={{ position: 'absolute', top: 0, right: '4px' }}>
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      <Typography variant='body1' sx={{ fontSize: '10px', fontWeight: 600 }} color="#979797">
+
+
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      You redeem
+                    </Typography>
+                    <Stack direction="row" spacing="10px" alignItems="center">
+                      <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
                         Balance:
                       </Typography>
-                      <Typography variant='body1' sx={{ fontSize: '10px', fontWeight: 600 }} color="#464646">
-                        {`${formatNumber(Number(H30Data[0].balance))}`}
+                      <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 700 }} color="#464646">
+                        {`${formatNumber(Number(H30Data[0]?.balance))}`}
                       </Typography>
                     </Stack>
-                  </Box>
-                  <Stack alignItems="center" direction="row" sx={{ padding: '12px 0 10px' }} justifyContent="space-between" spacing="4px">
-                    <BootstrapInput disabled={disable} minRows={0} value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: Number(inputValue) <= Number(H30Data[0]?.balance) ? '#464646' : '#ee3354', fontSize: '20px' }} placeholder="0" />
+
+                  </Stack>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '6px 0px' }} justifyContent="space-between" >
+                    <BootstrapInput disabled={disable} minRows={0} value={inputValue} onChange={InputChange} onBlur={handleBlur} sx={{ color: Number(inputValue) <= Number(H30Data[0]?.balance) ? '#000' : '#ee3354', fontSize: '20px' }} placeholder="0" />
 
                     {/* <Stack flex={1} direction="row" alignItems="center" spacing="2px">
                       <IconButton onClick={onDec} size="large" sx={{ p: 0, width: '20px', height: '20px' }}><MdIndeterminateCheckBox color="#9b9b9b" size={30} /></IconButton>
                       <BootstrapInput minRows={0} value={inputValue} onChange={InputChange} sx={{ color: Number(inputValue) <= Number(H30Data[0]?.balance) ? '#464646' : '#ee3354', fontSize: '20px' }} placeholder="0" />
                       <IconButton onClick={onInc} size="large" sx={{ p: 0, width: '20px', height: '20px' }}><MdAddBox color="#9b9b9b" size={30} /></IconButton>
                     </Stack> */}
-                    <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px' }} onClick={onMax} color="primary">
+                    <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, mr: "10px", fontWeight: 600, fontSize: '13px', color: '#007AFF', "&:hover": { backgroundColor: 'transparent', color: '#007AFF' } }} onClick={onMax} color="primary">
                       MAX
                     </Typography>
 
@@ -506,20 +544,30 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                     <IndexTokenButton
                       variant="text"
                       sx={{
-                        borderRadius: '1.12rem',
+                        borderRadius: '100px',
                         backgroundColor: '#fff',
                         border: 'none',
                         color: '#000',
                         fontSize: '14px',
-                        padding: '4px 8px'
+                        fontWeight: 600,
+                        "&:hover": {
+                          backgroundColor: '#fff',
+                          color: '#000',
+
+                        }
                       }}
-                      disabled={disable}
                       onClick={handleClickOpen}
                       startIcon={<TokenColorIcon size={20} name={indexToken} />}
-                      endIcon={<ChevronDownIcon fontSize="1.37rem" cursor="pointer" />}
+                      endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                     >
                       {indexToken}
                     </IndexTokenButton>
+                  </Stack>
+                  <Stack direction="row" alignItems="start">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                      $ 0.00
+                    </Typography>
+
                   </Stack>
                 </Box>
 
@@ -532,7 +580,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                 ) : (
                   <Box
                     sx={{
-                      width: "100%", mt: '8px'
+                      width: "100%", mt: '20px'
                     }}
                   ><RedeemTokensList data={tokensData} inputNum={inputValue} windowWidth={windowWidth} /></Box>
 
@@ -546,7 +594,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                         <>
                           <Box sx={{ width: '100%' }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Connect to Arbitrum Sepolia
+                              Switch to Arbitrum Sepolia
                             </ConnectNetorkButton>
                           </Box>
                         </>
@@ -554,20 +602,20 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                         <>
                           {
                             inputValue == '' ? (
-                              <Box sx={{ width: '100%', mt: '8px' }}>
-                                <SelectButton disabled>Enter amount</SelectButton>
+                              <Box sx={{ width: '100%', mt: '10px' }}>
+                                <SelectButton disabled>Enter an Amount</SelectButton>
                               </Box>
 
                             ) : (
                               <>
                                 {
                                   Number(H30Data[0]?.balance) >= Number(inputValue) ? (
-                                    <Box sx={{ width: '100%', mt: '8px' }}>
+                                    <Box sx={{ width: '100%', mt: '10px' }}>
                                       <EnterButton onClick={handleSwapOpen}>{`Redeem H20`}</EnterButton>
                                     </Box>
 
                                   ) : (
-                                    <Box sx={{ width: '100%', mt: '8px' }}>
+                                    <Box sx={{ width: '100%', mt: '10px' }}>
                                       <SelectButton disabled>Insufficient balane</SelectButton>
                                     </Box>
 

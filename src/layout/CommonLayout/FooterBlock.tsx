@@ -77,14 +77,14 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" textAlign="start" sx={{ color: '#000000', fontSize: "15px", lineHeight: '21px' }}  >
                       Resource
                     </Typography>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                    <Link onClick={() => goTo('https://docs.haya.finance/')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component="button" underline="none">
                       White Paper
                     </Link>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                    <Link onClick={() => goTo('https://medium.com/@HayaFinance')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component="button" underline="none">
                       Medium
                     </Link>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
-                      Brand Kit
+                    <Link onClick={() => goTo('https://drive.google.com/drive/folders/1oUCqCh6-DguiyMub08qpCFIIvjvtxWxa?usp=drive_link')} underline="none" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component="button">
+                      Media Kit
                     </Link>
 
                   </Stack>
@@ -142,14 +142,14 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" textAlign="start" sx={{ color: '#000000', fontSize: "15px", lineHeight: '21px' }}  >
                       Resource
                     </Typography>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                    <Link onClick={() => goTo('https://docs.haya.finance/')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} underline="none" component="button" >
                       White Paper
                     </Link>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                    <Link onClick={() => goTo('https://medium.com/@HayaFinance')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} underline="none" component="button" >
                       Medium
                     </Link>
-                    <Link to="/" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
-                      Brand Kit
+                    <Link onClick={() => goTo('https://drive.google.com/drive/folders/1oUCqCh6-DguiyMub08qpCFIIvjvtxWxa?usp=drive_link')} underline="none" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component="button" >
+                      Media Kit
                     </Link>
 
                   </Stack>

@@ -105,15 +105,17 @@ export default function ShowPool({ windowWeight, balanceOf, data }: DataProps) {
   }
 
   useEffect(() => {
-    console.log(data, balanceOf)
 
   }, [data, balanceOf])
 
   return (
     <>
-      <Box sx={{
-        p: '0px 20px', backgroundColor: "#fff",
+      <Box sx={windowWeight >= 600 ? {
+        p: '10px 20px', backgroundColor: "#fff",
         marginTop: "20px"
+      } : {
+        p: '10px 10px', backgroundColor: "#fff",
+        marginTop: "10px"
       }}>
 
         <Box sx={{ width: '100%' }}>

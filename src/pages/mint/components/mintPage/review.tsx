@@ -36,9 +36,9 @@ import { LoadingButton } from '@mui/lab';
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
   '.MuiDialog-paper': {
-    width: '100%',
+    width: '600px',
+    borderRadius: '20px',
     padding: '10px 19px',
-    borderRadius: '10px'
   },
 
   '& .MuiDialogContent-root': {
@@ -63,17 +63,7 @@ const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 
 
-const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
-  width: '100%',
-  backgroundColor: '#1AAE70',
-  borderRadius: '10px',
-  color: '#fff',
-  boxShadow: 'none',
-  '&:hover': {
-    backgroundColor: "#1AAE70",
-    color: '#fff',
-  },
-}));
+
 
 type dataType = {
   num: string;
@@ -144,6 +134,31 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
     top: windowHeight / 2 + 100
   }
 
+  const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
+    textTransform: 'none',
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
+    width: '100%',
+    backgroundColor: '#1AAE70',
+    color: '#fff',
+    boxShadow: 'none',
+    ".MuiLoadingButton-loadingIndicator": {
+      color: '#fff'
+
+    },
+    "&.MuiLoadingButton-loading": {
+      backgroundColor: "#1AAE70"
+
+    },
+    '&:hover': {
+      backgroundColor: "#19A56A",
+      color: '#fff',
+    },
+  }));
+
 
   const [api, contextHolder] = notification.useNotification(notificonfig);
 
@@ -203,15 +218,15 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
 
 
   const handleSwap = async () => {
-    console.log(data.every((item) => BigInt(item.allowance) > BigInt(Math.floor((Number(item.num) * Number(inputNum)) * (10 ** Number(item.decimals))))))
 
     if (data.every((item) => BigInt(item.allowance) > BigInt(Math.floor((Number(item.num) * Number(inputNum)) * (10 ** Number(item.decimals)))))) {
       const provider = getEthersSigner(config)
       const MintContract = new ethers.Contract(BasicIssuanceModule, basicIssAbi, await provider)
+      setDoneLoading(true)
       MintContract.issue(H30_Address, String(Number(inputNum) * (10 ** 18)), address).then(async (res) => {
 
         // console.log('结果222222222222', res)
-        setDoneLoading(true)
+
 
 
         const res1 = await res.wait()
@@ -232,6 +247,7 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
         // console.log("错误结果", err)
         openNotification('top')
         handleSwapClose()
+        setDoneLoading(false)
       })
 
 

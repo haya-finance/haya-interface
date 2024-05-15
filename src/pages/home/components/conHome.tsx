@@ -62,6 +62,19 @@ const BuyButton = styled(Button)<ButtonProps>(({ theme }) => ({
     color: '#fff',
   },
 }));
+
+const OneBuyButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  padding: '10px 24px',
+  fontSize: '18px',
+  lineHeight: '18px',
+  borderRadius: '20px',
+  color: '#fff',
+  backgroundColor: '#1B1B1B',
+  '&:hover': {
+    backgroundColor: '#1B1B1B',
+    color: '#fff',
+  },
+}));
 const HeaderPage = ({ windowWidth }: PropsType) => {
   const navigate = useNavigate()
 
@@ -211,66 +224,49 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '13px', lineHeight: '20px', mt: '10px', mb: '20px' }}  >
                       H20 is an entirely data-driven on-chain index token consisting of 20 top-tier crypto market assets.It is fully open-source and represents the growth of the crypto market.
                     </Typography>
-                    <BuyButton onClick={goToSwap}>Buy $H20</BuyButton>
+                    <OneBuyButton onClick={goToSwap}>Buy $H20</OneBuyButton>
                   </Stack>
 
                 </Stack>
-                <Box mt="30px" mb="30px" sx={{ boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.08)', borderRadius: '20px', width: '100%', padding: '10px 0' }}>
+                <Box mt="30px" mb="60px" sx={{ boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.08)', borderRadius: '20px', width: '100%', padding: '20px 30px' }}>
                   {/* <Stack> */}
-                  <Stack direction="row" justifyContent="space-evenly" alignItems="center" padding="0 4px" width="100%" marginBottom="10px">
-                    <Stack spacing="6px" alignItems="center">
+                  <Stack spacing="16px" alignItems="center" padding="20px 20px">
 
-                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '12px' }}  >
-                        Current Price
-                      </Typography>
-                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '12px', lineHeight: '12px' }}  >
-                        $100.0
-                      </Typography>
-
-                    </Stack>
-                    <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '22px' }}></Box>
-
-
-                    <Stack spacing="6px" alignItems="center">
-
-                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '12px' }}  >
-                        Market Cap
-                      </Typography>
-                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '12px', lineHeight: '12px' }}  >
-                        ------
-                      </Typography>
-
-                    </Stack>
-
+                    <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 100, fontSize: '18px', lineHeight: '12px' }}  >
+                      Current Price
+                    </Typography>
+                    <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
+                      $100.0
+                    </Typography>
 
                   </Stack>
-                  <Stack direction="row" justifyContent="space-evenly" alignItems="center" padding="0 4px">
+                  <Box sx={{ width: '100%', backgroundColor: '#f6f6f6', height: '1px' }}></Box>
 
-                    {/* <Stack spacing="6px" alignItems="center">
 
-                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '12px' }}  >
-                        APY
-                      </Typography>
-                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '12px', lineHeight: '12px' }}  >
-                        $105.1%
-                      </Typography>
+                  <Stack spacing="16px" alignItems="center" padding="20px 20px">
 
-                    </Stack>
-                    <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '22px', marginLeft: "22px" }}></Box> */}
-
-                    <Stack spacing="6px" alignItems="center">
-
-                      <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '12px' }}  >
-                        TVL
-                      </Typography>
-                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '12px', lineHeight: '12px' }}  >
-                        {`$ ${formatNumber(Number(tvl))}`}
-                      </Typography>
-
-                    </Stack>
-
+                    <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 100, fontSize: '18px', lineHeight: '12px' }}  >
+                      Market Cap
+                    </Typography>
+                    <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
+                      ------
+                    </Typography>
 
                   </Stack>
+
+                  <Box sx={{ width: '100%', backgroundColor: '#f6f6f6', height: '1px' }}></Box>
+
+                  <Stack spacing="16px" alignItems="center" padding="20px 20px">
+
+                    <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 100, fontSize: '18px', lineHeight: '12px' }}  >
+                      TVL
+                    </Typography>
+                    <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
+                      {`$ ${formatNumber(Number(tvl))}`}
+                    </Typography>
+
+                  </Stack>
+
                   {/* </Stack> */}
 
                 </Box>

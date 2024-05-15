@@ -28,7 +28,6 @@ import {
 } from '@mui/material';
 
 // project import
-import AnimateButton from 'components/@extended/AnimateButton';
 
 // assets
 import HeaderLogo from './headerLogo';
@@ -81,9 +80,11 @@ const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
   fontSize: '11px',
   lineHeight: '11px',
   color: '#fff',
+  "&::after": { boxShadow: 'none' },
   backgroundColor: '#1AAE70',
   '&:hover': {
     backgroundColor: '#1AAE70',
+    color: '#fff',
   },
 }));
 
@@ -91,8 +92,10 @@ const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
 const ConnectMaxButton = styled(Button)<ButtonProps>(({ theme }) => ({
   color: '#fff',
   backgroundColor: '#1AAE70',
+  "&::after": { boxShadow: 'none' },
   '&:hover': {
     backgroundColor: '#1AAE70',
+    color: '#fff',
   },
 
 }))
@@ -100,12 +103,10 @@ const ConnectMaxButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 const DisConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
   // width: '100%',
-  borderRadius: '10px',
-  paddingLeft: '12px',
-  paddingRight: '12px',
-  color: '#000',
-  fontWeight: 700,
+  borderRadius: '16px',
+  fontSize: '14px', padding: '10px 20px', color: '#1B1B1B', fontWeight: 600,
   backgroundColor: '#f6f6f6',
+  "&::after": { boxShadow: 'none' },
   '&:hover': {
     backgroundColor: '#f6f6f6',
     color: '#000'
@@ -253,7 +254,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
           <ElevationScroll layout={layout} {...others}>
             <AppBar sx={{ bgcolor: 'transparent', color: theme.palette.text.primary, boxShadow: 'none', padding: '0 36px', borderBottom: currentPath === '/' ? 0 : '0.5px solid rgb(0, 0, 0, 0.1)' }}>
               <Container disableGutters={matchDownMd}>
-                <Toolbar>
+                <Toolbar sx={{ maxWidth: '1340px' }}>
                   <Stack direction="row" width="100%" justifyContent="space-between">
                     <Stack direction="row" spacing="30px" alignItems="center" sx={{
                       '& .header-link': { '&:hover': { color: "#1AAE70" }, '&:active': { color: '#1AAE70' }, '&:focus': { color: '#1AAE70' } },
@@ -264,16 +265,16 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                       <Box sx={{ backgroundColor: '#c0c0c0', width: '1px', height: '28px' }}>
 
                       </Box>
-                      <Link className='header-link' to="/" sx={{ fontSize: '14px', lineHeight: '24px', p: 0, color: currentPath === '/' ? '#1aae70' : '#000' }} component={RouterLink} underline="none">
+                      <Link className='header-link' to="/" sx={{ fontSize: '14px', lineHeight: '24px', fontWeight: 600, p: 0, color: currentPath === '/' ? '#1aae70' : '#464646' }} component={RouterLink} underline="none">
                         Home
                       </Link>
-                      <Link className='header-link' to="/swap" sx={{ fontSize: '14px', lineHeight: '24px', p: 0, color: currentPath === '/swap' ? '#1aae70' : '#000' }} component={RouterLink} underline="none">
+                      <Link className='header-link' to="/swap" sx={{ fontSize: '14px', lineHeight: '24px', fontWeight: 600, p: 0, color: currentPath === '/swap' ? '#1aae70' : '#464646' }} component={RouterLink} underline="none">
                         Swap
                       </Link>
-                      <Link className='header-link' to="/pool" sx={{ fontSize: '14px', lineHeight: '24px', p: 0, color: currentPath === '/pool' ? '#1aae70' : '#000' }} component={RouterLink} underline="none">
+                      <Link className='header-link' to="/pool" sx={{ fontSize: '14px', lineHeight: '24px', fontWeight: 600, p: 0, color: currentPath === '/pool' ? '#1aae70' : '#464646' }} component={RouterLink} underline="none">
                         Pool
                       </Link>
-                      <Link className='header-link' to="/mint" sx={{ fontSize: '14px', lineHeight: '24px', p: 0, color: currentPath === '/mint' ? '#1aae70' : '#000' }} component={RouterLink} underline="none">
+                      <Link className='header-link' to="/mint" sx={{ fontSize: '14px', lineHeight: '24px', fontWeight: 600, p: 0, color: currentPath === '/mint' ? '#1aae70' : '#464646' }} component={RouterLink} underline="none">
                         Mint
                       </Link>
                       {/* <Link className='header-link' to="/auction" sx={{ fontSize: '14px', lineHeight: '24px', p: 0, color: currentPath === '/auction' ? '#1aae70' : '#000' }} component={RouterLink} underline="none">
@@ -282,22 +283,20 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                     </Stack>
                     <Stack direction="row" alignItems="center" spacing="30px">
                       <Box>
-                        <AnimateButton>
-                          <Button
-                            sx={{ backgroundColor: '#f6f6f6', color: '#000', '&:hover': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000' }, '&:active': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 }, '&:focus': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 } }}
-                            ref={anchorRef}
-                            id="composition-button"
-                            aria-controls={open ? 'composition-menu' : undefined}
-                            aria-expanded={open ? 'true' : undefined}
-                            aria-haspopup="true"
-                            onClick={handleToggle}
-                            startIcon={<Networks name={network.name} size={20} />}
-                            endIcon={<KeyboardArrowDownIcon />}
-                          >
-                            {network.name}
+                        <Button
+                          sx={{ backgroundColor: '#f6f6f6', fontSize: '14px', padding: '10px 20px', color: '#1B1B1B', fontWeight: 600, borderRadius: '16px', '&:hover': { backgroundColor: '#f6f6f6', color: '#1B1B1B', boxShadow: 'none' }, "&::after": { boxShadow: 'none' }, '&:active': { backgroundColor: '#f6f6f6', color: '#1B1B1B', border: 0, boxShadow: 'none', zIndex: 100, outline: '0px solid #fff' }, '&:focus': { backgroundColor: '#f6f6f6', boxShadow: 'none', color: '#1B1B1B', border: 0, outline: '0px solid #fff' } }}
+                          ref={anchorRef}
+                          id="composition-button"
+                          aria-controls={open ? 'composition-menu' : undefined}
+                          aria-expanded={open ? 'true' : undefined}
+                          aria-haspopup="true"
+                          onClick={handleToggle}
+                          startIcon={<Networks name={network.name} size={22} />}
+                          endIcon={<KeyboardArrowDownIcon style={{ fontWeight: 600, fontSize: '20px' }} />}
+                        >
+                          {network.name}
 
-                          </Button>
-                        </AnimateButton>
+                        </Button>
                         <Popper
                           open={open}
                           anchorEl={anchorRef.current}
@@ -314,7 +313,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                                   placement === "bottom-start" ? 'left top' : 'left bottom'
                               }}
                             >
-                              <Paper>
+                              <Paper sx={{ borderRadius: '16px', padding: '10px 20px', marginTop: '10px', width: '240px' }}>
                                 <ClickAwayListener onClickAway={handleClose}>
                                   <MenuList
                                     autoFocusItem={open}
@@ -325,10 +324,10 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                                     {
                                       networkes.map((item) => {
                                         return (
-                                          <MenuItem onClick={(event) => onChangeNework({ name: item.name, id: item.id }, event)} disableRipple key={item.id}>
-                                            <Stack direction="row" key={item.id} spacing={1} sx={{ alignItems: "center", justifyContent: "start" }}>
-                                              <Networks name={item.name} size={20} />
-                                              <Box sx={{ fontSize: '12px' }}>
+                                          <MenuItem sx={{ padding: 0, "&:hover": { backgroundColor: '#fff' } }} onClick={(event) => onChangeNework({ name: item.name, id: item.id }, event)} disableRipple key={item.id}>
+                                            <Stack direction="row" key={item.id} spacing="10px" sx={{ alignItems: "center", justifyContent: "start" }}>
+                                              <Networks name={item.name} size={22} />
+                                              <Box sx={{ fontSize: '14px', color: '#1B1B1B', fontWeight: 600 }}>
                                                 {item.name}
                                               </Box>
                                             </Stack>
@@ -349,16 +348,16 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
 
                       <Box >
                         {address !== undefined ? (
-                          <AnimateButton>
+                          <>
                             <DisConnectWallet windowWidth={windowWidth} open={disOpenWallet} handleClose={onCloseDisConnect} />
-                            <DisConnectButton onClick={disConnectWallet} startIcon={<Avatar src={avatarImage(`./${connector?.name}.png`)} sx={{ width: '1.30rem', height: '1.30rem' }} />} endIcon={<MdKeyboardArrowDown />}>
+                            <DisConnectButton onClick={disConnectWallet} startIcon={<Avatar src={avatarImage(`./${connector?.name}.png`)} sx={{ width: '22px', height: '22px' }} />} endIcon={<MdKeyboardArrowDown style={{ fontWeight: 600, fontSize: '20px' }} />}>
 
                               {address?.substring(0, 6)}...{address?.substring(address.length - 4)}
 
                             </DisConnectButton>
-                          </AnimateButton>
+                          </>
                         ) : (
-                          <AnimateButton>
+                          <>
                             <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onCloseWalletConnect} />
                             <ConnectMaxButton
                               variant="contained"
@@ -367,7 +366,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                             >
                               Connect Wallet
                             </ConnectMaxButton>
-                          </AnimateButton>
+                          </>
                         )
                         }
                       </Box>
@@ -386,7 +385,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
           </ElevationScroll>
         ) : (
           <Toolbar sx={{ display: 'flex', flexDirection: 'column', height: `${windowHeight}px`, width: `${windowWidth}px`, p: 0 }}>
-            <Stack direction="row" width="100%" justifyContent="space-between" sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 10, padding: '2px 8px', borderBottom: currentPath === '/' ? 0 : '0.5px solid rgb(0, 0, 0, 0.1)' }}>
+            <Stack direction="row" width="100%" justifyContent="space-between" sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 10, padding: '8px 16px', borderBottom: currentPath === '/' ? 0 : '0.5px solid rgb(0, 0, 0, 0.1)' }}>
 
               <ButtonBase component={RouterLink} to="/" disableRipple>
                 <HeaderLogo />
@@ -397,19 +396,17 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                 spacing={2}
               >
                 <Box>
-                  <AnimateButton>
-                    <Button
-                      sx={{ backgroundColor: '#f6f6f6', color: '#000', padding: '8px 15px', minWidth: 0, borderRadius: '10px', '&:hover': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000' }, '&:active': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 }, '&:focus': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 }, }}
-                      ref={anchorRef}
-                      id="composition-button"
-                      aria-controls={open ? 'composition-menu' : undefined}
-                      aria-expanded={open ? 'true' : undefined}
-                      aria-haspopup="true"
-                      onClick={handleToggle}
-                    >
-                      <Networks name={network.name} size={20} />
-                    </Button>
-                  </AnimateButton>
+                  <Button
+                    sx={{ backgroundColor: '#f6f6f6', color: '#000', padding: '10px 20px', minWidth: 0, borderRadius: '16px', "&::after": { boxShadow: 'none' }, '&:hover': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000' }, '&:active': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 }, '&:focus': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 }, }}
+                    ref={anchorRef}
+                    id="composition-button"
+                    aria-controls={open ? 'composition-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleToggle}
+                  >
+                    <Networks name={network.name} size={22} />
+                  </Button>
                   <Popper
                     open={open}
                     anchorEl={anchorRef.current}
@@ -426,7 +423,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                             placement === 'bottom-start' ? 'left top' : 'left bottom',
                         }}
                       >
-                        <Paper>
+                        <Paper sx={{ borderRadius: '16px', padding: '5px 15px', marginTop: '10px' }}>
                           <ClickAwayListener onClickAway={handleClose}>
                             <MenuList
                               autoFocusItem={open}
@@ -438,10 +435,10 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                               {
                                 networkes.map((item) => {
                                   return (
-                                    <MenuItem sx={{ padding: '0 8px' }} onClick={(event) => onChangeNework({ name: item.name, id: item.id }, event)} disableRipple key={item.id}>
+                                    <MenuItem sx={{ padding: 0, "&:hover": { backgroundColor: '#fff' } }} onClick={(event) => onChangeNework({ name: item.name, id: item.id }, event)} disableRipple key={item.id}>
                                       <Stack direction="row" key={item.id} spacing={1} sx={{ alignItems: "center", justifyContent: "start" }}>
-                                        <Networks name={item.name} size={20} />
-                                        <Box sx={{ fontSize: '12px' }}>
+                                        <Networks name={item.name} size={22} />
+                                        <Box sx={{ fontSize: '14px', color: '#1B1B1B', fontWeight: 600 }}>
                                           {item.name}
                                         </Box>
                                       </Stack>
@@ -459,16 +456,16 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                 </Box>
                 <Box >
                   {address !== undefined ? (
-                    <AnimateButton>
+                    <>
                       <DisConnectWallet windowWidth={windowWidth} open={disOpenWallet} handleClose={onCloseDisConnect} />
-                      <DisConnectButton sx={{ padding: '10px 12px', minWidth: 0 }} onClick={disConnectWallet} startIcon={<Avatar src={avatarImage(`./${connector?.name}.png`)} sx={{ width: '1.30rem', height: '1.30rem', ml: '4px', mr: '-8px' }} />}>
+                      <DisConnectButton sx={{ padding: '10px 20px', minWidth: 0, '& .MuiButton-startIcon': { margin: 0 } }} onClick={disConnectWallet} startIcon={<Avatar src={avatarImage(`./${connector?.name}.png`)} sx={{ width: '22px', height: '22px' }} />}>
 
                         {/* {address?.substring(0, 6)}...{address?.substring(address.length - 4)} */}
 
                       </DisConnectButton>
-                    </AnimateButton>
+                    </>
                   ) : (
-                    <AnimateButton>
+                    <>
                       <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onCloseWalletConnect} />
                       <ConnectButton
                         variant="contained"
@@ -477,7 +474,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                       >
                         Connect Wallet
                       </ConnectButton>
-                    </AnimateButton>
+                    </>
                   )
                   }
                 </Box>

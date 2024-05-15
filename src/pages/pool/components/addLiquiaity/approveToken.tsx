@@ -84,16 +84,17 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
     '.MuiDialog-paper': {
-      width: '100%',
-      padding: windowWidth >= 600 ? '10px 19px' : '5px 8px',
-      borderRadius: '10px'
+
+      width: '600px',
+      borderRadius: '20px',
+      padding: '10px 19px'
     },
 
     '& .MuiDialogContent-root': {
-      padding: windowWidth >= 600 ? "14px 24px" : '10px 14px',
+      padding: "0px",
     },
     '& .MuiDialogActions-root': {
-      padding: theme.spacing(1),
+      padding: 0,
     },
     '& .customized-dialog-title': {
       borderBottom: 0
@@ -176,12 +177,29 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
 
   const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
+    padding: windowWidth >= 600 ? '18px 0' : '15px 0',
+    borderRadius: '20px',
+    fontSize: '18px',
+    fontWeight: 500,
+    lineHeight: '20px',
     width: '100%',
     backgroundColor: disable ? '#9B9B9B' : '#1AAE70',
-
-    borderRadius: '10px',
     color: '#fff',
     boxShadow: 'none',
+    "&.Mui-disabled": {
+      zIndex: 100,
+      color: '#fff',
+
+    },
+    ".MuiLoadingButton-loadingIndicator": {
+      color: '#fff'
+
+    },
+    "&.MuiLoadingButton-loading": {
+      zIndex: 100,
+      backgroundColor: '#1AAE70',
+
+    },
     '&:hover': {
       backgroundColor: '#1AAE70',
       color: '#fff',
@@ -220,6 +238,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
         // console.log("错误结果", err)
         openNotification('top')
         handleApprovalClose()
+        setDoneLoading(false)
       })
 
     } else {
@@ -246,6 +265,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
         // console.log("错误结果", err)
         openNotification('top')
         handleApprovalClose()
+        setDoneLoading(false)
       })
     }
 
@@ -446,7 +466,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
     }
 
-  }, [data])
+  }, [data, toToken])
 
   // console.log(toToken, inputFromNum, inputToNum, fromToken)
 
@@ -472,7 +492,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
               open={open}
             >
 
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Stack direction="row" justifyContent="space-between" alignItems="center" padding="0 10px">
                 <Typography sx={{ color: "#464646", fontSize: '20px', fontWeight: 700 }}>
                   Approve Your Tokens
                 </Typography>
@@ -487,7 +507,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
               </Stack>
 
               <DialogContent >
-                <Box >
+                <Box padding="12px 20px">
 
                   {
                     data.map((item, index) => {
@@ -531,7 +551,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
                             )
                           } */}
 
-                          <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
+                          <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '12px' }}>
                             <Stack direction="row" spacing="4px" alignItems="center" key={index}>
                               <TokenColorIcon name={item.symbol.split('-')[0]} size={30} />
                               <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
@@ -572,9 +592,9 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
               </DialogContent>
               <DialogActions>
                 <Stack width="100%">
-                  <Stack direction="row" spacing="6px" pb="12px" pt='8px' alignItems="center">
+                  <Stack direction="row" spacing="6px" pb="20px" pt='20px' alignItems="center">
                     <InfoIcon sx={{ color: '#6f6f6f', width: '20px', height: '20px' }} />
-                    <Typography sx={{ color: '#6f6f6f', fontSize: windowWidth >= 600 ? '14px' : '11px' }}>
+                    <Typography sx={{ color: '#6f6f6f', fontSize: '14px' }}>
                       Tip: Approve your tokens before use. Each Token requires a separate one-time approval.
                     </Typography>
 
@@ -611,42 +631,34 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
                     data.map((item, index) => {
                       return (
                         <>
-                          {
-                            item.symbol !== 'ETH' ? (
-                              <>
-                                <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
-                                  <Stack direction="row" spacing="4px" alignItems="center" key={index}>
-                                    <TokenColorIcon name={item.symbol.split('-')[0]} size={30} />
-                                    <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                                      {toToken == 'ETH' ? inputFromNum : inputToNum}
-                                    </Typography>
-                                    <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                                      {item.symbol.split('-')[0]}
-                                    </Typography>
+                          <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
+                            <Stack direction="row" spacing="4px" alignItems="center" key={index}>
+                              <TokenColorIcon name={item.symbol.split('-')[0]} size={30} />
+                              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
+                                {toToken == 'ETH' ? inputFromNum : inputToNum}
+                              </Typography>
+                              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
+                                {item.symbol.split('-')[0]}
+                              </Typography>
 
-                                  </Stack>
-                                  {
-                                    !approval[index] ? (
-                                      <ApprovalButton key={index} loading={loading[index]} onClick={() => OnApproval(index, item.num, item.address)}>Approval</ApprovalButton>
+                            </Stack>
+                            {
+                              !approval[index] ? (
+                                <ApprovalButton key={index} loading={loading[index]} onClick={() => OnApproval(index, item.num, item.address)}>Approval</ApprovalButton>
 
-                                    ) : (
-                                      <Stack direction="row" spacing="8px" alignItems="center" key={index}>
-                                        <Typography sx={{ color: "#464646", fontSize: '11px', fontWeight: 700 }}>
-                                          Approved
-                                        </Typography>
-                                        <FaCheck color='#1AAE70' size={20} />
-                                      </Stack>
-
-
-                                    )
-                                  }
-
+                              ) : (
+                                <Stack direction="row" spacing="8px" alignItems="center" key={index}>
+                                  <Typography sx={{ color: "#464646", fontSize: '11px', fontWeight: 700 }}>
+                                    Approved
+                                  </Typography>
+                                  <FaCheck color='#1AAE70' size={20} />
                                 </Stack>
-                              </>
-                            ) : (
-                              <></>
-                            )
-                          }
+
+
+                              )
+                            }
+
+                          </Stack>
                         </>
                       )
                     })

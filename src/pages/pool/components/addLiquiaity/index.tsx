@@ -217,7 +217,7 @@ export default function AddPool() {
                   <Box component="button" sx={{ cursor: 'pointer', padding: '0', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }} onClick={GoBack}>
                     <Stack direction="row" alignItems="center" spacing="4px">
                       <MdOutlineArrowBackIosNew />
-                      <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 500 }}>
+                      <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
                         Add Liquidity
                       </Typography>
 
@@ -229,11 +229,11 @@ export default function AddPool() {
                   <PoolSons data={tokenList} windowHeight={windowHeight} windowWeight={windowWidth} OnChange={OnChange} />
                 </Box>
               ) : (
-                <Box sx={{ width: '100%', p: '20px 10px' }}>
-                  <Box component="button" sx={{ cursor: 'pointer', padding: '0', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }} onClick={GoBack}>
+                <Box sx={{ width: `${windowWidth}px`, p: '20px 10px' }}>
+                  <Box component="button" sx={{ cursor: 'pointer', padding: '0', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '10px' }} onClick={GoBack}>
                     <Stack direction="row" alignItems="center" spacing="4px">
                       <MdOutlineArrowBackIosNew />
-                      <Typography sx={{ color: "#000", fontSize: '12px', fontWeight: 500 }}>
+                      <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
                         Add Liquidity
                       </Typography>
 

@@ -142,6 +142,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
     },
     "&.MuiLoadingButton-loading": {
+      opacity: 'inherit',
       zIndex: 100,
       backgroundColor: '#1AAE70',
 

@@ -187,7 +187,6 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
     color: '#fff',
     boxShadow: 'none',
     "&.Mui-disabled": {
-      zIndex: 100,
       color: '#fff',
 
     },
@@ -196,6 +195,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
     },
     "&.MuiLoadingButton-loading": {
+      opacity: 'inherit',
       zIndex: 100,
       backgroundColor: '#1AAE70',
 

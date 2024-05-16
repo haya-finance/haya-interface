@@ -220,6 +220,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
     },
     "&.MuiLoadingButton-loading": {
+      opacity: 'inherit',
       zIndex: 100,
       backgroundColor: '#1AAE70',
 

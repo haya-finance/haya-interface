@@ -148,6 +148,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
     },
     "&.MuiLoadingButton-loading": {
+      opacity: 'inherit',
       zIndex: 100,
       backgroundColor: '#1AAE70',
 

@@ -150,6 +150,7 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
 
     },
     "&.MuiLoadingButton-loading": {
+      opacity: 'inherit',
       backgroundColor: "#1AAE70"
 
     },

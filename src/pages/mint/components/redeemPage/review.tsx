@@ -144,6 +144,7 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
 
     },
     "&.MuiLoadingButton-loading": {
+      opacity: 'inherit',
       backgroundColor: "#1AAE70"
 
     },

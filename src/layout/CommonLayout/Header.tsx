@@ -23,8 +23,7 @@ import {
   ClickAwayListener,
   MenuList,
   MenuItem,
-  ButtonProps,
-  Avatar
+  ButtonProps
 } from '@mui/material';
 
 // project import
@@ -35,7 +34,7 @@ import Networks from 'assets/networks';
 import { useAccount, useSwitchChain } from 'wagmi';
 import DisConnectWallet from './components/disConnectWallet';
 import ConnectWallet from './components/connectWallet';
-const avatarImage = require.context('assets/wallet', true);
+import WalletIcon from 'assets/images/wallet';
 
 // =============================================|| COMPONENTS - APP BAR ||============================================= //
 
@@ -281,7 +280,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                         Auction
                       </Link> */}
                     </Stack>
-                    <Stack direction="row" alignItems="center" spacing="30px">
+                    <Stack direction="row" alignItems="center" spacing="20px">
                       <Box>
                         <Button
                           sx={{ backgroundColor: '#f6f6f6', fontSize: '14px', padding: '10px 20px', color: '#1B1B1B', fontWeight: 600, borderRadius: '16px', '&:hover': { backgroundColor: '#f6f6f6', color: '#1B1B1B', boxShadow: 'none' }, "&::after": { boxShadow: 'none' }, '&:active': { backgroundColor: '#f6f6f6', color: '#1B1B1B', border: 0, boxShadow: 'none', zIndex: 100, outline: '0px solid #fff' }, '&:focus': { backgroundColor: '#f6f6f6', boxShadow: 'none', color: '#1B1B1B', border: 0, outline: '0px solid #fff' } }}
@@ -350,7 +349,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                         {address !== undefined ? (
                           <>
                             <DisConnectWallet windowWidth={windowWidth} open={disOpenWallet} handleClose={onCloseDisConnect} />
-                            <DisConnectButton onClick={disConnectWallet} startIcon={<Avatar src={avatarImage(`./${connector?.name}.png`)} sx={{ width: '22px', height: '22px' }} />} endIcon={<MdKeyboardArrowDown style={{ fontWeight: 600, fontSize: '20px' }} />}>
+                            <DisConnectButton onClick={disConnectWallet} startIcon={<WalletIcon name={connector?.name} size={22} />} endIcon={<MdKeyboardArrowDown style={{ fontWeight: 600, fontSize: '20px' }} />}>
 
                               {address?.substring(0, 6)}...{address?.substring(address.length - 4)}
 
@@ -458,7 +457,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                   {address !== undefined ? (
                     <>
                       <DisConnectWallet windowWidth={windowWidth} open={disOpenWallet} handleClose={onCloseDisConnect} />
-                      <DisConnectButton sx={{ padding: '10px 20px', minWidth: 0, '& .MuiButton-startIcon': { margin: 0 } }} onClick={disConnectWallet} startIcon={<Avatar src={avatarImage(`./${connector?.name}.png`)} sx={{ width: '22px', height: '22px' }} />}>
+                      <DisConnectButton sx={{ padding: '10px 20px', minWidth: 0, '& .MuiButton-startIcon': { margin: 0 } }} onClick={disConnectWallet} startIcon={<WalletIcon name={connector?.name} size={22} />}>
 
                         {/* {address?.substring(0, 6)}...{address?.substring(address.length - 4)} */}
 

@@ -10,11 +10,37 @@ type PropsType = {
   windowWidth: number
 }
 
+interface DataType {
+  name: string;
+  value: string;
+  time: string;
+  color: string;
+}
+
 const HistoryNotial = ({ windowWidth }: PropsType) => {
   const [slot, setSlot] = useState('allTime');
 
   const [btcShow, setBTCShow] = useState(true)
   const [spxShow, setSPXShow] = useState(true)
+  const [data, setData] = useState<DataType[]>([{
+    name: 'H20',
+    value: '108.5740044',
+    time: '',
+    color: ''
+  },
+  {
+    name: 'BTC',
+    value: '65.72836824',
+    time: '',
+    color: ''
+  },
+  {
+    name: 'spx500',
+    value: '2.247767641',
+    time: '',
+    color: ''
+  }
+  ])
 
 
   const onCheckBTC = () => {
@@ -35,6 +61,16 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
   useEffect(() => {
 
   }, [windowWidth])
+
+  const onData = (value: DataType[]) => {
+    setData(value)
+
+
+  }
+
+  useEffect(() => {
+
+  }, [data])
 
 
 
@@ -87,7 +123,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
 
                   </Box>
-                  <Typography onClick={() => setSlot('allTime')} component="button" sx={{ cursor: 'pointer', fontSize: '12px', color: '#667085', border: 0, backgroundColor: 'transparent' }}>
+                  <Typography onClick={() => setSlot('allTime')} component="button" sx={{ cursor: 'pointer', fontSize: '14px', color: '#667085', border: 0, backgroundColor: 'transparent' }}>
                     All Time
                   </Typography>
 
@@ -99,8 +135,8 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
 
             </Stack>
-            <IncomeAreaChart SpxShow={spxShow} BtcShow={btcShow} windowWidth={windowWidth} slot={slot} />
-            <Typography sx={{ fontSize: '14px', color: '#717E91', marginBottom: '10px' }}>
+            <IncomeAreaChart SpxShow={spxShow} BtcShow={btcShow} windowWidth={windowWidth} slot={slot} onData={onData} />
+            <Typography sx={{ fontSize: '14px', color: '#717E91', marginBottom: '10px', fontWeight: 600 }}>
               Compare to:
             </Typography>
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb="10px">
@@ -144,7 +180,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                     $H20 Performance
                   </Typography>
                   <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                    818.35%
+                    {isNaN(Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100).toFixed(2)}%`}
                   </Typography>
                 </Stack>
                 <Stack>
@@ -152,7 +188,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                     $BTC Performance
                   </Typography>
                   <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                    818.35%
+                    {isNaN(Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100).toFixed(2)}%`}
                   </Typography>
                 </Stack>
                 <Stack>
@@ -160,7 +196,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                     $SPY Performance
                   </Typography>
                   <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                    818.35%
+                    {isNaN(Number((Number(data.filter((item) => item.name == 'spx500')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'spx500')[0]?.value) - 1) * 100).toFixed(2)}%`}
                   </Typography>
                 </Stack>
 
@@ -172,7 +208,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
         ) : (
           <Box sx={{ width: '100%', backgroundColor: '#fff', mb: "30px" }}>
             <Stack direction="row" justifyContent="space-between" sx={{ borderBottom: '2px solid #CCD5E0', paddingBottom: '10px' }}>
-              <Typography variant="body1" textAlign="center" sx={{ color: '#000', fontWeight: 700, fontSize: '18px' }}  >
+              <Typography variant="body1" textAlign="center" sx={{ color: '#000', pl: '16px', fontWeight: 700, fontSize: '18px' }}  >
                 Growth of $H20
               </Typography>
               <Stack direction="row" alignItems="center" spacing="4px">
@@ -226,11 +262,11 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
 
             </Stack>
-            <IncomeAreaChart SpxShow={spxShow} BtcShow={btcShow} windowWidth={windowWidth} slot={slot} />
+            <IncomeAreaChart SpxShow={spxShow} BtcShow={btcShow} windowWidth={windowWidth} slot={slot} onData={onData} />
 
 
             <Stack padding="16px 16px">
-              <Typography sx={{ fontSize: '13px', color: '#717E91', marginBottom: '10px' }}>
+              <Typography sx={{ fontSize: '13px', color: '#717E91', marginBottom: '10px', fontWeight: 600 }}>
                 Compare to:
               </Typography>
               <Stack direction="row" alignItems="center" spacing="30px">
@@ -272,7 +308,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                   $H20 Performance
                 </Typography>
                 <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                  818.35%
+                  {isNaN(Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100).toFixed(2)}%`}
                 </Typography>
               </Stack>
               <Stack marginBottom="10px">
@@ -280,7 +316,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                   $BTC Performance
                 </Typography>
                 <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                  818.35%
+                  {isNaN(Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100).toFixed(2)}%`}
                 </Typography>
               </Stack>
               <Stack>
@@ -288,7 +324,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                   $SPY Performance
                 </Typography>
                 <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                  818.35%
+                  {isNaN(Number((Number(data.filter((item) => item.name == 'spx500')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'spx500')[0]?.value) - 1) * 100).toFixed(2)}%`}
                 </Typography>
               </Stack>
 

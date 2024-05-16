@@ -1,4 +1,5 @@
 
+
 import ReactEcharts from 'echarts-for-react';
 // import echarts from 'echarts/lib/echarts';
 import { useEffect, useState } from 'react';
@@ -11,20 +12,33 @@ interface Props {
   slot: string;
   windowWidth: number;
   SpxShow: boolean;
+  onData: (data: DataType[]) => void
   BtcShow: boolean
 
+
+
 }
+
+interface DataType {
+  name: string;
+  value: string;
+  time: string;
+  color: string;
+}
+
 // interface Data {
 //   time: string,
 //   equity: string,
 //   name: string
 // }
 
-const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
+const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth, onData }: Props) => {
   const [BTCData, setBtcData] = useState<Number[]>([])
   const [H20Data, setH20Data] = useState<Number[]>([])
   const [SPXData, setSPXData] = useState<Number[]>([])
   const [YearY, setYearY] = useState<String[]>([])
+
+  const [hoverData, setHoverData] = useState<any>([])
 
 
   useEffect(() => {
@@ -45,15 +59,45 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
   }, [slot])
 
 
+
+
+
+
   useEffect(() => {
 
   }, [BTCData, H20Data, SPXData, YearY])
+
+
   // const params = useParams()
+
+  const GetTooltipFormatter = (p: any, params: any) => {
+    let arr: DataType[] = []
+    // setHoverData(params);
+    // 返回自定义的formatter内容，这里简单返回params的name
+    for (let i = 0; i < params.length; i++) {
+      arr.push({
+        name: params[i].seriesName,
+        value: String(params[i].value),
+        time: params[i].name,
+        color: params[i].color
+      })
+    }
+
+    setHoverData(arr)
+
+
+
+  };
+
+
+
 
 
   const option = {
     tooltip: {
       trigger: 'axis',
+      position: GetTooltipFormatter,
+      transitionDuration: 1,
       // position: function (pt: any[]) {
       //   return [pt[0], '10%'];
       // }
@@ -74,8 +118,8 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
     },
     grid: {
       top: windowWidth >= 600 ? '10%' : '10%',
-      left: windowWidth >= 600 ? '4%' : '12%',
-      right: windowWidth >= 600 ? '2%' : '2%',
+      left: windowWidth >= 600 ? '4%' : '18%',
+      right: windowWidth >= 600 ? '2%' : '10%',
       bottom: windowWidth >= 600 ? '10%' : '10%',
       contaionLabel: true
 
@@ -135,6 +179,14 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
         //   origin: 'start'
         // },
         data: SPXData
+      },
+      {
+        event: {
+          mouseover: function (event: any) {
+            console.log('event1111', event)
+          }
+
+        }
       }
     ]
   };
@@ -143,6 +195,8 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
   const BTCoption = {
     tooltip: {
       trigger: 'axis',
+      position: GetTooltipFormatter,
+      transitionDuration: 1,
       // position: function (pt: any[]) {
       //   return [pt[0], '10%'];
       // }
@@ -163,8 +217,8 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
     },
     grid: {
       top: windowWidth >= 600 ? '10%' : '10%',
-      left: windowWidth >= 600 ? '4%' : '12%',
-      right: windowWidth >= 600 ? '2%' : '2%',
+      left: windowWidth >= 600 ? '4%' : '18%',
+      right: windowWidth >= 600 ? '2%' : '10%',
       bottom: windowWidth >= 600 ? '10%' : '10%',
       contaionLabel: true
 
@@ -220,6 +274,8 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
   const SPXoption = {
     tooltip: {
       trigger: 'axis',
+      position: GetTooltipFormatter,
+      transitionDuration: 1,
       // position: function (pt: any[]) {
       //   return [pt[0], '10%'];
       // }
@@ -240,8 +296,8 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
     },
     grid: {
       top: windowWidth >= 600 ? '10%' : '10%',
-      left: windowWidth >= 600 ? '4%' : '12%',
-      right: windowWidth >= 600 ? '2%' : '2%',
+      left: windowWidth >= 600 ? '4%' : '18%',
+      right: windowWidth >= 600 ? '2%' : '10%',
       bottom: windowWidth >= 600 ? '10%' : '10%',
       contaionLabel: true
 
@@ -296,6 +352,8 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
   const H20option = {
     tooltip: {
       trigger: 'axis',
+      position: GetTooltipFormatter,
+      transitionDuration: 1,
       // position: function (pt: any[]) {
       //   return [pt[0], '10%'];
       // }
@@ -316,8 +374,8 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
     },
     grid: {
       top: windowWidth >= 600 ? '10%' : '10%',
-      left: windowWidth >= 600 ? '4%' : '12%',
-      right: windowWidth >= 600 ? '2%' : '2%',
+      left: windowWidth >= 600 ? '4%' : '18%',
+      right: windowWidth >= 600 ? '2%' : '10%',
       bottom: windowWidth >= 600 ? '10%' : '10%',
       contaionLabel: true
 
@@ -383,41 +441,48 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth }: Props) => {
 
 
 
+  useEffect(() => {
+    onData(hoverData)
+
+  }, [hoverData])
+
+
+
+
 
 
 
   return (
     <>
-      <div>
-        {
-          SpxShow && !BtcShow ? (
-            <ReactEcharts option={SPXoption} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
-          ) : (
-            <></>
-          )
-        }
-        {
-          !SpxShow && BtcShow ? (
-            <ReactEcharts option={BTCoption} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
-          ) : (
-            <></>
-          )
-        }
-        {
-          SpxShow && BtcShow ? (
-            <ReactEcharts option={option} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
-          ) : (
-            <></>
-          )
-        }
-        {
-          !SpxShow && !BtcShow ? (
-            <ReactEcharts option={H20option} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
-          ) : (
-            <></>
-          )
-        }
-      </div>
+
+      {
+        SpxShow && !BtcShow ? (
+          <ReactEcharts option={SPXoption} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
+        ) : (
+          <></>
+        )
+      }
+      {
+        !SpxShow && BtcShow ? (
+          <ReactEcharts option={BTCoption} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
+        ) : (
+          <></>
+        )
+      }
+      {
+        SpxShow && BtcShow ? (
+          <ReactEcharts option={option} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
+        ) : (
+          <></>
+        )
+      }
+      {
+        !SpxShow && !BtcShow ? (
+          <ReactEcharts option={H20option} style={{ height: windowWidth >= 600 ? 400 : 300 }} />
+        ) : (
+          <></>
+        )
+      }
     </>
   );
 };

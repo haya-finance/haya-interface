@@ -62,13 +62,13 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" textAlign="start" sx={{ color: '#000000', fontSize: "15px", lineHeight: '21px' }}  >
                       App
                     </Typography>
-                    <Link to="/swap" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                    <Link to="/swap" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646', textAlign: 'start' }} component={RouterLink} underline="none">
                       Swap
                     </Link>
-                    <Link to="/pool" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                    <Link to="/pool" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646', textAlign: 'start' }} component={RouterLink} underline="none">
                       Pool
                     </Link>
-                    <Link to="/mint" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                    <Link to="/mint" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646', textAlign: 'start' }} component={RouterLink} underline="none">
                       Mint
                     </Link>
 
@@ -77,13 +77,13 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" textAlign="start" sx={{ color: '#000000', fontSize: "15px", lineHeight: '21px' }}  >
                       Resource
                     </Typography>
-                    <Link onClick={() => goTo('https://docs.haya.finance/')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component="button" underline="none">
+                    <Link onClick={() => goTo('https://docs.haya.finance/')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646', textAlign: 'start' }} component="button" underline="none">
                       White Paper
                     </Link>
-                    <Link onClick={() => goTo('https://medium.com/@HayaFinance')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component="button" underline="none">
+                    <Link onClick={() => goTo('https://medium.com/@HayaFinance')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646', textAlign: 'start' }} component="button" underline="none">
                       Medium
                     </Link>
-                    <Link onClick={() => goTo('https://drive.google.com/drive/folders/1oUCqCh6-DguiyMub08qpCFIIvjvtxWxa?usp=drive_link')} underline="none" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component="button">
+                    <Link onClick={() => goTo('https://drive.google.com/drive/folders/1oUCqCh6-DguiyMub08qpCFIIvjvtxWxa?usp=drive_link')} underline="none" sx={{ fontSize: '13px', textAlign: 'start', lineHeight: '18px', p: 0, color: '#464646' }} component="button">
                       Media Kit
                     </Link>
 
@@ -127,13 +127,13 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" textAlign="start" sx={{ color: '#000000', fontSize: "15px", lineHeight: '21px' }}  >
                       App
                     </Typography>
-                    <Link to="/swap" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                    <Link to="/swap" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646', textAlign: 'start' }} component={RouterLink} underline="none">
                       Swap
                     </Link>
-                    <Link to="/pool" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                    <Link to="/pool" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646', textAlign: 'start' }} component={RouterLink} underline="none">
                       Pool
                     </Link>
-                    <Link to="/mint" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component={RouterLink} underline="none">
+                    <Link to="/mint" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646', textAlign: 'start' }} component={RouterLink} underline="none">
                       Mint
                     </Link>
 
@@ -142,13 +142,13 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" textAlign="start" sx={{ color: '#000000', fontSize: "15px", lineHeight: '21px' }}  >
                       Resource
                     </Typography>
-                    <Link onClick={() => goTo('https://docs.haya.finance/')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} underline="none" component="button" >
+                    <Link onClick={() => goTo('https://docs.haya.finance/')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646', textAlign: 'start' }} underline="none" component="button" >
                       White Paper
                     </Link>
-                    <Link onClick={() => goTo('https://medium.com/@HayaFinance')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} underline="none" component="button" >
+                    <Link onClick={() => goTo('https://medium.com/@HayaFinance')} sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646', textAlign: 'start' }} underline="none" component="button" >
                       Medium
                     </Link>
-                    <Link onClick={() => goTo('https://drive.google.com/drive/folders/1oUCqCh6-DguiyMub08qpCFIIvjvtxWxa?usp=drive_link')} underline="none" sx={{ fontSize: '13px', lineHeight: '18px', p: 0, color: '#464646' }} component="button" >
+                    <Link onClick={() => goTo('https://drive.google.com/drive/folders/1oUCqCh6-DguiyMub08qpCFIIvjvtxWxa?usp=drive_link')} underline="none" sx={{ fontSize: '13px', textAlign: 'start', lineHeight: '18px', p: 0, color: '#464646' }} component="button" >
                       Media Kit
                     </Link>
 

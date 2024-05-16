@@ -25,7 +25,6 @@ import { LoadingButton } from '@mui/lab';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
 import tokenAbi from 'abi/token.json';
-import wethAbi from 'abi/weth.json'
 
 
 // const sepolia_rpc = "https://sepolia.infura.io/v3/0edd253962184b628e0cfabc2f91b0ae"
@@ -234,64 +233,36 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
     } else {
       if (toToken !== 'ETH') {
-        await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))),
-          BigInt(Math.floor((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))),
-          [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address],
-          address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
-            setDoneLoading(true)
+        setDoneLoading(true)
+        await swapContract.swapExactTokensForETH(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
-            console.log('结果swap', res)
-            // await res.wait()
-            const tokenContract = new ethers.Contract(data.filter(item => item.symbol === fromToken)[0].address, wethAbi, await provider)
-            await tokenContract.withdraw(BigInt(Math.floor((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl))))).then(async (res2) => {
-              await res2.wait()
-              setDoneLoading(false)
-              handleApprovalClose()
-              onUpdate()
+          // console.log('结果swap', res)
+          await res.wait()
+          setDoneLoading(false)
+          handleApprovalClose()
+          onUpdate()
+        }).catch((err) => {
+          openNotification('top')
+          handleApprovalClose()
+          setDoneLoading(false)
+          // console.log('错误1', err)
+        })
 
-
-
-            }).catch((err) => {
-              // console.log(err)
-              openNotification('top')
-              handleApprovalClose()
-              setDoneLoading(false)
-
-            })
-
-
-          }).catch((err) => {
-            openNotification('top')
-            handleApprovalClose()
-            setDoneLoading(false)
-            // console.log('错误1', err)
-          })
 
       } else {
-        const tokenContract = new ethers.Contract(data.filter(item => item.symbol === toToken)[0].address, wethAbi, await provider)
-
-        await tokenContract.deposit({
+        setDoneLoading(true)
+        await swapContract.swapExactETHForTokens(BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5, {
           from: address,
-          value: String(Number(inputToNum) * (10 ** 18))
-        }).then(async (result) => {
-          setDoneLoading(true)
-          await result.wait()
-          await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
-
-            // console.log('结果swap', res)
-            await res.wait()
-            setDoneLoading(false)
-            handleApprovalClose()
-            onUpdate()
-          }).catch((err) => {
-            openNotification('top')
-            handleApprovalClose()
-            setDoneLoading(false)
-            // console.log('错误1', err)
-          })
-
-
-
+          value: BigInt((Number(inputToNum) * (10 ** 18)))
+        }).then(async (res) => {
+          await res.wait()
+          setDoneLoading(false)
+          handleApprovalClose()
+          onUpdate()
+        }).catch((err) => {
+          openNotification('top')
+          handleApprovalClose()
+          setDoneLoading(false)
         })
 
 

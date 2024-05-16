@@ -305,10 +305,11 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     // console.log(data.filter(item => item.symbol == pay)[0].address, data.filter(item => item.symbol == receive)[0].address, swapContract)
 
     await swapContract.getAmountsOut(BigInt(Number(value) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
-      // console.log('结果', res)
+      console.log('结果', res)
       setInputReValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
       setInputReShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
     }).catch(err => {
+      console.log('err', err)
       setInputReValue('')
       setInputReShowValue('')
       // console.log('错误输出', err)
@@ -423,7 +424,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
     }
 
-  }, [address, data])
+  }, [address, data, receive, pay])
 
 
 
@@ -468,7 +469,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
       }
     }
-  }, [pay, receive, inputToValue, inputReValue])
+  }, [pay, receive, inputToValue, inputReValue, data])
 
 
 

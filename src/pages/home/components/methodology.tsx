@@ -27,121 +27,121 @@ const data: DataType[] = [
   {
     key: '1',
     name: 'BTC',
-    num: '64.52%',
+    num: '25.13%',
     color: '#F7931a'
   },
   {
     key: '2',
     name: 'ETH',
-    num: '64.52%',
+    num: '24.16%',
     color: '#627eea'
   },
   {
     key: '3',
     name: 'BNB',
-    num: '64.52%',
+    num: '14.92%',
     color: '#f3ba2f'
   },
   {
     key: '4',
     name: 'SOL',
-    num: '64.52%',
+    num: '10.39%',
     color: '#8d4ef7'
   },
   {
     key: '5',
     name: 'DOGE',
-    num: '64.52%',
+    num: '3.56%',
     color: '#fff'
   },
   {
     key: '6',
     name: 'TON',
-    num: '64.52%',
+    num: '3.17%',
     color: '#fff'
   },
   {
     key: '7',
     name: 'ADA',
-    num: '64.52%',
+    num: '2.76%',
     color: '#fff'
   },
   {
     key: '8',
     name: 'SHIB',
-    num: '64.52%',
+    num: '2.40%',
     color: '#fff'
   },
   {
     key: '9',
     name: 'AVAX',
-    num: '64.52%',
+    num: '2.16%',
     color: '#fff'
   },
   {
     key: '10',
     name: 'TRX',
-    num: '64.52%',
+    num: '1.79%',
     color: '#fff'
   },
   {
     key: '11',
     name: 'DOT',
-    num: '64.52%',
+    num: '1.62%',
     color: '#fff'
   },
   {
     key: '12',
     name: 'LINK',
-    num: '64.52%',
+    num: '1.36%',
     color: '#fff'
   },
   {
     key: '13',
     name: 'NEAR',
-    num: '64.52%',
+    num: '1.26%',
     color: '#fff'
   },
   {
     key: '14',
     name: 'MATIC',
-    num: '64.52%',
+    num: '1.20%',
     color: '#fff'
   },
   {
     key: '15',
     name: 'LTC',
-    num: '64.52%',
+    num: '1.05%',
     color: '#fff'
   },
   {
     key: '16',
     name: 'UNI',
-    num: '64.52%',
+    num: '0.79%',
     color: '#fff'
   },
   {
     key: '17',
     name: 'RNDR',
-    num: '64.52%',
+    num: '0.51%',
     color: '#fff'
   },
   {
     key: '18',
     name: 'APT',
-    num: '64.52%',
+    num: '0.64%',
     color: '#fff'
   },
   {
     key: '19',
     name: 'FIL',
-    num: '64.52%',
+    num: '0.54%',
     color: '#fff'
   },
   {
     key: '20',
     name: 'ARB',
-    num: '64.52%',
+    num: '0.49%',
     color: '#fff'
   },
 ];
@@ -166,16 +166,16 @@ const Methodology = ({ windowWidth }: TypeProps) => {
             </Typography>
             <Box sx={{ height: '30px', width: '100%', backgroundColor: 'transparent', mb: '20px' }}>
               <Stack direction="row">
-                <Box sx={{ backgroundColor: '#F7931A', width: '60%', height: '30px', borderRadius: '20px 0 0 20px' }}>
+                <Box sx={{ backgroundColor: '#F7931A', width: '25.14%', height: '30px', borderRadius: '20px 0 0 20px' }}>
 
                 </Box>
-                <Box sx={{ backgroundColor: '#627EEA', width: '15%', height: '30px' }}>
+                <Box sx={{ backgroundColor: '#627EEA', width: '24.16%', height: '30px' }}>
 
                 </Box>
-                <Box sx={{ backgroundColor: '#F3BA2F', width: '8%', height: '30px' }}>
+                <Box sx={{ backgroundColor: '#F3BA2F', width: '14.93%', height: '30px' }}>
 
                 </Box>
-                <Box sx={{ backgroundColor: '#8D4EF7', width: '3%', height: '30px' }}>
+                <Box sx={{ backgroundColor: '#8D4EF7', width: '10.40%', height: '30px' }}>
 
                 </Box>
                 <Box sx={{ backgroundColor: '#E9ECEA', flex: 1, height: '30px', borderRadius: '0 20px 20px 0' }}>
@@ -346,21 +346,21 @@ const Methodology = ({ windowWidth }: TypeProps) => {
         ) : (
           <>
             <Box sx={{ width: '100%', backgroundColor: '#fff' }}>
-              <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontWeight: 700, ml: '10px', mb: '10px', fontSize: '16px' }}  >
+              <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontWeight: 700, ml: '30px', mb: '10px', fontSize: '18px' }}  >
                 Methodology
               </Typography>
               <Box sx={{ height: '30px', width: '100%', backgroundColor: 'transparent', mb: '20px' }}>
                 <Stack direction="row">
-                  <Box sx={{ backgroundColor: '#F7931A', width: '60%', height: '30px', borderRadius: '20px 0 0 20px' }}>
+                  <Box sx={{ backgroundColor: '#F7931A', width: '25.14%', height: '30px', borderRadius: '20px 0 0 20px' }}>
 
                   </Box>
-                  <Box sx={{ backgroundColor: '#627EEA', width: '15%', height: '30px' }}>
+                  <Box sx={{ backgroundColor: '#627EEA', width: '24.16%', height: '30px' }}>
 
                   </Box>
-                  <Box sx={{ backgroundColor: '#F3BA2F', width: '8%', height: '30px' }}>
+                  <Box sx={{ backgroundColor: '#F3BA2F', width: '14.93%', height: '30px' }}>
 
                   </Box>
-                  <Box sx={{ backgroundColor: '#8D4EF7', width: '3%', height: '30px' }}>
+                  <Box sx={{ backgroundColor: '#8D4EF7', width: '10.40%', height: '30px' }}>
 
                   </Box>
                   <Box sx={{ backgroundColor: '#E9ECEA', flex: 1, height: '30px', borderRadius: '0 20px 20px 0' }}>

@@ -77,7 +77,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
     },
     {
       symbol: 'ETH',
-      address: '0xc8d5A5b5E59dF02Eb3108158C724ED956b020029',
+      address: '0x0d05D33Ab10870069DE5Aa7Ddcd42fbEB8C44dCd',
       balance: '0',
       network: chain?.name ?? 'Arbitrum Sepolia',
       decimasl: '',

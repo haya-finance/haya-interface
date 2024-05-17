@@ -75,25 +75,32 @@ interface NetworkType {
 
 const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
   // width: '100%',
-  padding: '10px 6px',
-  fontSize: '11px',
+  borderRadius: '16px',
+  padding: '15px 15px',
+  fontSize: '14px',
   lineHeight: '11px',
+  fontWeight: 600,
   color: '#fff',
   "&::after": { boxShadow: 'none' },
   backgroundColor: '#1AAE70',
   '&:hover': {
-    backgroundColor: '#1AAE70',
+    backgroundColor: '#19A56A',
     color: '#fff',
   },
 }));
 
 
 const ConnectMaxButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  padding: '18px 20px',
+  borderRadius: '10px',
+  fontWeight: 600,
   color: '#fff',
+  fontSize: '16px',
+  lineHeight: '11px',
   backgroundColor: '#1AAE70',
   "&::after": { boxShadow: 'none' },
   '&:hover': {
-    backgroundColor: '#1AAE70',
+    backgroundColor: '#19A56A',
     color: '#fff',
   },
 
@@ -117,26 +124,32 @@ const DisConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
 const NavtionButton = styled(Button)<ButtonProps>(({ theme }) => ({
   width: '100%',
   // borderRadius: '10px',
-  padding: '9px 5px',
+  padding: '12px 34px',
+  fontSize: '13px',
+  lineHeight: '13px',
   color: '#464646',
-  fontWeight: 700,
+  fontWeight: 600,
   backgroundColor: 'transparent',
+  "&::after": { boxShadow: 'none' },
   '&:hover': {
     backgroundColor: '#f6f6f6',
     color: '#1aae70',
-    borderRadius: '10px'
+    borderRadius: '20px',
+    fontWeight: 600,
 
   },
   '&:focus': {
     backgroundColor: '#f6f6f6',
     color: '#1aae70',
-    borderRadius: '10px'
+    borderRadius: '20px',
+    fontWeight: 600,
 
   },
   '&:active': {
     backgroundColor: '#f6f6f6',
     color: '#1aae70',
-    borderRadius: '10px'
+    borderRadius: '20px',
+    fontWeight: 600,
 
   },
 }));
@@ -253,7 +266,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
           <ElevationScroll layout={layout} {...others}>
             <AppBar sx={{ bgcolor: 'transparent', color: theme.palette.text.primary, boxShadow: 'none', padding: '0 36px', borderBottom: currentPath === '/' ? 0 : '0.5px solid rgb(0, 0, 0, 0.1)' }}>
               <Container disableGutters={matchDownMd}>
-                <Toolbar sx={{ maxWidth: '1340px' }}>
+                <Toolbar sx={{ maxWidth: '1340px', p: '12px 10px' }}>
                   <Stack direction="row" width="100%" justifyContent="space-between">
                     <Stack direction="row" spacing="30px" alignItems="center" sx={{
                       '& .header-link': { '&:hover': { color: "#1AAE70" }, '&:active': { color: '#1AAE70' }, '&:focus': { color: '#1AAE70' } },
@@ -281,7 +294,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                       </Link> */}
                     </Stack>
                     <Stack direction="row" alignItems="center" spacing="20px">
-                      <Box>
+                      <Box sx={{ display: address == undefined ? 'none' : 'block' }}>
                         <Button
                           sx={{ backgroundColor: '#f6f6f6', fontSize: '14px', padding: '10px 20px', color: '#1B1B1B', fontWeight: 600, borderRadius: '16px', '&:hover': { backgroundColor: '#f6f6f6', color: '#1B1B1B', boxShadow: 'none' }, "&::after": { boxShadow: 'none' }, '&:active': { backgroundColor: '#f6f6f6', color: '#1B1B1B', border: 0, boxShadow: 'none', zIndex: 100, outline: '0px solid #fff' }, '&:focus': { backgroundColor: '#f6f6f6', boxShadow: 'none', color: '#1B1B1B', border: 0, outline: '0px solid #fff' } }}
                           ref={anchorRef}
@@ -383,8 +396,8 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
 
           </ElevationScroll>
         ) : (
-          <Toolbar sx={{ display: 'flex', flexDirection: 'column', height: `${windowHeight}px`, width: `${windowWidth}px`, p: 0 }}>
-            <Stack direction="row" width="100%" justifyContent="space-between" sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 10, padding: '8px 16px', borderBottom: currentPath === '/' ? 0 : '0.5px solid rgb(0, 0, 0, 0.1)' }}>
+          <Toolbar sx={{ display: 'flex', flexDirection: 'column', height: `${windowHeight}px`, width: `${windowWidth}px`, p: 0, }}>
+            <Stack direction="row" width="100%" justifyContent="space-between" sx={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 10, padding: '8px 16px', borderBottom: '0.5px solid rgb(0, 0, 0, 0.1)' }}>
 
               <ButtonBase component={RouterLink} to="/" disableRipple>
                 <HeaderLogo />
@@ -394,7 +407,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                 alignItems="center"
                 spacing={2}
               >
-                <Box>
+                <Box sx={{ display: address == undefined ? 'none' : 'block' }}>
                   <Button
                     sx={{ backgroundColor: '#f6f6f6', color: '#000', padding: '10px 20px', minWidth: 0, borderRadius: '16px', "&::after": { boxShadow: 'none' }, '&:hover': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000' }, '&:active': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 }, '&:focus': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 }, }}
                     ref={anchorRef}
@@ -488,17 +501,17 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
             </Box>
 
             <Paper sx={{ position: 'sticky', bottom: 0, zIndex: 10 }} elevation={3}>
-              <Stack direction="row" alignItems="center" justifyContent="space-around" sx={{ backgroundColor: '#fff', width: `${windowWidth}px` }}>
-                <NavtionButton sx={{ backgroundColor: currentPath === '/' ? '#f6f6f6' : 'transparent', color: currentPath === '/' ? '#1aae70' : '#464646', borderRadius: currentPath === '/' ? '10px' : 0 }} onClick={() => onClickNav('/')}>
+              <Stack direction="row" alignItems="center" justifyContent="space-around" sx={{ backgroundColor: '#fff', width: `${windowWidth}px`, padding: '8px 14px' }}>
+                <NavtionButton sx={{ backgroundColor: currentPath === '/' ? '#f6f6f6' : 'transparent', color: currentPath === '/' ? '#1aae70' : '#464646', borderRadius: currentPath === '/' ? '20px' : 0 }} onClick={() => onClickNav('/')}>
                   Home
                 </NavtionButton >
-                <NavtionButton sx={{ backgroundColor: currentPath === '/swap' ? '#f6f6f6' : 'transparent', color: currentPath === '/swap' ? '#1aae70' : '#464646', borderRadius: currentPath === '/swap' ? '10px' : 0 }} onClick={() => onClickNav('/swap')}>
+                <NavtionButton sx={{ backgroundColor: currentPath === '/swap' ? '#f6f6f6' : 'transparent', color: currentPath === '/swap' ? '#1aae70' : '#464646', borderRadius: currentPath === '/swap' ? '20px' : 0 }} onClick={() => onClickNav('/swap')}>
                   Swap
                 </NavtionButton>
-                <NavtionButton sx={{ backgroundColor: currentPath === '/pool' ? '#f6f6f6' : 'transparent', color: currentPath === '/pool' ? '#1aae70' : '#464646', borderRadius: currentPath === '/pool' ? '10px' : 0 }} onClick={() => onClickNav('/pool')}>
+                <NavtionButton sx={{ backgroundColor: currentPath === '/pool' ? '#f6f6f6' : 'transparent', color: currentPath === '/pool' ? '#1aae70' : '#464646', borderRadius: currentPath === '/pool' ? '20px' : 0 }} onClick={() => onClickNav('/pool')}>
                   Pool
                 </NavtionButton>
-                <NavtionButton sx={{ backgroundColor: currentPath === '/mint' ? '#f6f6f6' : 'transparent', color: currentPath === '/mint' ? '#1aae70' : '#464646', borderRadius: currentPath === '/mint' ? '10px' : 0 }} onClick={() => onClickNav('/mint')}>
+                <NavtionButton sx={{ backgroundColor: currentPath === '/mint' ? '#f6f6f6' : 'transparent', color: currentPath === '/mint' ? '#1aae70' : '#464646', borderRadius: currentPath === '/mint' ? '20px' : 0 }} onClick={() => onClickNav('/mint')}>
                   Mint
                 </NavtionButton>
                 {/* <NavtionButton sx={{ backgroundColor: currentPath === '/auction' ? '#f6f6f6' : 'transparent', color: currentPath === '/auction' ? '#1aae70' : '#464646', borderRadius: currentPath === '/mint' ? '10px' : 0 }} onClick={() => onClickNav('/auction')}>

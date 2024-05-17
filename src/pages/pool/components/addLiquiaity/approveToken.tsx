@@ -50,6 +50,31 @@ type dataType = {
   allowance: string
 }
 
+function formatNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.round(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+
+
+
+      }
+    }
+  } else {
+    return num.toLocaleString()
+
+  }
+}
+
+
 
 type TypeProps = {
   open: boolean;
@@ -68,8 +93,11 @@ type TypeProps = {
 const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
   width: '100%',
   color: '#fff',
+  padding: '12px 0',
   boxShadow: 'none',
-  borderRadius: '10px',
+  fontSize: '18px',
+  fontWeight: 600,
+  borderRadius: '20px',
   backgroundColor: '#1AAE70',
   '&:hover': {
     backgroundColor: '#1AAE70',
@@ -83,15 +111,15 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
-    '.MuiDialog-paper': {
 
+    '.MuiDialog-paper': {
       width: '600px',
       borderRadius: '20px',
-      padding: '10px 19px'
+      padding: '20px 20px'
     },
 
     '& .MuiDialogContent-root': {
-      padding: "0px",
+      padding: 0,
     },
     '& .MuiDialogActions-root': {
       padding: 0,
@@ -107,17 +135,28 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
     borderRadius: '20px',
     color: '#fff',
     boxShadow: 'none',
-    fontSize: '14px',
+    fontSize: windowWidth >= 600 ? '16px' : '14px',
     lineHeight: '14px',
-    padding: windowWidth >= 600 ? '10px 20px' : '5px 10px',
+    padding: windowWidth >= 600 ? '15px 30px' : '10px 20px',
+    ".MuiLoadingButton-loadingIndicator": {
+      color: '#fff'
+
+    },
+    "&.MuiLoadingButton-loading": {
+      opacity: 'inherit',
+      zIndex: 100,
+      backgroundColor: '#1AAE70',
+
+    },
     '&:hover': {
-      backgroundColor: "#1AAE70",
+      backgroundColor: "#19A56A",
       color: '#fff',
     },
   }));
 
   const notificonfig = {
-    top: windowHeight / 2 + 100
+    top: windowHeight * 0.4,
+
   }
 
 
@@ -126,28 +165,48 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
   const openNotification = (placement: NotificationPlacement) => {
     const key = `open${Date.now()}`;
     const btn = (
-      <Box>
-        <Stack width="100%" alignItems="center" textAlign="center" padding="12px 0" spacing="6px">
-          <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
-          <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
-            The transaction submission was either cancelled or failed.
-          </Typography>
-        </Stack>
-        <OkButton onClick={() => api.destroy()}>
-          OK
-        </OkButton>
+      <Box sx={{ marginTop: '-8px' }}>
+        {
+          windowWidth >= 600 ? (
+            <>
+              <Stack width="100%" alignItems="center" textAlign="center" padding="20px 0" spacing="10px">
+                <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
+                <Typography variant='body1' sx={{ fontSize: '18px', fontWeight: 600, lineHeight: '24px' }} color="#000">
+                  The transaction submission was either cancelled or failed.
+                </Typography>
+              </Stack>
+              <OkButton onClick={() => api.destroy()}>
+                OK
+              </OkButton>
+            </>
+          ) : (
+            <>
+              <Stack direction="row" width="100%" alignItems="center" textAlign="center" spacing="10px">
+                <WarningIcon style={{ color: '#9b9b9b', width: '24px', height: '24px' }} fontSize="large" />
+                <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
+                  Coming soon
+                </Typography>
+              </Stack>
+            </>
+          )
+        }
       </Box>
     );
+
+    const mess = (
+      <Box sx={{ m: 0, p: 0, '& .ant-notification-notice': { "& .ant-notification-notice-message": { mb: 0 } } }}></Box>
+    )
 
 
 
     api.open({
-      message: '',
+      message: mess,
       description: btn,
+      closeIcon: windowWidth >= 600 ? true : false,
       className: 'custom-class',
       style: {
-        width: '280px',
-        padding: '20px 24px',
+        width: windowWidth >= 600 ? '400px' : '160px',
+        padding: '20px 20px',
         borderRadius: '20px'
       },
       key,
@@ -161,7 +220,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
 
 
-  const [disable, setDisabled] = useState<boolean>(false)
+  const [disable, setDisabled] = useState<boolean>(true)
 
   const [approval, setApproval] = useState<boolean[]>([])
   const [loading, setLoading] = useState<boolean[]>([])
@@ -187,7 +246,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
     color: '#fff',
     boxShadow: 'none',
     "&.Mui-disabled": {
-      color: '#fff',
+      color: doneLoading ? 'transparent' : '#fff',
 
     },
     ".MuiLoadingButton-loadingIndicator": {
@@ -201,7 +260,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
     },
     '&:hover': {
-      backgroundColor: '#1AAE70',
+      backgroundColor: '#19A56A',
       color: '#fff',
     },
   }));
@@ -423,45 +482,54 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
   useEffect(() => {
 
     for (let i = 0; i < data.length; i++) {
-      if (toToken == 'ETH') {
-        if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
-          // console.log('111111111111111111111')
+      if (data[i].symbol == toToken || data[i].symbol == fromToken) {
+        if (toToken == 'ETH') {
+          if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
+            // console.log('111111111111111111111')
 
-          setApproval((pre) => {
-            const newPre = [...pre]
-            newPre[i] = true;
-            return newPre
-          })
+            setApproval((pre) => {
+              const newPre = [...pre]
+              newPre[i] = true;
+              return newPre
+            })
 
+
+          } else {
+            setApproval((pre) => {
+              const newPre = [...pre]
+              newPre[i] = false;
+              return newPre
+            })
+
+          }
 
         } else {
-          setApproval((pre) => {
-            const newPre = [...pre]
-            newPre[i] = false;
-            return newPre
-          })
+          if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
+            // console.log('111111111111111111111')
 
+            setApproval((pre) => {
+              const newPre = [...pre]
+              newPre[i] = true;
+              return newPre
+            })
+
+
+          } else {
+            setApproval((pre) => {
+              const newPre = [...pre]
+              newPre[i] = false;
+              return newPre
+            })
+
+          }
         }
-
       } else {
-        if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
-          // console.log('111111111111111111111')
+        setApproval((pre) => {
+          const newPre = [...pre]
+          newPre[i] = true;
+          return newPre
+        })
 
-          setApproval((pre) => {
-            const newPre = [...pre]
-            newPre[i] = true;
-            return newPre
-          })
-
-
-        } else {
-          setApproval((pre) => {
-            const newPre = [...pre]
-            newPre[i] = false;
-            return newPre
-          })
-
-        }
       }
 
     }
@@ -492,7 +560,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
               open={open}
             >
 
-              <Stack direction="row" justifyContent="space-between" alignItems="center" padding="0 10px">
+              <Stack direction="row" justifyContent="space-between" alignItems="center" padding="0 10px" mb="20px">
                 <Typography sx={{ color: "#464646", fontSize: '20px', fontWeight: 700 }}>
                   Approve Your Tokens
                 </Typography>
@@ -507,7 +575,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
               </Stack>
 
               <DialogContent >
-                <Box padding="12px 20px">
+                <Box padding="0px 20px" mb='20px'>
 
                   {
                     data.map((item, index) => {
@@ -552,14 +620,11 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
                           } */}
 
                           <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '12px' }}>
-                            <Stack direction="row" spacing="4px" alignItems="center" key={index}>
-                              <TokenColorIcon name={item.symbol.split('-')[0]} size={30} />
-                              <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
-                                {toToken == "ETH" ? inputFromNum : inputToNum}
+                            <Stack direction="row" spacing="12px" alignItems="center" key={index}>
+                              <TokenColorIcon name={item.symbol.split('-')[0]} size={36} />
+                              <Typography sx={{ color: "#000", fontSize: '20px', fontWeight: 600 }}>
+                                {toToken == "ETH" ? formatNumber(Number(inputFromNum)) : formatNumber(Number(inputToNum))} {item.symbol.split('-')[0]}
 
-                              </Typography>
-                              <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
-                                {item.symbol.split('-')[0]}
                               </Typography>
 
                             </Stack>
@@ -568,11 +633,11 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
                                 <ApprovalButton key={index} loading={loading[index]} onClick={() => OnApproval(index, item.num, item.address)}>Approval</ApprovalButton>
 
                               ) : (
-                                <Stack direction="row" spacing="8px" alignItems="center" key={index}>
-                                  <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
+                                <Stack direction="row" spacing="4px" alignItems="center" key={index}>
+                                  <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 600 }}>
                                     Approved
                                   </Typography>
-                                  <FaCheck color='#1AAE70' size={20} />
+                                  <FaCheck color='#1AAE70' size={22} />
                                 </Stack>
 
 
@@ -592,9 +657,9 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
               </DialogContent>
               <DialogActions>
                 <Stack width="100%">
-                  <Stack direction="row" spacing="6px" pb="20px" pt='20px' alignItems="center">
-                    <InfoIcon sx={{ color: '#6f6f6f', width: '20px', height: '20px' }} />
-                    <Typography sx={{ color: '#6f6f6f', fontSize: '14px' }}>
+                  <Stack direction="row" spacing="8px" pb="20px" pt='12px' alignItems="center">
+                    <InfoIcon sx={{ color: '#6f6f6f', width: '22px', height: '22px' }} />
+                    <Typography sx={{ color: '#6f6f6f', fontSize: '15px', fontWeight: 600, lineHeight: '20px' }}>
                       Tip: Approve your tokens before use. Each Token requires a separate one-time approval.
                     </Typography>
 
@@ -608,12 +673,12 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
           </Box>
         ) : (
-          <Drawer anchor='bottom' open={open} onClose={handleApprovalClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff', left: '5px', right: '5px', borderRadius: '10px 10px 0 0' } }}>
-            <Box sx={{ width: 'auto', padding: '10px 10px 20px 10px' }}>
+          <Drawer anchor='bottom' open={open} onClose={handleApprovalClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff', left: '5px', right: '5px', borderRadius: '20px 20px 0 0' } }}>
+            <Box sx={{ width: 'auto', padding: '20px 10px' }}>
               <Box sx={{ width: '100%' }}>
 
-                <Stack direction="row" justifyContent="space-between" alignItems="center" pb="10px">
-                  <Typography sx={{ color: "#464646", fontSize: '17px', fontWeight: 400 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" p="0 10px" mb="10px">
+                  <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 600 }}>
                     Approve Your Tokens
                   </Typography>
                   <IconButton
@@ -631,14 +696,11 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
                     data.map((item, index) => {
                       return (
                         <>
-                          <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
-                            <Stack direction="row" spacing="4px" alignItems="center" key={index}>
-                              <TokenColorIcon name={item.symbol.split('-')[0]} size={30} />
-                              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                                {toToken == 'ETH' ? inputFromNum : inputToNum}
-                              </Typography>
-                              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                                {item.symbol.split('-')[0]}
+                          <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '12px' }}>
+                            <Stack direction="row" spacing="6px" alignItems="center" key={index}>
+                              <TokenColorIcon name={item.symbol.split('-')[0]} size={36} />
+                              <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 600 }}>
+                                {toToken == 'ETH' ? formatNumber(Number(inputFromNum)) : formatNumber(Number(inputToNum))} {item.symbol.split('-')[0]}
                               </Typography>
 
                             </Stack>
@@ -647,11 +709,11 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
                                 <ApprovalButton key={index} loading={loading[index]} onClick={() => OnApproval(index, item.num, item.address)}>Approval</ApprovalButton>
 
                               ) : (
-                                <Stack direction="row" spacing="8px" alignItems="center" key={index}>
-                                  <Typography sx={{ color: "#464646", fontSize: '11px', fontWeight: 700 }}>
+                                <Stack direction="row" spacing="4px" alignItems="center" key={index}>
+                                  <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 600 }}>
                                     Approved
                                   </Typography>
-                                  <FaCheck color='#1AAE70' size={20} />
+                                  <FaCheck color='#1AAE70' size={22} />
                                 </Stack>
 
 
@@ -669,9 +731,9 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
                 </Box>
                 <Stack width="100%">
-                  <Stack direction="row" spacing="6px" pb="12px" pt='8px' alignItems="center">
-                    <InfoIcon sx={{ color: '#6f6f6f', width: '20px', height: '20px' }} />
-                    <Typography sx={{ color: '#6f6f6f', fontSize: '11px' }}>
+                  <Stack direction="row" spacing="8px" pb="10px" pt="12px" alignItems="center">
+                    <InfoIcon sx={{ color: '#6f6f6f', width: '22px', height: '22px' }} />
+                    <Typography sx={{ color: '#6f6f6f', fontSize: '13px', fontWeight: 600, lineHeight: '20px' }}>
                       Tip: Approve your tokens before use. Each Token requires a separate one-time approval.
                     </Typography>
 

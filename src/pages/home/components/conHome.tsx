@@ -34,9 +34,9 @@ function formatNumber(num: number) {
 
     for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
-        num *= 10 ** (i + 4)
+        num *= 10 ** (i + 2)
         num = Math.floor(num)
-        num /= 10 ** (i + 4)
+        num /= 10 ** (i + 2)
         var parts = num.toString().split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return parts.join(".");
@@ -51,27 +51,29 @@ function formatNumber(num: number) {
 const provider = new ethers.JsonRpcProvider(sepolia_rpc)
 
 const BuyButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  padding: '10px 24px',
-  fontSize: '18px',
+  padding: '20px 40px',
+  fontSize: '16px',
   lineHeight: '18px',
   borderRadius: '20px',
+  fontWeight: 600,
   color: '#fff',
   backgroundColor: '#1AAE70',
   '&:hover': {
-    backgroundColor: '#1AAE70',
+    backgroundColor: '#19A56A',
     color: '#fff',
   },
 }));
 
 const OneBuyButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  padding: '10px 24px',
+  padding: '15px 35px',
   fontSize: '18px',
   lineHeight: '18px',
   borderRadius: '20px',
+  fontWeight: 600,
   color: '#fff',
-  backgroundColor: '#1B1B1B',
+  backgroundColor: '#1AAE70',
   '&:hover': {
-    backgroundColor: '#1B1B1B',
+    backgroundColor: '#19A56A',
     color: '#fff',
   },
 }));
@@ -126,7 +128,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
         {
           windowWidth >= 600 ? (
             <>
-              <Box sx={{ paddingTop: '70px', paddingLeft: '36px', paddingRight: '36px' }}>
+              <Box sx={{ paddingTop: '100px', paddingLeft: '36px', paddingRight: '36px' }}>
 
                 <Stack direction="row" alignItems='start' justifyContent='space-evenly' spacing="2px" >
                   <Stack alignItems="start" justifyContent="center" height="290px" width="60%">
@@ -150,7 +152,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                   </Box>
 
                 </Stack>
-                <Box mt="60px" mb="60px" sx={{ boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.08)', borderRadius: '20px', width: '100%', padding: '20px 0' }}>
+                <Box mt="60px" mb="60px" sx={{ boxShadow: '0 0 50px 0 rgba(25, 0, 61, 0.1)', borderRadius: '20px', width: '100%', padding: '20px 0' }}>
                   <Stack direction="row" justifyContent="space-around" alignItems="center" padding="10px 20px">
                     <Stack spacing="10px" alignItems="center">
 
@@ -158,7 +160,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                         Current Price
                       </Typography>
                       <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
-                        $100.0
+                        $100.00
                       </Typography>
 
                     </Stack>
@@ -211,7 +213,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
             </>
           ) : (
             <>
-              <Box sx={{ paddingTop: '20px' }}>
+              <Box sx={{ paddingTop: '40px' }}>
 
                 <Stack direction="row" alignItems='start' justifyContent='space-evenly' spacing="2px" >
                   <Stack alignItems="start" justifyContent="center" width="100%">
@@ -221,14 +223,14 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '34px', lineHeight: '38px' }}  >
                       Buy the Crypto.
                     </Typography>
-                    <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '13px', lineHeight: '20px', mt: '10px', mb: '20px' }}  >
+                    <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '18px', mt: '10px', mb: '20px' }}  >
                       H20 is an entirely data-driven on-chain index token consisting of 20 top-tier crypto market assets.It is fully open-source and represents the growth of the crypto market.
                     </Typography>
                     <OneBuyButton onClick={goToSwap}>Buy $H20</OneBuyButton>
                   </Stack>
 
                 </Stack>
-                <Box mt="30px" mb="60px" sx={{ boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.08)', borderRadius: '20px', width: '100%', padding: '20px 30px' }}>
+                <Box mt="30px" mb="60px" sx={{ boxShadow: '0 0 50px 0 rgba(25, 0, 61, 0.1)', borderRadius: '20px', width: '100%', padding: '20px 30px' }}>
                   {/* <Stack> */}
                   <Stack spacing="16px" alignItems="center" padding="20px 20px">
 

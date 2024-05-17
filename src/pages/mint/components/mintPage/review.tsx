@@ -38,14 +38,14 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '.MuiDialog-paper': {
     width: '600px',
     borderRadius: '20px',
-    padding: '10px 19px',
+    padding: '20px 20px',
   },
 
   '& .MuiDialogContent-root': {
-    padding: '14px',
+    padding: 0,
   },
   '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
+    padding: 0,
   },
   '& .customized-dialog-title': {
     borderBottom: 0
@@ -56,9 +56,15 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
   color: '#1AAE70',
   boxShadow: 'none',
+  padding: 0,
+  "&::after": { boxShadow: 'none' },
   '&:hover': {
     backgroundColor: "#fff",
     color: '#1aae70',
+  },
+  '&:active': {
+    boxShadow: 'none',
+
   },
 }));
 
@@ -130,9 +136,6 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
   const [doneLoading, setDoneLoading] = useState<boolean>(false)
 
 
-  const notificonfig = {
-    top: windowHeight / 2 + 100
-  }
 
   const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
     textTransform: 'none',
@@ -161,35 +164,59 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
   }));
 
 
-  const [api, contextHolder] = notification.useNotification(notificonfig);
+  const notificonfig = {
+    top: windowHeight * 0.4,
 
-  // console.log('data', data)
+  }
+
+
+  const [api, contextHolder] = notification.useNotification(notificonfig);
 
   const openNotification = (placement: NotificationPlacement) => {
     const key = `open${Date.now()}`;
     const btn = (
-      <Box>
-        <Stack width="100%" alignItems="center" textAlign="center" padding="12px 0" spacing="6px">
-          <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
-          <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
-            The transaction submission was either cancelled or failed.
-          </Typography>
-        </Stack>
-        <OkButton onClick={() => api.destroy()}>
-          OK
-        </OkButton>
+      <Box sx={{ marginTop: '-8px' }}>
+        {
+          windowWidth >= 600 ? (
+            <>
+              <Stack width="100%" alignItems="center" textAlign="center" padding="20px 0" spacing="10px">
+                <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
+                <Typography variant='body1' sx={{ fontSize: '18px', fontWeight: 600, lineHeight: '24px' }} color="#000">
+                  The transaction submission was either cancelled or failed.
+                </Typography>
+              </Stack>
+              <OkButton onClick={() => api.destroy()}>
+                OK
+              </OkButton>
+            </>
+          ) : (
+            <>
+              <Stack direction="row" width="100%" alignItems="center" textAlign="center" spacing="10px">
+                <WarningIcon style={{ color: '#9b9b9b', width: '24px', height: '24px' }} fontSize="large" />
+                <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
+                  Coming soon
+                </Typography>
+              </Stack>
+            </>
+          )
+        }
       </Box>
     );
+
+    const mess = (
+      <Box sx={{ m: 0, p: 0, '& .ant-notification-notice': { "& .ant-notification-notice-message": { mb: 0 } } }}></Box>
+    )
 
 
 
     api.open({
-      message: '',
+      message: mess,
       description: btn,
+      closeIcon: windowWidth >= 600 ? true : false,
       className: 'custom-class',
       style: {
-        width: '280px',
-        padding: '20px 24px',
+        width: windowWidth >= 600 ? '400px' : '160px',
+        padding: '20px 20px',
         borderRadius: '20px'
       },
       key,
@@ -203,7 +230,7 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
 
 
 
-  const [hidder, setHidder] = useState(false)
+  const [hidder, setHidder] = useState(true)
   const [openApproval, setOpenApproval] = useState(false)
   const [update, setUpdate] = useState(false)
 
@@ -301,8 +328,8 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
             Review Swap
           </DialogTitle> */}
 
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Typography sx={{ color: "#464646", fontSize: '20px', fontWeight: 700 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" p="0 10px" mb="20px">
+                  <Typography sx={{ color: "#000", fontSize: '22px', fontWeight: 700 }}>
                     Review Mint
                   </Typography>
                   <IconButton
@@ -316,79 +343,81 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
                 </Stack>
 
                 <DialogContent >
-                  <Box sx={{ marginBottom: '10px' }}>
-                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      You pay <span style={{ color: '#1AAE70' }}>{data.length}</span> tokens
+                  <Box sx={{ p: '12px 20px' }}>
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
+                      You pay
                     </Typography>
 
                     {
                       data.map((item, index) => {
                         return (
                           <>
-                            <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
-                              <Stack direction="row" spacing="4px" alignItems="center" key={index}>
-                                <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
-                                  {String(ChangeNumber(Number(item.num) * Number(inputNum)))}
-                                </Typography>
-                                <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
-                                  {item.symbol.split('-')[0]}
+                            <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '10px' }}>
+                              <Stack direction="row" alignItems="center" key={index}>
+                                <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 700 }}>
+                                  {String(ChangeNumber(Number(item.num) * Number(inputNum)))} {item.symbol.split('-')[0]}
                                 </Typography>
 
                               </Stack>
-                              <TokenColorIcon name={item.symbol.split('-')[0]} size={30} />
+                              <TokenColorIcon name={item.symbol.split('-')[0]} size={36} />
                             </Stack>
                           </>
                         )
                       })
                     }
 
-                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600, mt: '6px' }} color="#9b9b9b">
-                      ≈ $4131.321
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600, mt: '10px' }} color="#9b9b9b">
+                      ≈ $ 0.00
                     </Typography>
 
 
                   </Box>
-                  <Stack direction="row" alignItems="center" justifyContent="space-between">
+                  <Stack direction="row" alignItems="center" justifyContent="space-between" p="0 20px" m="10px 0">
                     <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                     <ArrowDownwardIcon sx={{ color: '#1aae70', padding: '0 1px' }} />
                     <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                   </Stack>
 
-                  <Box sx={{ marginBottom: '10px', marginTop: '10px' }}>
-                    <Box position="relative">
-                      <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                  <Box sx={{ p: '12px 20px', marginBottom: '10px' }}>
+                    <Stack alignItems="start" spacing="10px">
+                      <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
                         You receive
                       </Typography>
+                      <Stack width="100%" alignItems="center" direction="row" justifyContent="space-between">
 
-                      <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                        $35.1
-                      </Typography>
-                      <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
-
-                        <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
+                        <Typography variant='body1' sx={{ color: '#000', fontWeight: 600, fontSize: '24px' }}>
                           {inputNum} {name}
                         </Typography>
 
-                        <TokenColorIcon name={name} size={40} />
+                        <TokenColorIcon name={name} size={36} />
 
 
 
                       </Stack>
-                    </Box>
+                      <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
+                        $0.00
+                      </Typography>
+
+                    </Stack>
                   </Box>
-                  <Stack direction="row" alignItems="center" justifyContent="space-between">
+                  <Stack direction="row" alignItems="center" justifyContent="space-between" p="0 20px">
                     <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                     <ShowButton variant="text" onClick={onShowMore} endIcon={!hidder ? <KeyboardArrowUpIcon sx={{ color: '1aae70' }} /> : <KeyboardArrowDownIcon sx={{ color: '1aae70' }} />}>Show more</ShowButton>
 
                     <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                   </Stack>
-                  <Box sx={{ marginTop: '5px', marginBottom: '5px', display: !hidder ? 'none' : 'block' }}>
-                    <Stack spacing={2}>
+                  <Box sx={{ marginTop: '8px', mb: '20px', p: '0 20px', display: !hidder ? 'none' : 'block' }}>
+                    <Stack spacing="10px">
                       <Stack direction="row" alignItems="center" justifyContent="space-between">
                         <Typography sx={{ color: '#6F6F6F' }}>
                           Contract
                         </Typography>
-                        <Typography sx={{ color: '#1aae70' }} component={Button} onClick={gotoContract} variant='body1' >
+                        <Typography sx={{
+                          color: '#1aae70', padding: 0, '&:hover': {
+                            color: "#19A56A",
+                            backgroundColor: 'transparent'
+                          }
+                        }} component={Button} onClick={gotoContract} variant='body1' >
                           {BasicIssuanceModule.slice(0, 9)}
                         </Typography>
 
@@ -398,7 +427,7 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
                         <Typography sx={{ color: '#6F6F6F' }}>
                           Transaction simulation
                         </Typography>
-                        <Typography sx={{ color: '#464646' }} variant='body1' >
+                        <Typography sx={{ color: '#464646', fontWeight: 600 }} variant='body1' >
                           Auto
                         </Typography>
 
@@ -421,10 +450,10 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
           <>
             <ApprovalTokens windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} name={name} inputNum={inputNum} windowWidth={windowWidth} />
 
-            <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff', left: '5px', right: '5px', borderRadius: '10px 10px 0 0' } }}>
-              <Box width="auto" padding="10px 10px 20px 10px">
-                <Stack direction="row" justifyContent="space-between" alignItems="center" pb="10px">
-                  <Typography sx={{ color: "#464646", fontSize: '17px', fontWeight: 400 }}>
+            <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff', left: '5px', right: '5px', borderRadius: '20px 20px 0 0' } }}>
+              <Box width="auto" padding="20px 10px">
+                <Stack direction="row" justifyContent="space-between" alignItems="center" p="0 10px" mb="10px">
+                  <Typography sx={{ color: "#000", fontSize: '20px', fontWeight: 700 }}>
                     Review Mint
                   </Typography>
                   <IconButton
@@ -437,8 +466,8 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
                   </IconButton>
                 </Stack>
 
-                <Box sx={{ marginBottom: '10px' }}>
-                  <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                <Box sx={{ marginBottom: '10px', p: '12px 10px' }}>
+                  <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
                     You pay <span style={{ color: '#1AAE70' }}>{data.length}</span> tokens
                   </Typography>
 
@@ -446,70 +475,72 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
                     data.map((item, index) => {
                       return (
                         <>
-                          <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '6px' }}>
+                          <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '10px' }}>
                             <Stack direction="row" spacing="4px" alignItems="center" key={index}>
-                              <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
-                                {String(ChangeNumber(Number(item.num) * Number(inputNum)))}
-                              </Typography>
-                              <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
-                                {item.symbol.split('-')[0]}
+                              <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
+                                {String(ChangeNumber(Number(item.num) * Number(inputNum)))} {item.symbol.split('-')[0]}
                               </Typography>
 
                             </Stack>
-                            <TokenColorIcon name={item.symbol.split('-')[0]} size={30} />
+                            <TokenColorIcon name={item.symbol.split('-')[0]} size={36} />
                           </Stack>
                         </>
                       )
                     })
                   }
 
-                  <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600, mt: '6px' }} color="#9b9b9b">
-                    ≈ $4131.321
+                  <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600, mt: '10px' }} color="#9b9b9b">
+                    ≈ $0.00
                   </Typography>
 
 
                 </Box>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Stack direction="row" alignItems="center" justifyContent="space-between" p="0 20px">
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                   <ArrowDownwardIcon sx={{ color: '#1aae70', padding: '0 1px' }} />
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                 </Stack>
 
                 <Box sx={{ marginBottom: '10px', marginTop: '10px' }}>
-                  <Box position="relative">
-                    <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                  <Stack alignItems="start" spacing="10px">
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
                       You receive
                     </Typography>
+                    <Stack alignItems="center" direction="row" justifyContent="space-between" width="100%">
 
-                    <Typography variant='body1' sx={{ position: 'absolute', bottom: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
-                      $35.1
-                    </Typography>
-                    <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
-
-                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 600, fontSize: '24px' }}>
                         {inputNum} {name}
                       </Typography>
 
-                      <TokenColorIcon name={name} size={40} />
+                      <TokenColorIcon name={name} size={36} />
 
 
 
                     </Stack>
-                  </Box>
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
+                      $ 0.00
+                    </Typography>
+
+                  </Stack>
                 </Box>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Stack direction="row" alignItems="center" justifyContent="space-between" >
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                   <ShowButton variant="text" onClick={onShowMore} endIcon={!hidder ? <KeyboardArrowUpIcon sx={{ color: '1aae70' }} /> : <KeyboardArrowDownIcon sx={{ color: '1aae70' }} />}>Show more</ShowButton>
 
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                 </Stack>
-                <Box sx={{ marginTop: '5px', marginBottom: '5px', display: !hidder ? 'none' : 'block' }}>
+                <Box sx={{ p: '0 10px', marginTop: '10px', marginBottom: '10px', display: !hidder ? 'none' : 'block' }}>
                   <Stack spacing={2}>
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
                       <Typography sx={{ color: '#6F6F6F' }}>
                         Contract
                       </Typography>
-                      <Typography sx={{ color: '#1aae70' }} component={Button} onClick={gotoContract} variant='body1' >
+                      <Typography sx={{
+                        color: '#1aae70', padding: 0, '&:hover': {
+                          color: "#19A56A",
+                          backgroundColor: 'transparent'
+                        }
+                      }} component={Button} onClick={gotoContract} variant='body1' >
                         {BasicIssuanceModule.slice(0, 9)}
                       </Typography>
 

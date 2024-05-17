@@ -19,6 +19,8 @@ const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
   boxShadow: 'none',
   fontSize: '12px',
   fontWeight: 600,
+  padding: 0,
+  "&::after": { boxShadow: 'none' },
   '&:hover': {
     backgroundColor: "#fff",
     color: '#464646',
@@ -66,24 +68,24 @@ export default function ShowDetail({ windowWeight, LpToken }: DataProps) {
           <Box width="100%" sx={{ display: hidden ? 'none' : 'block' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography sx={{ color: '#9B9B9B', fontSize: '12px', fontWeight: 600 }}>
+                <Typography sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}>
                   Price
                 </Typography>
               </Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 600 }}>
+                <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 600 }}>
                   1ETH ≈ 100.234 H20
                 </Typography>
               </Stack>
             </Stack>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography sx={{ color: '#9B9B9B', fontSize: '12px', fontWeight: 600 }}>
+                <Typography sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}>
                   Estimated Gas fee
                 </Typography>
               </Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 600 }}>
+                <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 600 }}>
                   0.00035 ETH
                 </Typography>
               </Stack>

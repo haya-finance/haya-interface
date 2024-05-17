@@ -22,6 +22,7 @@ type DataProps = {
 const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
   color: '#1AAE70',
   boxShadow: 'none',
+  "&::after": { boxShadow: 'none' },
   '&:hover': {
     backgroundColor: "#fff",
     color: '#1aae70',
@@ -115,53 +116,55 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty,
                   <Typography sx={{ color: '#464646', fontWeight: 600 }}>Prices and pool share</Typography>
                   <ShowButton endIcon={!hidden ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />} onClick={handleChange}>Uniswap</ShowButton>
                 </Stack>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
-                      ETH per H30
-                    </Typography>
+                <Box sx={{ display: hidden ? 'block' : 'none' }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 700 }}>
+                        ETH per H30
+                      </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 700 }}>
+                        {
+                          toToken === 'ETH' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
+                        }
+                      </Typography>
+                    </Stack>
                   </Stack>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                      {
-                        toToken === 'ETH' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
-                      }
-                    </Typography>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}>
+                        H30 per ETH
+                      </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 600 }}>
+                        {
+                          toToken === 'H30' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
+                        }
+                      </Typography>
+                    </Stack>
                   </Stack>
-                </Stack>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
-                      H30 per ETH
-                    </Typography>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}>
+                        Share of Pool
+                      </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 600 }}>
+                        {InputNumber(Number(inputValue) / Number(toLiquidty)) ?? 0.00} %
+                      </Typography>
+                    </Stack>
                   </Stack>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                      {
-                        toToken === 'H30' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
-                      }
-                    </Typography>
-                  </Stack>
-                </Stack>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: '#9B9B9B', fontSize: '12px' }}>
-                      Share of Pool
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                      {InputNumber(Number(inputValue) / Number(toLiquidty)) ?? 0.00} %
-                    </Typography>
-                  </Stack>
-                </Stack>
+                </Box>
               </Box>
 
             </Box>
             <Box>
               <Stack direction="row" spacing="6px" pb="12px" pt='8px' alignItems="center">
-                <InfoIcon sx={{ color: '#6f6f6f', width: '20px', height: '20px' }} />
-                <Typography sx={{ color: '#6f6f6f', fontSize: windowWeight >= 600 ? '14px' : '11px' }}>
+                <InfoIcon sx={{ color: '#6f6f6f', width: '22px', height: '22px' }} />
+                <Typography sx={{ color: '#6f6f6f', fontSize: '14px', fontWeight: 600 }}>
                   Tip: When you add liquidity,you will receive pool tokens representing your position.
                   These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at time.
                 </Typography>
@@ -182,53 +185,55 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty,
                   <Typography sx={{ color: '#464646', fontWeight: 600 }}>Prices and pool share</Typography>
                   <ShowButton endIcon={!hidden ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />} onClick={handleChange}>Uniswap</ShowButton>
                 </Stack>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: '#9B9B9B', fontSize: '11px' }}>
-                      ETH per H30
-                    </Typography>
+                <Box sx={{ display: hidden ? 'block' : 'none' }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: '#9B9B9B', fontSize: '13px', fontWeight: 600 }}>
+                        ETH per H30
+                      </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: "#464646", fontSize: '13px', fontWeight: 600 }}>
+                        {
+                          toToken === 'ETH' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
+                        }
+                      </Typography>
+                    </Stack>
                   </Stack>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: "#464646", fontSize: '11px', fontWeight: 700 }}>
-                      {
-                        toToken === 'ETH' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
-                      }
-                    </Typography>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: '#9B9B9B', fontSize: '13px', fontWeight: 600 }}>
+                        H30 per ETH
+                      </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: "#464646", fontSize: '13px', fontWeight: 600 }}>
+                        {
+                          toToken === 'H30' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
+                        }
+                      </Typography>
+                    </Stack>
                   </Stack>
-                </Stack>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: '#9B9B9B', fontSize: '11px' }}>
-                      H30 per ETH
-                    </Typography>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: '#9B9B9B', fontSize: '13px', fontWeight: 600 }}>
+                        Share of Pool
+                      </Typography>
+                    </Stack>
+                    <Stack direction="row" alignItems="center" >
+                      <Typography sx={{ color: "#464646", fontSize: '13px', fontWeight: 600 }}>
+                        {InputNumber(Number(inputValue) / Number(toLiquidty)) ?? 0.00} %
+                      </Typography>
+                    </Stack>
                   </Stack>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                      {
-                        toToken === 'H30' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
-                      }
-                    </Typography>
-                  </Stack>
-                </Stack>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: '#9B9B9B', fontSize: '11px' }}>
-                      Share of Pool
-                    </Typography>
-                  </Stack>
-                  <Stack direction="row" alignItems="center" spacing={1}>
-                    <Typography sx={{ color: "#464646", fontSize: '11px', fontWeight: 700 }}>
-                      {InputNumber(Number(inputValue) / Number(toLiquidty)) ?? 0.00} %
-                    </Typography>
-                  </Stack>
-                </Stack>
+                </Box>
               </Box>
 
             </Box>
             <Box>
-              <Stack direction="row" spacing="4px" pb="10px" pt='8px' alignItems="center">
-                <InfoIcon sx={{ color: '#6f6f6f', width: '20px', height: '20px' }} />
-                <Typography sx={{ color: '#6f6f6f', fontSize: windowWeight >= 600 ? '14px' : '11px' }}>
+              <Stack direction="row" spacing="6px" pb="10px" pt='8px' alignItems="center">
+                <InfoIcon sx={{ color: '#6f6f6f', width: '22px', height: '22px' }} />
+                <Typography sx={{ color: '#6f6f6f', fontSize: '12px', fontWeight: 600 }}>
                   Tip: When you add liquidity,you will receive pool tokens representing your position.
                   These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at time.
                 </Typography>

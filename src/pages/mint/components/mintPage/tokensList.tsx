@@ -108,8 +108,8 @@ export default function TokensList({ data, inputNum, name, windowWidth }: DataPr
                               ) : null
                             }
                             <Stack direction="row" alignItems="center" spacing="4px">
-                              <TokenColorIcon name={item.symbol.split('-')[0]} size={20} />
-                              <Typography sx={{ color: '#464646', fontSize: '11px' }}>
+                              <TokenColorIcon name={item.symbol.split('-')[0]} size={22} />
+                              <Typography sx={{ color: "#000", fontSize: '11px', fontWeight: 600 }}>
                                 {item.symbol.split('-')[0]}
                               </Typography>
                             </Stack>
@@ -122,7 +122,7 @@ export default function TokensList({ data, inputNum, name, windowWidth }: DataPr
                                 </Typography>
                               ) : null
                             }
-                            <Typography sx={{ color: "#464646", fontSize: '11px', fontWeight: 700 }}>
+                            <Typography sx={{ color: "#000", fontSize: '11px', fontWeight: 600 }}>
                               {formatNumber(Number(item.balance))}
                             </Typography>
                           </Stack>
@@ -135,11 +135,8 @@ export default function TokensList({ data, inputNum, name, windowWidth }: DataPr
                               ) : null
                             }
                             <Stack direction="row" spacing="4px">
-                              <Typography sx={{ color: Number(item.balance) >= Number(Number(item.num)) * Number(inputNum) ? "#464646" : '#ee3354', fontSize: '12px', fontWeight: 700 }}>
-                                {String(formatNumber(Number(item.num) * Number(inputNum)))}
-                              </Typography>
-                              <Typography sx={{ color: Number(item.balance) >= Number(Number(item.num)) * Number(inputNum) ? "#464646" : '#ee3354', fontSize: '12px', fontWeight: 700 }}>
-                                {item.symbol.split('-')[0]}
+                              <Typography sx={{ color: Number(item.balance) >= Number(Number(item.num)) * Number(inputNum) ? "#000" : '#ee3354', fontSize: '12px', fontWeight: 600 }}>
+                                {String(formatNumber(Number(item.num) * Number(inputNum)))} {item.symbol.split('-')[0]}
                               </Typography>
 
                             </Stack>
@@ -189,8 +186,8 @@ export default function TokensList({ data, inputNum, name, windowWidth }: DataPr
                               ) : null
                             }
                             <Stack direction="row" alignItems="center" spacing="2px">
-                              <TokenColorIcon name={item.symbol.split('-')[0]} size={20} />
-                              <Typography sx={{ color: '#464646', fontSize: '10px' }}>
+                              <TokenColorIcon name={item.symbol.split('-')[0]} size={22} />
+                              <Typography sx={{ color: '#000', fontSize: '10px', fontWeight: 600 }}>
                                 {item.symbol.split('-')[0]}
                               </Typography>
                             </Stack>
@@ -203,7 +200,7 @@ export default function TokensList({ data, inputNum, name, windowWidth }: DataPr
                                 </Typography>
                               ) : null
                             }
-                            <Typography sx={{ color: "#464646", fontSize: '10px', fontWeight: 700 }}>
+                            <Typography sx={{ color: '#000', fontSize: '10px', fontWeight: 600 }}>
                               {formatNumber(Number(item.balance))}
                             </Typography>
                           </Stack>
@@ -216,11 +213,8 @@ export default function TokensList({ data, inputNum, name, windowWidth }: DataPr
                               ) : null
                             }
                             <Stack direction="row" spacing="2px">
-                              <Typography sx={{ color: Number(item.balance) >= Number(Number(item.num)) * Number(inputNum) ? "#464646" : '#ee3354', fontSize: '10px', fontWeight: 700 }}>
-                                {String(formatNumber(Number(item.num) * Number(inputNum)))}
-                              </Typography>
-                              <Typography sx={{ color: Number(item.balance) >= Number(Number(item.num)) * Number(inputNum) ? "#464646" : '#ee3354', fontSize: '10px', fontWeight: 700 }}>
-                                {item.symbol.split('-')[0]}
+                              <Typography sx={{ color: Number(item.balance) >= Number(Number(item.num)) * Number(inputNum) ? "#000" : '#ee3354', fontSize: '10px', fontWeight: 600 }}>
+                                {String(formatNumber(Number(item.num) * Number(inputNum)))} {item.symbol.split('-')[0]}
                               </Typography>
 
                             </Stack>

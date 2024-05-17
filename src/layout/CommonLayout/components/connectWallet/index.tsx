@@ -94,10 +94,10 @@ export default function ConnectWallet({ open, handleClose, windowWidth }: Props)
             </DialogContent>
           </BootstrapDialog>
         ) : (
-          <Drawer anchor='bottom' open={open} onClose={handleClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#191a1a', left: '5px', right: '5px', borderRadius: '10px 10px 0 0' } }}>
-            <Box sx={{ width: 'auto', padding: '10px 10px 20px 10px' }}>
+          <Drawer anchor='bottom' open={open} onClose={handleClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#191a1a', left: '5px', right: '5px', borderRadius: '20px 20px 0 0' } }}>
+            <Box sx={{ width: 'auto', padding: '20px 10px' }}>
               <Box sx={{ backgroundColor: '#191a1a', borderBottom: '1px solid #1e1f1f' }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" pb="10px">
+                <Stack direction="row" justifyContent="space-between" alignItems="center" p="0 10px" mb="10px">
                   <Typography sx={{ color: "#fff", fontSize: '17px', fontWeight: 700 }}>
                     Connect wallet
                   </Typography>
@@ -110,7 +110,7 @@ export default function ConnectWallet({ open, handleClose, windowWidth }: Props)
                   </IconButton>
                 </Stack>
               </Box>
-              <Box sx={{ width: '100%', backgroundColor: '#191a1a', p: '1px', pr: '10px', pl: '10px' }}>
+              <Box sx={{ width: '100%', backgroundColor: '#191a1a', p: '9px 20px' }}>
                 <WalletList handleClick={handleWalletClick} wallets={installedWallets} />
               </Box>
 

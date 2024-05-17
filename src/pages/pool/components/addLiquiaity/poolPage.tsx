@@ -6,7 +6,6 @@ import { useAccount, useSwitchChain } from 'wagmi';
 import { styled } from '@mui/material/styles';
 import { ButtonProps } from '@mui/material/Button';
 
-import { MdAdd } from "react-icons/md";
 import InputBase from '@mui/material/InputBase';
 import ShowSwap from './showSwap';
 // import { ethers } from 'ethers';
@@ -16,6 +15,7 @@ import ReviewSupply from './reviewSupply';
 import SelectAddOneToken from './select_add_token_one';
 import SelectAddTwoToken from './select_add_token_two';
 import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
+import addIcon from 'assets/images/icon/add.svg'
 
 // import Select, { components } from 'react-select'
 
@@ -434,28 +434,24 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
               <Box
                 sx={{
                   p: "10px 20px", backgroundColor: "#f6f6f6", borderRadius: "20px",
-                  width: "600px", margin: "0 auto", marginBottom: "10px", height: '88px'
+                  width: "600px", margin: "0 auto", marginBottom: "10px", position: "relative"
                 }}
               >
                 <SelectAddOneToken windowWidth={windowWeight} open={open} handleClose={handleClose} handleListClose={handleToToken} data={data} />
-                <Box sx={{ position: "relative" }}>
+                <Box>
 
-                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-72%', left: '44%', borderRadius: '10px', width: '40px', height: '40px' }}>
-                    <Box sx={{ backgroundColor: '#f6f6f6', m: '5px 4px', p: '2px 2px', borderRadius: '6px', border: 'none', textAlign: 'center', lineHeight: '26px' }}>
-                      < MdAdd color='#333' />
-                    </Box>
+                  <img src={addIcon} style={{ position: 'absolute', bottom: '-24%', left: '47%' }} />
 
-                  </Box>
 
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#979797">
                       You add
                     </Typography>
                     <Stack direction="row" spacing="12px" alignItems="center">
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                      <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#979797">
                         Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${formatNumber(Number(balance))}`}</span>
                       </Typography>
-                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onMax} color="primary">
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '13px', fontWeight: 600 }} onClick={onMax} color="primary">
                         MAX
                       </Typography>
                     </Stack>
@@ -463,24 +459,27 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
 
 
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0 0 0', height: '56px' }} justifyContent="space-between" spacing={2}>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '15px 0 15px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1} >
-                      <BootstrapInput onBlur={handleBlur} disabled={disable} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} />
+                      <BootstrapInput onBlur={handleBlur} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#000' : '#EE3354', fontSize: '32px' }} />
                     </Stack>
                     <IndexTokenButton
                       variant="text"
                       sx={{
                         borderRadius: '100px',
                         backgroundColor: '#fff',
-                        fontWeight: '500',
+                        fontWeight: 500,
                         border: 'none',
                         color: '#000',
-                        fontSize: '13px',
+                        fontSize: '14px',
+                        "&:hover": {
+                          backgroundColor: '#fff',
+                          color: '#000',
+                        }
                       }}
-                      disabled={disable}
-                      startIcon={<TokenColorIcon size={20} name={pay} />}
+                      startIcon={<TokenColorIcon size={22} name={pay} />}
                       onClick={handleClickToOpen}
-                      endIcon={<ChevronDownIcon width="13px" height="13px" cursor="pointer" color="#333" />}
+                      endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                     >
 
                       {pay}
@@ -491,44 +490,47 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
               <Box
                 sx={{
                   p: "12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
-                  width: "600px", margin: "0 auto", marginBottom: "10px", height: '88px'
+                  width: "600px", margin: "0 auto", marginBottom: "10px"
                 }}
               >
                 <SelectAddTwoToken windowWidth={windowWeight} open={reOpen} handleClose={handleReClose} handleListClose={handleFromToken} data={data} />
-                <Box sx={{ position: "relative" }}>
-                  <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#979797">
-                    You add
-                  </Typography>
-                  <Box sx={{ position: 'absolute', top: 0, right: '2px' }}>
-                    <Stack direction="row" spacing={1}>
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                <Box >
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#979797">
+                      You add
+                    </Typography>
+                    <Stack direction="row" spacing="12px" alignItems="center">
+                      <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#979797">
                         Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${formatNumber(Number(reBalance))}`}</span>
                       </Typography>
-                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onReMax} color="primary">
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '13px', fontWeight: 600 }} onClick={onReMax} color="primary">
                         MAX
                       </Typography>
                     </Stack>
-                  </Box>
+                  </Stack>
 
 
-                  <Stack alignItems="center" direction="row" sx={{ padding: '20px 0 0 0', height: '56px' }} justifyContent="space-between" spacing={2}>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '15px 0 15px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
-                      <BootstrapInput disabled={disable} onBlur={handleReBlur} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', color: Number(reBalance) >= Number(inputReValue) ? '#6f6f6f' : '#EE3354', fontSize: '26px' }} placeholder="0" />
+                      <BootstrapInput onBlur={handleReBlur} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', color: Number(reBalance) >= Number(inputReValue) ? '#000' : '#EE3354', fontSize: '32px' }} placeholder="0" />
                     </Stack>
                     <IndexTokenButton
                       variant="text"
                       sx={{
                         borderRadius: '100px',
                         backgroundColor: '#fff',
-                        fontWeight: 500,
                         border: 'none',
                         color: '#000',
-                        fontSize: '13px',
+                        fontWeight: 600,
+                        fontSize: '14px',
+                        "&:hover": {
+                          backgroundColor: '#fff',
+                          color: '#000',
+                        }
                       }}
                       onClick={handleClickFromOpen}
-                      disabled={disable}
-                      startIcon={<TokenColorIcon size={20} name={receive} />}
-                      endIcon={<ChevronDownIcon height="13px" width="13px" cursor="pointer" color="#333" />}
+                      startIcon={<TokenColorIcon size={22} name={receive} />}
+                      endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                     >
                       {receive}
                     </IndexTokenButton>
@@ -550,7 +552,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                   <>
                     {
                       inputToValue === '' || inputReValue === '' ? (
-                        <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
+                        <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
                           <SelectButton >Enter an Amount</SelectButton>
                         </Box>
 
@@ -558,12 +560,12 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                         <>
                           {
                             Number(balance) >= Number(inputToValue) && Number(reBalance) >= Number(inputReValue) ? (
-                              <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
+                              <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
                                 <EnterButton onClick={handleSwapOpen}>Supply</EnterButton>
                               </Box>
 
                             ) : (
-                              <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
+                              <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
                                 <SelectButton >Insufficient Balance</SelectButton>
                               </Box>
 
@@ -584,13 +586,13 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                     {
                       chain?.id === undefined ? (
                         <>
-                          <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
+                          <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
                             <ConnectButton onClick={onChangeNetwork} >Switch to Arbitrum Sepolia</ConnectButton>
                           </Box>
                         </>
                       ) : (
                         <>
-                          <Box sx={{ width: "600px", margin: '0 auto', mt: 1 }}>
+                          <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
                             <ConnectWallet windowWidth={windowWeight} open={openWallet} handleClose={onClose} />
                             <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
                           </Box>
@@ -610,28 +612,23 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
               <Box
                 sx={{
                   p: "12px 12px", backgroundColor: "#f6f6f6", borderRadius: "20px",
-                  width: "100%", marginBottom: "10px"
+                  width: "100%", marginBottom: "10px", position: "relative"
                 }}
               >
                 <SelectAddOneToken windowWidth={windowWeight} open={open} handleClose={handleClose} handleListClose={handleToToken} data={data} />
-                <Box sx={{ position: "relative" }}>
+                <Box>
 
-                  <Box sx={{ backgroundColor: '#fff', position: 'absolute', bottom: '-47%', left: '44%', borderRadius: '10px' }}>
-                    <Box sx={{ backgroundColor: '#f6f6f6', m: '3px 5px', p: '4px 10px', borderRadius: '6px', border: 'none' }}>
-                      < MdAdd color='#333' style={{ margin: '-2px' }} />
-                    </Box>
-
-                  </Box>
+                  <img src={addIcon} style={{ position: 'absolute', bottom: '-24%', left: '41%' }} />
 
                   <Stack direction="row" justifyContent="space-between" alignItems="center" >
-                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#979797">
                       You add
                     </Typography>
                     <Stack direction="row" spacing="12px" alignItems="center">
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                      <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#979797">
                         Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${formatNumber(Number(balance))}`}</span>
                       </Typography>
-                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onMax} color="primary">
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '12px', fontWeight: 600 }} onClick={onMax} color="primary">
                         MAX
                       </Typography>
                     </Stack>
@@ -639,7 +636,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
 
 
-                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0px 0', height: '46px' }} justifyContent="space-between" spacing={2}>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0px 0', }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1} >
                       <BootstrapInput onBlur={handleBlur} disabled={disable} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#000' : '#EE3354', fontSize: '26px' }} />
                     </Stack>
@@ -648,15 +645,19 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                       sx={{
                         borderRadius: '100px',
                         backgroundColor: '#fff',
-                        fontWeight: '500',
                         border: 'none',
                         color: '#000',
-                        fontSize: '13px',
+                        fontWeight: 600,
+                        fontSize: '14px',
+                        "&:hover": {
+                          backgroundColor: '#fff',
+                          color: '#000',
+                        }
                       }}
                       disabled={disable}
-                      startIcon={<TokenColorIcon size={20} name={pay} />}
+                      startIcon={<TokenColorIcon size={22} name={pay} />}
                       onClick={handleClickToOpen}
-                      endIcon={<ChevronDownIcon width="13px" height="13px" cursor="pointer" color="#333" />}
+                      endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                     >
 
                       {pay}
@@ -674,14 +675,14 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                 <Box>
 
                   <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#979797">
                       You add
                     </Typography>
                     <Stack direction="row" alignItems="center" spacing="12px">
-                      <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#979797">
+                      <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#979797">
                         Balance: <span style={{ color: '#000', fontWeight: 600 }}>{`${formatNumber(Number(reBalance))}`}</span>
                       </Typography>
-                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '11px', fontWeight: 600 }} onClick={onReMax} color="primary">
+                      <Typography component={Button} variant='body1' sx={{ textDecoration: "none", minWidth: 0, p: 0, fontSize: '12px', fontWeight: 600 }} onClick={onReMax} color="primary">
                         MAX
                       </Typography>
 
@@ -689,7 +690,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                   </Stack>
 
 
-                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0 0', height: '46px' }} justifyContent="space-between" spacing={2}>
+                  <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 10px 0' }} justifyContent="space-between" spacing={2}>
                     <Stack flex={1}>
                       <BootstrapInput onBlur={handleReBlur} disabled={disable} value={inputReShowValue} onChange={InputFromChange} sx={{ width: '100%', color: Number(reBalance) >= Number(inputReValue) ? '#000' : '#EE3354', fontSize: '26px' }} placeholder="0" />
                     </Stack>
@@ -698,15 +699,19 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                       sx={{
                         borderRadius: '100px',
                         backgroundColor: '#fff',
-                        fontWeight: 500,
                         border: 'none',
                         color: '#000',
-                        fontSize: '13px',
+                        fontWeight: 600,
+                        fontSize: '14px',
+                        "&:hover": {
+                          backgroundColor: '#fff',
+                          color: '#000',
+                        }
                       }}
                       disabled={disable}
                       onClick={handleClickFromOpen}
-                      startIcon={<TokenColorIcon size={20} name={receive} />}
-                      endIcon={<ChevronDownIcon height="13px" width="13px" cursor="pointer" color="#333" />}
+                      startIcon={<TokenColorIcon size={22} name={receive} />}
+                      endIcon={<ChevronDownIcon style={{ fontSize: "1.37rem", cursor: "pointer", fontWeight: 700 }} />}
                     >
                       {receive}
                     </IndexTokenButton>
@@ -724,7 +729,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                       p: '10px 12px', backgroundColor: "#fff",
                       width: "100%", marginBottom: "10px"
                     }}
-                  ><ShowSwap inputValue={inputToValue} toLiquidty={data.filter(item => item.symbol === pay)[0].proportion} fromLiquidty={data.filter(item => item.symbol === receive)[0].proportion} windowWeight={windowWeight} toToken={pay} fromToken={receive} /></Box>
+                  ><ShowSwap inputValue={inputToValue} toLiquidty={data?.filter(item => item.symbol === pay)[0]?.proportion} fromLiquidty={data?.filter(item => item.symbol === receive)[0]?.proportion} windowWeight={windowWeight} toToken={pay} fromToken={receive} /></Box>
 
                 )
               }

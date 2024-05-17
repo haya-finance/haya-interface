@@ -12,7 +12,7 @@ import tokenAbi from 'abi/token.json'
 import { H30_Address, sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
 import { ethers } from 'ethers';
 import { PiWarningBold } from "react-icons/pi";
-import Setting from 'assets/images/icon/Setting.svg'
+import Setting from 'assets/images/icon/Setting.svg';
 
 // const web3 = new Web3(sepolia_rpc)
 const provider = new ethers.JsonRpcProvider(sepolia_rpc)
@@ -29,7 +29,9 @@ type TokenListType = {
   balance: string;
   network: string;
   decimasl: string;
-  allowance: string
+  allowance: string;
+  contract?: string;
+  price?: string;
 }
 
 export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
@@ -47,7 +49,9 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       balance: '0',
       network: chain?.name ?? 'Arbitrum Sepolia',
       decimasl: '',
-      allowance: ''
+      allowance: '',
+      contract: '0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165',
+      price: '0.00'
     },
     {
       symbol: 'H20',
@@ -55,7 +59,9 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       balance: '0',
       network: chain?.name ?? 'Arbitrum Sepolia',
       decimasl: '',
-      allowance: ''
+      allowance: '',
+      price: '0.00',
+      contract: 'H20',
 
     },
     {
@@ -64,7 +70,10 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       balance: '0',
       network: chain?.name ?? 'Arbitrum Sepolia',
       decimasl: '',
-      allowance: ''
+      allowance: '',
+      contract: '0x80EDee6f667eCc9f63a0a6f55578F870651f06A4',
+      price: '0.00'
+
 
     },
     {
@@ -73,7 +82,10 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       balance: '0',
       network: chain?.name ?? 'Arbitrum Sepolia',
       decimasl: '',
-      allowance: ''
+      allowance: '',
+      contract: '0x0153002d20B96532C639313c2d54c3dA09109309',
+      price: '0.00'
+
     },
     {
       symbol: 'ETH',
@@ -81,9 +93,15 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       balance: '0',
       network: chain?.name ?? 'Arbitrum Sepolia',
       decimasl: '',
-      allowance: ''
+      allowance: '',
+      contract: '0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165',
+      price: '0.00'
+
     }
   ])
+
+
+
 
 
 

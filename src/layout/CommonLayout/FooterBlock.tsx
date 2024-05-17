@@ -92,8 +92,8 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
               </Box>
             </Stack>
 
-            <Box sx={{ height: '100px' }}>
-              <Typography variant="body1" textAlign="center" sx={{ color: '#9B9B9B', lineHeight: '100px' }}  >
+            <Box sx={{ pb: '30px' }}>
+              <Typography variant="body1" textAlign="center" sx={{ color: '#9B9B9B' }}  >
                 © 2024 Haya. All rights reserved
               </Typography>
             </Box>

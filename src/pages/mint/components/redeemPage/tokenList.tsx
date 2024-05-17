@@ -69,9 +69,9 @@ export default function RedeemTokensList({ data, inputNum, windowWidth }: DataPr
                                 </Stack>
                               ) : null
                             }
-                            <Stack direction="row" alignItems="center" spacing="4px">
-                              <TokenColorIcon name={item.symbol.split('-')[0]} size={20} />
-                              <Typography sx={{ color: '#464646', fontSize: '11px' }}>
+                            <Stack direction="row" alignItems="center" spacing="6px">
+                              <TokenColorIcon name={item.symbol.split('-')[0]} size={22} />
+                              <Typography sx={{ color: '#000', fontSize: '14px', fontWeight: 600 }}>
                                 {item.symbol.split('-')[0]}
                               </Typography>
                             </Stack>
@@ -85,11 +85,8 @@ export default function RedeemTokensList({ data, inputNum, windowWidth }: DataPr
                               ) : null
                             }
                             <Stack direction="row" spacing="4px">
-                              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                                {String(formatNumber(Number(item.num) * Number(inputNum)))}
-                              </Typography>
-                              <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 700 }}>
-                                {item.symbol.split('-')[0]}
+                              <Typography sx={{ color: '#000', fontSize: '14px', fontWeight: 600 }}>
+                                {String(formatNumber(Number(item.num) * Number(inputNum)))} {item.symbol.split('-')[0]}
                               </Typography>
 
                             </Stack>
@@ -115,7 +112,7 @@ export default function RedeemTokensList({ data, inputNum, windowWidth }: DataPr
         ) : (
           <Box sx={{ width: '100%', p: "2px", display: inputNum !== '' && inputNum !== "0" ? 'block' : 'none' }}>
             <Box>
-              <Typography sx={{ color: '#9b9b9b', fontSize: '11px' }}>
+              <Typography sx={{ color: '#9b9b9b', fontSize: '11px', fontWeight: 600 }}>
                 You receive the <span style={{ color: '#1AAE70' }}>{data.length}</span>  constituent tokens in set ratios when redeeming one H20 token.
               </Typography>
               <Box>
@@ -138,14 +135,14 @@ export default function RedeemTokensList({ data, inputNum, windowWidth }: DataPr
                                 </Stack>
                               ) : null
                             }
-                            <Stack direction="row" alignItems="center" spacing="2px">
-                              <TokenColorIcon name={item.symbol.split('-')[0]} size={20} />
-                              <Typography sx={{ color: '#464646', fontSize: '10px' }}>
+                            <Stack direction="row" alignItems="center" spacing="6px">
+                              <TokenColorIcon name={item.symbol.split('-')[0]} size={22} />
+                              <Typography sx={{ color: '#000', fontSize: '14px', fontWeight: 600 }}>
                                 {item.symbol.split('-')[0]}
                               </Typography>
                             </Stack>
                           </Stack>
-                          <Stack alignItems="end" width="40%">
+                          <Stack alignItems="end" width="60%">
                             {
                               index == 0 ? (
                                 <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600, pb: "6px" }} color="#979797">
@@ -154,11 +151,8 @@ export default function RedeemTokensList({ data, inputNum, windowWidth }: DataPr
                               ) : null
                             }
                             <Stack direction="row" spacing="2px">
-                              <Typography sx={{ color: "#464646", fontSize: '10px', fontWeight: 700 }}>
-                                {String(formatNumber(Number(item.num) * Number(inputNum)))}
-                              </Typography>
-                              <Typography sx={{ color: "#464646", fontSize: '10px', fontWeight: 700 }}>
-                                {item.symbol.split('-')[0]}
+                              <Typography sx={{ color: '#000', fontSize: '14px', fontWeight: 600 }}>
+                                {String(formatNumber(Number(item.num) * Number(inputNum)))} {item.symbol.split('-')[0]}
                               </Typography>
 
                             </Stack>

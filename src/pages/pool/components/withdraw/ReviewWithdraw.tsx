@@ -76,17 +76,16 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '.MuiDialog-paper': {
     width: '600px',
     borderRadius: '20px',
+    padding: '20px 20px',
 
 
   },
-
-
 
   '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
+    padding: 0,
   },
   '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
+    padding: 0,
   },
   '& .customized-dialog-title': {
     borderBottom: 0
@@ -153,7 +152,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
     },
   }));
 
-  const [hidder, setHidder] = useState(false)
+  const [hidder, setHidder] = useState(true)
 
   const onShowMore = () => {
     setHidder(!hidder)
@@ -165,7 +164,8 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
 
   const notificonfig = {
-    top: windowHeight / 2 + 100
+    top: windowHeight * 0.4,
+
   }
 
 
@@ -174,28 +174,48 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
   const openNotification = (placement: NotificationPlacement) => {
     const key = `open${Date.now()}`;
     const btn = (
-      <Box>
-        <Stack width="100%" alignItems="center" textAlign="center" padding="12px 0" spacing="6px">
-          <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
-          <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
-            The transaction submission was either cancelled or failed.
-          </Typography>
-        </Stack>
-        <OkButton onClick={() => api.destroy()}>
-          OK
-        </OkButton>
+      <Box sx={{ marginTop: '-8px' }}>
+        {
+          windowWidth >= 600 ? (
+            <>
+              <Stack width="100%" alignItems="center" textAlign="center" padding="20px 0" spacing="10px">
+                <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
+                <Typography variant='body1' sx={{ fontSize: '18px', fontWeight: 600, lineHeight: '24px' }} color="#000">
+                  The transaction submission was either cancelled or failed.
+                </Typography>
+              </Stack>
+              <OkButton onClick={() => api.destroy()}>
+                OK
+              </OkButton>
+            </>
+          ) : (
+            <>
+              <Stack direction="row" width="100%" alignItems="center" textAlign="center" spacing="10px">
+                <WarningIcon style={{ color: '#9b9b9b', width: '24px', height: '24px' }} fontSize="large" />
+                <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
+                  Coming soon
+                </Typography>
+              </Stack>
+            </>
+          )
+        }
       </Box>
     );
+
+    const mess = (
+      <Box sx={{ m: 0, p: 0, '& .ant-notification-notice': { "& .ant-notification-notice-message": { mb: 0 } } }}></Box>
+    )
 
 
 
     api.open({
-      message: '',
+      message: mess,
       description: btn,
+      closeIcon: windowWidth >= 600 ? true : false,
       className: 'custom-class',
       style: {
-        width: '280px',
-        padding: '20px 24px',
+        width: windowWidth >= 600 ? '400px' : '160px',
+        padding: '20px 20px',
         borderRadius: '20px'
       },
       key,
@@ -312,11 +332,6 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
               onClose={handleSwapClose}
               aria-labelledby="customized-dialog-title"
               open={open}
-              sx={{
-                '.MuiDialog-paper': {
-                  width: '600px', borderRadius: '20px', padding: '20px 20px'
-                }
-              }}
             >
               <Stack direction="row" justifyContent="space-between" alignItems="center" p="0 10px" marginBottom="10px">
                 <Typography sx={{ color: "#000", fontSize: '17px', fontWeight: 700 }}>
@@ -332,7 +347,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
               </Stack>
               <DialogContent >
 
-                <Box sx={{ marginBottom: '10px' }}>
+                <Box sx={{ marginBottom: '10px', padding: '0 20px' }}>
                   <Box position="relative">
                     <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
                       You withdraw
@@ -350,13 +365,13 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
                 </Box>
 
 
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ padding: '0 20px' }}>
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
                   <ArrowDownwardIcon sx={{ color: '#1aae70', padding: '0 1px' }} />
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
                 </Stack>
 
-                <Box sx={{ marginBottom: '10px', marginTop: '10px' }}>
+                <Box sx={{ marginBottom: '10px', marginTop: '10px', padding: '0 20px' }}>
                   <Stack alignItems="start" spacing="6px" width="100%" >
                     <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
                       You receive
@@ -369,7 +384,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
                       </Typography>
 
-                      <TokenColorIcon name="ETH" size={40} />
+                      <TokenColorIcon name="ETH" size={36} />
 
 
 
@@ -380,7 +395,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
                         {ValueNumber(balance !== '0' && data[0].H20Amount !== '0' && data[0]?.liq !== "0" ? Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.H20Amount) * Number(num / 100)) : 0)} H20
                       </Typography>
 
-                      <TokenColorIcon name="H20" size={40} />
+                      <TokenColorIcon name="H20" size={36} />
 
 
 
@@ -392,7 +407,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
 
 
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Stack direction="row" alignItems="center" justifyContent="space-between" padding='0 20px'>
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
 
                   <Box component="button" sx={{ backgroundColor: 'transparent', padding: 0, border: 0, cursor: 'pointer' }} onClick={onShowMore}>
@@ -409,13 +424,18 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                 </Stack>
-                <Box sx={{ marginTop: '5px', marginBottom: '5px' }}>
+                <Box sx={{ marginTop: '5px', marginBottom: '20px', padding: '0 20px' }}>
                   <Stack spacing={1}>
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
+                      <Typography sx={{ color: '#6F6F6F', }}>
                         Contract
                       </Typography>
-                      <Typography sx={{ color: '#1aae70', }} component={Button} onClick={gotoContract} variant='body1' >
+                      <Typography sx={{
+                        color: '#1aae70', padding: 0, '&:hover': {
+                          color: "#19A56A",
+                          backgroundColor: 'transparent'
+                        }
+                      }} component={Button} onClick={gotoContract} variant='body1' >
                         {UniswapSepoliaRouterContract.slice(0, 9)}
                       </Typography>
 
@@ -432,37 +452,8 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
                     </Stack>
 
                   </Stack>
-                  <Stack spacing={1} sx={{ display: !hidder ? 'none' : 'block', mt: '8px' }}>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
-                      </Typography>
 
-                    </Stack>
 
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
-                      </Typography>
-
-                    </Stack>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
-                      </Typography>
-
-                    </Stack>
-
-                  </Stack>
                 </Box>
 
 
@@ -476,11 +467,11 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
           </Box>
         ) : (
-          <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff', left: '5px', right: '5px', borderRadius: '10px 10px 0 0' } }}>
+          <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff', left: '5px', right: '5px', borderRadius: '20px 20px 0 0' } }}>
             <Box sx={{ width: 'auto', padding: '20px 10px' }}>
               <Box sx={{ width: '100%' }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" p="0 10px" marginBottom="10px">
-                  <Typography sx={{ color: "#000", fontSize: '17px', fontWeight: 700 }}>
+                  <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
                     Review Withdraw
                   </Typography>
                   <IconButton
@@ -495,7 +486,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
 
                   <Stack alignItems="start" spacing="6px" padding="0px 12px">
-                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
                       You withdraw
                     </Typography>
 
@@ -521,7 +512,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
                 <Box >
                   <Stack alignItems="start" spacing="6px" width='100%' padding="0px 12px">
-                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
                       You receive
                     </Typography>
 
@@ -532,7 +523,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
                         {ValueNumber(balance !== '0' && data[0].ETHAmount !== '0' && data[0]?.liq !== "0" ? Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.ETHAmount) * Number(num / 100)) : 0)}ETH
                       </Typography>
 
-                      <TokenColorIcon name="ETH" size={30} />
+                      <TokenColorIcon name="ETH" size={36} />
 
 
 
@@ -543,7 +534,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
                         {ValueNumber(balance !== '0' && data[0].H20Amount !== '0' && data[0]?.liq !== "0" ? Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.H20Amount) * Number(num / 100)) : 0)} H20
                       </Typography>
 
-                      <TokenColorIcon name="H20" size={30} />
+                      <TokenColorIcon name="H20" size={36} />
 
 
 
@@ -571,7 +562,12 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
                       <Typography sx={{ color: '#6F6F6F' }}>
                         Contract
                       </Typography>
-                      <Typography sx={{ color: '#1aae70', }} component={Button} onClick={gotoContract} variant='body1' >
+                      <Typography sx={{
+                        color: '#1aae70', padding: 0, '&:hover': {
+                          color: "#19A56A",
+                          backgroundColor: 'transparent'
+                        }
+                      }} component={Button} onClick={gotoContract} variant='body1' >
                         {UniswapSepoliaRouterContract.slice(0, 9)}
                       </Typography>
 
@@ -588,37 +584,8 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
                     </Stack>
 
                   </Stack>
-                  <Stack spacing={1} sx={{ display: !hidder ? 'none' : 'block', mt: '10px' }}>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
-                      </Typography>
 
-                    </Stack>
 
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
-                      </Typography>
-
-                    </Stack>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
-                      </Typography>
-
-                    </Stack>
-
-                  </Stack>
                 </Box>
 
 

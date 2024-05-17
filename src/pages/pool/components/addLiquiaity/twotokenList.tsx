@@ -7,7 +7,8 @@ import TokenColorIcon from 'assets/tokens';
 
 interface Props {
   onClose: (value: string) => void;
-  data: any[]
+  data: any[];
+  windowWidth: number
 }
 
 function formatNumber(num: number) {
@@ -34,7 +35,7 @@ function formatNumber(num: number) {
   }
 }
 
-export default function TwoTokenList({ onClose, data }: Props) {
+export default function TwoTokenList({ onClose, data, windowWidth }: Props) {
 
 
 
@@ -47,19 +48,19 @@ export default function TwoTokenList({ onClose, data }: Props) {
   return (
     <Box sx={{ width: '100%' }}>
       <nav aria-label="main mailbox folders">
-        <List>
+        <List sx={{ p: 0 }}>
           {data?.map((item, index) => {
             return (
-              <Box key={index} component="button" sx={{ cursor: 'pointer', width: '100%', backgroundColor: 'transparent', border: 0, padding: "10px 10px 10px 4px", "&:hover": { backgroundColor: '#f6f6f6', borderRadius: '10px' }, "&:focus": { backgroundColor: '#f6f6f6', borderRadius: '10px' } }} onClick={() => handleListClick(item.symbol)} >
+              <Box key={index} component="button" sx={{ cursor: 'pointer', width: '100%', backgroundColor: 'transparent', border: 0, padding: windowWidth >= 600 ? "16px 20px" : "12px 12px", "&:hover": { backgroundColor: '#f6f6f6', borderRadius: '20px' }, "&:focus": { backgroundColor: '#f6f6f6', borderRadius: '20px' } }} onClick={() => handleListClick(item.symbol)} >
                 <Stack direction="row" alignItems="center" justifyContent="space-between" width="100%">
                   <Stack direction="row" alignItems="center" spacing="6px">
-                    <TokenColorIcon name={item.symbol} size={25} />
+                    <TokenColorIcon name={item.symbol} size={36} />
                     <Stack>
-                      <Typography variant="inherit" sx={{ color: '#000', fontSize: '13px', fontWeight: 400, textAlign: 'start' }}>{item.symbol}</Typography>
-                      <Typography variant="inherit" sx={{ color: '#8c8c8c', fontSize: '13px', fontWeight: 400, textAlign: 'start' }}>{item.network}</Typography>
+                      <Typography variant="inherit" sx={{ color: '#000', fontSize: '13px', fontWeight: 500, textAlign: 'start' }}>{item.symbol}</Typography>
+                      <Typography variant="inherit" sx={{ color: '#8c8c8c', fontSize: '13px', fontWeight: 500, textAlign: 'start' }}>{item.network}</Typography>
                     </Stack>
                   </Stack>
-                  <Typography variant="inherit">{formatNumber(Number(item.balance))}</Typography>
+                  <Typography variant="inherit" sx={{ color: '#000', fontSize: '16px', fontWeight: 500 }}>{formatNumber(Number(item.balance))}</Typography>
 
                 </Stack>
               </Box>

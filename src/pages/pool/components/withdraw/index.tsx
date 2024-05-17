@@ -476,7 +476,7 @@ export default function WithdrawPoolPage() {
 
 
                   </Box>
-                  <Box sx={{ padding: '7px 16px', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }}>
+                  <Box sx={{ padding: '7px 16px', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '10px' }}>
                     <PrettoSlider
                       // valueLabelDisplay="auto"
                       onChange={valuetext}
@@ -486,7 +486,7 @@ export default function WithdrawPoolPage() {
                       marks={marks}
                     />
                   </Box>
-                  <Box sx={{ padding: '12px 20px', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '20px' }}>
+                  <Box sx={{ padding: '12px 20px', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '10px' }}>
                     <Typography sx={{ color: "#9B9B9B", fontSize: '12px', textAlign: 'start', fontWeight: 500, marginBottom: '10px' }}>
                       You receive
                     </Typography>
@@ -588,8 +588,8 @@ export default function WithdrawPoolPage() {
                       marks={marks}
                     />
                   </Box>
-                  <Box sx={{ padding: '12px 12px', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '10px' }}>
-                    <Typography sx={{ color: "#9B9B9B", fontSize: '12px', textAlign: 'start', fontWeight: 500, marginBottom: '10px' }}>
+                  <Box sx={{ padding: '12px 12px', width: '100%', backgroundColor: 'transparent', border: 'none', marginBottom: '5px' }}>
+                    <Typography sx={{ color: "#9B9B9B", fontSize: '12px', textAlign: 'start', fontWeight: 500, marginBottom: '5px' }}>
                       You receive
                     </Typography>
                     <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">

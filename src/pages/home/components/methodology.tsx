@@ -195,9 +195,9 @@ const Methodology = ({ windowWidth }: TypeProps) => {
                           {
                             Number(item.key) <= 5 ? (
                               <Stack direction="row" justifyContent="space-between">
-                                <Stack direction="row" spacing="10px">
-                                  <TokenColorIcon name={item.name} size={20} />
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                <Stack direction="row" spacing="10px" alignItems="center">
+                                  <TokenColorIcon name={item.name} size={32} />
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '15px', fontWeight: 600 }}  >
                                     {item.name}
                                   </Typography>
 
@@ -206,7 +206,7 @@ const Methodology = ({ windowWidth }: TypeProps) => {
                                   <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
 
                                   </Box>
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}  >
                                     {item.num}
                                   </Typography>
 
@@ -232,18 +232,18 @@ const Methodology = ({ windowWidth }: TypeProps) => {
                           {
                             Number(item.key) > 5 && Number(item.key) <= 10 ? (
                               <Stack direction="row" justifyContent="space-between">
-                                <Stack direction="row" spacing="10px">
-                                  <TokenColorIcon name={item.name} size={20} />
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                <Stack direction="row" spacing="10px" alignItems="center">
+                                  <TokenColorIcon name={item.name} size={32} />
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '15px', fontWeight: 600 }}  >
                                     {item.name}
                                   </Typography>
 
                                 </Stack>
-                                <Stack direction="row" spacing="6px">
+                                <Stack direction="row" spacing="6px" alignItems="center">
                                   <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
 
                                   </Box>
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}  >
                                     {item.num}
                                   </Typography>
 
@@ -269,18 +269,18 @@ const Methodology = ({ windowWidth }: TypeProps) => {
                           {
                             Number(item.key) > 10 && Number(item.key) <= 15 ? (
                               <Stack direction="row" justifyContent="space-between">
-                                <Stack direction="row" spacing="10px">
-                                  <TokenColorIcon name={item.name} size={20} />
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                <Stack direction="row" spacing="10px" alignItems="center">
+                                  <TokenColorIcon name={item.name} size={32} />
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '15px', fontWeight: 600 }}  >
                                     {item.name}
                                   </Typography>
 
                                 </Stack>
-                                <Stack direction="row" spacing="6px">
+                                <Stack direction="row" spacing="6px" alignItems="center">
                                   <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
 
                                   </Box>
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}  >
                                     {item.num}
                                   </Typography>
 
@@ -306,18 +306,18 @@ const Methodology = ({ windowWidth }: TypeProps) => {
                           {
                             Number(item.key) > 15 && Number(item.key) <= 20 ? (
                               <Stack direction="row" justifyContent="space-between">
-                                <Stack direction="row" spacing="10px">
-                                  <TokenColorIcon name={item.name} size={20} />
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                <Stack direction="row" spacing="10px" alignItems="center">
+                                  <TokenColorIcon name={item.name} size={32} />
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '15px', fontWeight: 600 }}  >
                                     {item.name}
                                   </Typography>
 
                                 </Stack>
-                                <Stack direction="row" spacing="6px">
+                                <Stack direction="row" spacing="6px" alignItems="center">
                                   <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
 
                                   </Box>
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}  >
                                     {item.num}
                                   </Typography>
 
@@ -380,9 +380,9 @@ const Methodology = ({ windowWidth }: TypeProps) => {
                           {
                             Number(item.key) <= 5 ? (
                               <Stack direction="row" justifyContent="space-between">
-                                <Stack direction="row" spacing="10px">
-                                  <TokenColorIcon name={item.name} size={20} />
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                <Stack direction="row" spacing="10px" alignItems="center">
+                                  <TokenColorIcon name={item.name} size={32} />
+                                  <Typography variant="body1" textAlign="center" sx={{ color: '#000', fontSize: '15px', fontWeight: 600 }}  >
                                     {item.name}
                                   </Typography>
 
@@ -391,7 +391,7 @@ const Methodology = ({ windowWidth }: TypeProps) => {
                                   <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
 
                                   </Box>
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                  <Typography variant="body1" textAlign="center" sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}  >
                                     {item.num}
                                   </Typography>
 
@@ -417,18 +417,18 @@ const Methodology = ({ windowWidth }: TypeProps) => {
                           {
                             Number(item.key) > 5 && Number(item.key) <= 10 ? (
                               <Stack direction="row" justifyContent="space-between">
-                                <Stack direction="row" spacing="10px">
-                                  <TokenColorIcon name={item.name} size={20} />
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                <Stack direction="row" spacing="10px" alignItems="center">
+                                  <TokenColorIcon name={item.name} size={32} />
+                                  <Typography variant="body1" textAlign="center" sx={{ color: '#000', fontSize: '15px', fontWeight: 600 }}  >
                                     {item.name}
                                   </Typography>
 
                                 </Stack>
-                                <Stack direction="row" spacing="6px">
+                                <Stack direction="row" spacing="6px" alignItems="center">
                                   <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
 
                                   </Box>
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                  <Typography variant="body1" textAlign="center" sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}  >
                                     {item.num}
                                   </Typography>
 
@@ -461,18 +461,18 @@ const Methodology = ({ windowWidth }: TypeProps) => {
                           {
                             Number(item.key) > 10 && Number(item.key) <= 15 ? (
                               <Stack direction="row" justifyContent="space-between">
-                                <Stack direction="row" spacing="10px">
-                                  <TokenColorIcon name={item.name} size={20} />
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                <Stack direction="row" spacing="10px" alignItems="center">
+                                  <TokenColorIcon name={item.name} size={32} />
+                                  <Typography variant="body1" textAlign="center" sx={{ color: '#000', fontSize: '15px', fontWeight: 600 }}  >
                                     {item.name}
                                   </Typography>
 
                                 </Stack>
-                                <Stack direction="row" spacing="6px">
+                                <Stack direction="row" spacing="6px" alignItems="center">
                                   <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
 
                                   </Box>
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                  <Typography variant="body1" textAlign="center" sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}  >
                                     {item.num}
                                   </Typography>
 
@@ -498,18 +498,18 @@ const Methodology = ({ windowWidth }: TypeProps) => {
                           {
                             Number(item.key) > 15 && Number(item.key) <= 20 ? (
                               <Stack direction="row" justifyContent="space-between">
-                                <Stack direction="row" spacing="10px">
-                                  <TokenColorIcon name={item.name} size={20} />
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#000', fontSize: '12px' }}  >
+                                <Stack direction="row" spacing="10px" alignItems="center">
+                                  <TokenColorIcon name={item.name} size={32} />
+                                  <Typography variant="body1" textAlign="center" sx={{ color: '#000', fontSize: '15px', fontWeight: 600 }}  >
                                     {item.name}
                                   </Typography>
 
                                 </Stack>
-                                <Stack direction="row" spacing="6px">
+                                <Stack direction="row" spacing="6px" alignItems="center">
                                   <Box sx={{ width: '12px', height: '12px', backgroundColor: `${item.color}` }}>
 
                                   </Box>
-                                  <Typography variant="body1" textAlign="start" sx={{ color: '#9B9B9B', fontSize: '12px' }}  >
+                                  <Typography variant="body1" textAlign="center" sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}  >
                                     {item.num}
                                   </Typography>
 

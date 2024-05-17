@@ -2,14 +2,12 @@
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import { Avatar, AvatarGroup, Box, Drawer, Stack } from '@mui/material';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { Box, Drawer, Stack } from '@mui/material';
 import TokenColorIcon from 'assets/tokens';
 import { ButtonProps } from '@mui/material/Button';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -28,8 +26,8 @@ import swapabi from 'abi/swap.json'
 import { notification } from 'antd';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import { WarningIcon } from '@chakra-ui/icons';
+import ETHH20 from 'assets/images/token/H20_ETH.svg'
 
-const avatarImage = require.context('assets/images/token', true);
 
 
 
@@ -70,15 +68,16 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '.MuiDialog-paper': {
     width: '600px',
     borderRadius: '20px',
+    padding: '20px 20px',
 
 
   },
 
   '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
+    padding: 0,
   },
   '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
+    padding: 0,
   },
   '& .customized-dialog-title': {
     borderBottom: 0
@@ -89,6 +88,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
   color: '#1AAE70',
   boxShadow: 'none',
+  "&::after": { boxShadow: 'none' },
   '&:hover': {
     backgroundColor: "#fff",
     color: '#1aae70',
@@ -172,7 +172,8 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
 
   const notificonfig = {
-    top: windowHeight / 2 + 100
+    top: windowHeight * 0.4,
+
   }
 
 
@@ -181,28 +182,48 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
   const openNotification = (placement: NotificationPlacement) => {
     const key = `open${Date.now()}`;
     const btn = (
-      <Box>
-        <Stack width="100%" alignItems="center" textAlign="center" padding="12px 0" spacing="6px">
-          <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
-          <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
-            The transaction submission was either cancelled or failed.
-          </Typography>
-        </Stack>
-        <OkButton onClick={() => api.destroy()}>
-          OK
-        </OkButton>
+      <Box sx={{ marginTop: '-8px' }}>
+        {
+          windowWidth >= 600 ? (
+            <>
+              <Stack width="100%" alignItems="center" textAlign="center" padding="20px 0" spacing="10px">
+                <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
+                <Typography variant='body1' sx={{ fontSize: '18px', fontWeight: 600, lineHeight: '24px' }} color="#000">
+                  The transaction submission was either cancelled or failed.
+                </Typography>
+              </Stack>
+              <OkButton onClick={() => api.destroy()}>
+                OK
+              </OkButton>
+            </>
+          ) : (
+            <>
+              <Stack direction="row" width="100%" alignItems="center" textAlign="center" spacing="10px">
+                <WarningIcon style={{ color: '#9b9b9b', width: '24px', height: '24px' }} fontSize="large" />
+                <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
+                  Coming soon
+                </Typography>
+              </Stack>
+            </>
+          )
+        }
       </Box>
     );
+
+    const mess = (
+      <Box sx={{ m: 0, p: 0, '& .ant-notification-notice': { "& .ant-notification-notice-message": { mb: 0 } } }}></Box>
+    )
 
 
 
     api.open({
-      message: '',
+      message: mess,
       description: btn,
+      closeIcon: windowWidth >= 600 ? true : false,
       className: 'custom-class',
       style: {
-        width: '280px',
-        padding: '20px 24px',
+        width: windowWidth >= 600 ? '400px' : '160px',
+        padding: '20px 20px',
         borderRadius: '20px'
       },
       key,
@@ -229,7 +250,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
     // const signer = await provider.getSigner()
 
     if (toToken == 'ETH') {
-      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
+      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) < BigInt(Math.floor(Number(inputFromNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
         // console.log('111111111111111111111')
         setDoneLoading(true)
         await poolContract.addLiquidity(H30_Address, WETH_address, String(Number(inputFromNum) * (10 ** 18)), String(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
@@ -433,47 +454,44 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
               aria-labelledby="customized-dialog-title"
               open={open}
             >
-              <DialogTitle sx={{ m: 0, p: 2, color: '#000', fontWeight: 700, fontSize: '18px', backgroundColor: 'transparent' }} id="customized-dialog-title">
-                Review Supply
-              </DialogTitle>
-              <IconButton
-                aria-label="close"
-                onClick={handleSwapClose}
-                sx={{
-                  position: 'absolute',
-                  right: 8,
-                  top: 8,
-                  color: (theme) => theme.palette.grey[500],
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" p="0 10px" mb="20px">
+                <Typography sx={{ color: "#000", fontSize: '22px', fontWeight: 700 }}>
+                  Review Supply
+                </Typography>
+                <IconButton
+                  aria-label="close"
+                  onClick={handleSwapClose}
+                  sx={{ color: "#9b9b9b" }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Stack>
               <DialogContent >
 
-                <Box sx={{ marginBottom: '10px' }}>
+                <Box sx={{ p: '12px 20px' }}>
                   <Stack alignItems="start" spacing="10px" width="100%" >
-                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
                       You pay
                     </Typography>
 
                     <Stack width="100%" alignItems="center" direction="row" justifyContent="space-between">
 
-                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 600, fontSize: '24px' }}>
                         {ValueNumber(Number(inputToNum))} {toToken}
                       </Typography>
 
-                      <TokenColorIcon name={toToken} size={40} />
+                      <TokenColorIcon name={toToken} size={36} />
 
 
 
                     </Stack>
                     <Stack width="100%" alignItems="center" direction="row" justifyContent="space-between">
 
-                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 600, fontSize: '24px' }}>
                         {ValueNumber(Number(inputFromNum))} {fromToken}
                       </Typography>
 
-                      <TokenColorIcon name={fromToken} size={40} />
+                      <TokenColorIcon name={fromToken} size={36} />
 
 
 
@@ -481,46 +499,48 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
                   </Stack>
                 </Box>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Stack direction="row" alignItems="center" justifyContent="space-between" >
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
                   <MdAdd color='#333' style={{ padding: '0 1px' }} />
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
                 </Stack>
 
-                <Box sx={{ marginBottom: '10px', marginTop: '10px' }}>
-                  <Box position="relative">
-                    <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                <Box sx={{ marginBottom: '10px', marginTop: '10px', p: '12px 20px' }}>
+                  <Stack alignItems="start" spacing="10px">
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
                       You receive
                     </Typography>
-
-                    <Stack alignItems="center" direction="row" justifyContent="space-between" pt="20px">
+                    <Stack alignItems="center" width="100%" direction="row" justifyContent="space-between" pt="20px">
 
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
                         {ValueNumber(Number(Math.sqrt(Number(inputToNum) * Number(inputFromNum))))} H20/ETH
                       </Typography>
 
-                      <AvatarGroup>
-                        <Avatar alt="H20" src={avatarImage('./H20.svg')} />
-                        <Avatar alt="ETH" src={avatarImage('./ETH.svg')} />
-                      </AvatarGroup>
+                      <img src={ETHH20} />
                     </Stack>
-                  </Box>
+
+                  </Stack>
                 </Box>
 
 
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Stack direction="row" alignItems="center" justifyContent="space-between" p="0 20px">
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                   <ShowButton variant="text" onClick={onShowMore} endIcon={!hidder ? <KeyboardArrowUpIcon sx={{ color: '1aae70' }} /> : <KeyboardArrowDownIcon sx={{ color: '1aae70' }} />}>{!hidder ? `Show more` : `Fold`}</ShowButton>
 
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                 </Stack>
-                <Box sx={{ marginTop: '5px', marginBottom: '5px' }}>
+                <Box sx={{ p: '0 20px', marginBottom: '20px' }}>
                   <Stack spacing={1}>
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
                       <Typography sx={{ color: '#6F6F6F' }}>
                         Contract
                       </Typography>
-                      <Typography sx={{ color: '#1aae70', }} component={Button} onClick={gotoContract} variant='body1' >
+                      <Typography sx={{
+                        color: '#1aae70', padding: 0, '&:hover': {
+                          color: "#19A56A",
+                          backgroundColor: 'transparent'
+                        }
+                      }} component={Button} onClick={gotoContract} variant='body1' >
                         {UniswapSepoliaRouterContract.slice(0, 9)}
                       </Typography>
 
@@ -532,37 +552,6 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                       </Typography>
                       <Typography sx={{ color: '#464646' }} variant='body1' >
                         Auto
-                      </Typography>
-
-                    </Stack>
-
-                  </Stack>
-                  <Stack spacing={1} sx={{ display: !hidder ? 'none' : 'block', mt: '8px' }}>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
-                      </Typography>
-
-                    </Stack>
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
-                      </Typography>
-
-                    </Stack>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
                       </Typography>
 
                     </Stack>
@@ -581,11 +570,11 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
           </Box>
         ) : (
-          <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff', left: '5px', right: '5px', borderRadius: '10px 10px 0 0' } }}>
-            <Box sx={{ width: 'auto', padding: '10px 10px 20px 10px' }}>
+          <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff', left: '5px', right: '5px', borderRadius: '20px 20px 0 0' } }}>
+            <Box sx={{ width: 'auto', padding: '20px 10px' }}>
               <Box sx={{ width: '100%' }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" pb="10px">
-                  <Typography sx={{ color: "#464646", fontSize: '17px', fontWeight: 700 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" p="0 10px" mb="10px">
+                  <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
                     Review Supply
                   </Typography>
                   <IconButton
@@ -597,61 +586,58 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                   </IconButton>
                 </Stack>
 
-                <Box sx={{ marginBottom: '10px' }}>
-                  <Stack alignItems="start" spacing="6px" width='100%'>
-                    <Typography variant='body1' sx={{ fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                <Box sx={{ marginBottom: '10px', p: '12px 10px' }}>
+                  <Stack alignItems="start" spacing="10px" width='100%'>
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
                       You pay
                     </Typography>
 
 
-                    <Stack alignItems="center" direction="row" sx={{ padding: '10px 0 0 0', width: '100%' }} justifyContent="space-between">
+                    <Stack alignItems="center" direction="row" sx={{ width: '100%' }} justifyContent="space-between">
 
-                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
                         {ValueNumber(Number(inputToNum))} {toToken}
                       </Typography>
 
-                      <TokenColorIcon name={toToken} size={30} />
+                      <TokenColorIcon name={toToken} size={36} />
 
 
 
                     </Stack>
-                    <Stack alignItems="center" direction="row" sx={{ padding: '10px 0', width: '100%' }} justifyContent="space-between">
+                    <Stack alignItems="center" direction="row" sx={{ width: '100%' }} justifyContent="space-between">
 
-                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '24px' }}>
                         {ValueNumber(Number(inputFromNum))} {fromToken}
                       </Typography>
 
-                      <TokenColorIcon name={fromToken} size={30} />
+                      <TokenColorIcon name={fromToken} size={36} />
 
 
 
                     </Stack>
                   </Stack>
                 </Box>
-                <Stack direction="row" alignItems="center" justifyContent="space-between">
-                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
-                  <ArrowDownwardIcon sx={{ color: '#1aae70', padding: '0 1px' }} />
-                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
+                <Stack direction="row" alignItems="center" justifyContent="space-between" >
+                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
+                  <MdAdd color='#333' style={{ padding: '0 1px' }} />
+                  <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '0.5px' }}></Box>
                 </Stack>
 
-                <Box sx={{ marginBottom: '10px', marginTop: '10px' }}>
-                  <Box position="relative">
-                    <Typography variant='body1' sx={{ position: 'absolute', top: 0, left: 0, fontSize: '11px', fontWeight: 600 }} color="#9b9b9b">
+                <Box sx={{ marginBottom: '10px', p: '12px 10px' }}>
+                  <Stack alignItems="start" spacing="10px">
+                    <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
                       You receive
                     </Typography>
+                    <Stack alignItems="center" direction="row" width="100%" justifyContent="space-between">
 
-                    <Stack alignItems="center" direction="row" sx={{ padding: '20px 0' }} justifyContent="space-between">
-
-                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '16px' }}>
+                      <Typography variant='body1' sx={{ color: '#000', fontWeight: 700, fontSize: '18px' }}>
                         {ValueNumber(Number(Math.sqrt(Number(inputToNum) * Number(inputFromNum))))} {`${toToken} / ${fromToken}`}
                       </Typography>
 
-                      <AvatarGroup>
-                        <Avatar alt="H20" src={avatarImage('./H20.svg')} sx={{ width: '30px', height: '30px' }} />
-                        <Avatar alt="ETH" src={avatarImage('./ETH.svg')} sx={{ width: '30px', height: '30px' }} />
-                      </AvatarGroup>
+                      <img src={ETHH20} />
                     </Stack>
-                  </Box>
+
+                  </Stack>
                 </Box>
 
 
@@ -661,13 +647,18 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
                   <Box sx={{ flex: 1, backgroundColor: '#c0c0c0', height: '1px' }}></Box>
                 </Stack>
-                <Box sx={{ marginTop: '5px', marginBottom: '5px' }}>
+                <Box sx={{ p: '0 10px', marginBottom: '10px', mt: '10px' }}>
                   <Stack spacing={1}>
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
                       <Typography sx={{ color: '#6F6F6F' }}>
                         Contract
                       </Typography>
-                      <Typography sx={{ color: '#1aae70', }} component={Button} onClick={gotoContract} variant='body1' >
+                      <Typography sx={{
+                        color: '#1aae70', padding: 0, '&:hover': {
+                          color: "#19A56A",
+                          backgroundColor: 'transparent'
+                        }
+                      }} component={Button} onClick={gotoContract} variant='body1' >
                         {UniswapSepoliaRouterContract.slice(0, 9)}
                       </Typography>
 
@@ -679,37 +670,6 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
                       </Typography>
                       <Typography sx={{ color: '#464646' }} variant='body1' >
                         Auto
-                      </Typography>
-
-                    </Stack>
-
-                  </Stack>
-                  <Stack spacing={1} sx={{ display: !hidder ? 'none' : 'block', mt: '8px' }}>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
-                      </Typography>
-
-                    </Stack>
-
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
-                      </Typography>
-
-                    </Stack>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between">
-                      <Typography sx={{ color: '#6F6F6F' }}>
-                        Type
-                      </Typography>
-                      <Typography sx={{ color: '#464646' }}  >
-                        Name
                       </Typography>
 
                     </Stack>

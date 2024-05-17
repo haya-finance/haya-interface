@@ -147,7 +147,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
 
                   </Box>
-                  <TokenColorIcon name="BTC" size={20} />
+                  <TokenColorIcon name="BTC" size={22} />
                   <Typography sx={{ fontSize: '14px', color: '#F7931A' }}>
                     BTC
                   </Typography>
@@ -159,7 +159,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
 
                   </Box>
-                  <TokenColorIcon name="SPX" size={20} />
+                  <TokenColorIcon name="SPX" size={22} />
                   <Typography sx={{ fontSize: '14px', color: '#C4162E' }}>
                     spx500
                   </Typography>
@@ -276,8 +276,8 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
 
                   </Box>
-                  <TokenColorIcon name="BTC" size={20} />
-                  <Typography sx={{ fontSize: '12px', color: '#F7931A' }}>
+                  <TokenColorIcon name="BTC" size={22} />
+                  <Typography sx={{ fontSize: '14px', color: '#F7931A' }}>
                     BTC
                   </Typography>
 
@@ -288,8 +288,8 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
 
 
                   </Box>
-                  <TokenColorIcon name="SPX" size={20} />
-                  <Typography sx={{ fontSize: '12px', color: '#C4162E' }}>
+                  <TokenColorIcon name="SPX" size={22} />
+                  <Typography sx={{ fontSize: '14px', color: '#C4162E' }}>
                     spx500
                   </Typography>
 

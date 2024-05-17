@@ -78,6 +78,8 @@ const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
   boxShadow: 'none',
   fontSize: '12px',
   fontWeight: 600,
+  padding: 0,
+  "&::after": { boxShadow: 'none' },
   '&:hover': {
     backgroundColor: "#fff",
     color: '#464646',

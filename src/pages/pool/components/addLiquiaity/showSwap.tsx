@@ -22,6 +22,7 @@ type DataProps = {
 const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
   color: '#1AAE70',
   boxShadow: 'none',
+  padding: 0,
   "&::after": { boxShadow: 'none' },
   '&:hover': {
     backgroundColor: "#fff",

@@ -90,7 +90,26 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
 //   }
 // }
 
+function formatNumber(num: number) {
 
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart?.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 2)
+        num = Math.floor(num)
+        num /= 10 ** (i + 2)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    return num.toLocaleString()
+
+  }
+}
 
 
 function ValueNumber(num: number) {
@@ -134,6 +153,10 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
   const { address, chain } = useAccount();
   const [disable, setDisable] = React.useState(true)
+  const [toPrice, setToPrice] = React.useState('0')
+  const [rePrice, setRePrice] = React.useState('0')
+
+
 
 
 
@@ -156,13 +179,14 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
   }, [chain?.id])
 
-  async function getPrice(add: string) {
+  async function getToPrice(add: string) {
     if (add == 'H20') {
       data.forEach(item => {
         if (item.contract == add) {
           item.price = '100'
         }
       })
+      setToPrice('100')
 
     } else {
       const priceFeed = new ethers.Contract(add, PriceFeedAbi, provider);
@@ -173,6 +197,34 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
               item.price = String((Number(res1[2]) / (10 ** Number(res2))))
             }
           })
+          setToPrice(String((Number(res1[2]) / (10 ** Number(res2)))))
+          // console.log((Number(res1[2]) / (10 ** Number(res2))))
+
+
+        })
+      })
+    }
+  }
+
+  async function getRePrice(add: string) {
+    if (add == 'H20') {
+      data.forEach(item => {
+        if (item.contract == add) {
+          item.price = '100'
+        }
+      })
+      setRePrice('100')
+
+    } else {
+      const priceFeed = new ethers.Contract(add, PriceFeedAbi, provider);
+      await priceFeed.latestRoundData().then(async (res1) => {
+        await priceFeed.decimals().then(async (res2) => {
+          data.forEach(item => {
+            if (item.contract == add) {
+              item.price = String((Number(res1[2]) / (10 ** Number(res2))))
+            }
+          })
+          setRePrice(String((Number(res1[2]) / (10 ** Number(res2)))))
           // console.log((Number(res1[2]) / (10 ** Number(res2))))
 
 
@@ -465,19 +517,23 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
   useEffect(() => {
     if (pay !== "Select token" && receive == "Select token") {
       const tokens = data.filter(item => item.symbol === pay)
-      getPrice(tokens[0]?.contract)
+      getToPrice(tokens[0]?.contract)
     } else if (receive !== "Select token" && pay == "Select token") {
       const tokens = data.filter(item => item.symbol === receive)
-      getPrice(tokens[0]?.contract)
+      getRePrice(tokens[0]?.contract)
 
     } else if (receive !== "Select token" && pay !== "Select token") {
       const tokens1 = data.filter(item => item.symbol === pay)
-      getPrice(tokens1[0]?.contract)
+      getToPrice(tokens1[0]?.contract)
       const tokens = data.filter(item => item.symbol === receive)
-      getPrice(tokens[0]?.contract)
+      getRePrice(tokens[0]?.contract)
 
     }
   }, [receive, pay])
+
+  useEffect(() => {
+
+  }, [toPrice, rePrice])
 
 
 
@@ -492,6 +548,8 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
 
   useEffect(() => {
+
+    console.log('data', data)
 
 
 
@@ -673,7 +731,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
                     <Stack direction="row" alignItems="start">
                       <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
-                        {inputToValue == "" ? '$ 0.00' : `$ ${ValueNumber(Number(data.filter(item => item?.symbol === pay)[0].price) * Number(inputToValue))}`}
+                        {inputToValue !== "" ? `$ ${formatNumber(Number(toPrice) * Number(inputToValue))}` : '$ 0.00'}
                       </Typography>
 
                     </Stack>
@@ -765,7 +823,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
                     </Stack>
                     <Stack direction="row" alignItems="start">
                       <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
-                        {inputReValue == "" ? '$ 0.00' : `$ ${ValueNumber(Number(data.filter(item => item?.symbol === receive)[0].price) * Number(inputReValue))}`}
+                        {inputReValue == "" ? '$ 0.00' : `$ ${formatNumber(Number(rePrice) * Number(inputReValue))}`}
                       </Typography>
                     </Stack>
                   </Box>
@@ -940,7 +998,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
                     </Stack>
                     <Stack direction="row" alignItems="start">
                       <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
-                        {inputToValue == "" ? '$ 0.00' : `$ ${ValueNumber(Number(data.filter(item => item?.symbol === pay)[0].price) * Number(inputToValue))}`}
+                        {inputToValue == "" ? '$ 0.00' : `$ ${formatNumber(Number(toPrice) * Number(inputToValue))}`}
                       </Typography>
 
 
@@ -1032,7 +1090,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
                     </Stack>
                     <Stack direction="row" alignItems="start">
                       <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
-                        {inputReValue == "" ? '$ 0.00' : `$ ${ValueNumber(Number(data.filter(item => item?.symbol === receive)[0].price) * Number(inputReValue))}`}
+                        {inputReValue == "" ? '$ 0.00' : `$ ${formatNumber(Number(rePrice) * Number(inputReValue))}`}
                       </Typography>
                     </Stack>
                   </Box>

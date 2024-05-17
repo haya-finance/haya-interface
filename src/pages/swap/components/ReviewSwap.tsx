@@ -28,6 +28,27 @@ import { config } from 'contexts/wagmiConfig';
 import ApprovalTokens from './approve';
 
 
+function formatTwoNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart?.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 2)
+        num = Math.floor(num)
+        num /= 10 ** (i + 2)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    return num.toLocaleString()
+
+  }
+}
+
 function formatNumber(num: number) {
 
   if (num % 1 !== 0) {
@@ -121,7 +142,7 @@ type TypeProps = {
   windowWidth: number;
   slippage: string;
   windowHeight: number;
-  onUpdate: () => void
+  onUpdate: () => void;
 }
 
 
@@ -500,7 +521,8 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                     </Stack>
 
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      $ 0.00
+                      {inputToNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data.filter(item => item?.symbol === toToken)[0]?.price) * Number(inputToNum))}`}
+
                     </Typography>
 
                   </Stack>
@@ -528,7 +550,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                       <TokenColorIcon name={fromToken} size={36} />
                     </Stack>
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      $ 0.00
+                      {inputFromNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data.filter(item => item?.symbol === fromToken)[0]?.price) * Number(inputFromNum))}`}
                     </Typography>
 
                   </Stack>
@@ -621,7 +643,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                     </Stack>
 
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      $ 0.00
+                      {inputToNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data.filter(item => item?.symbol === toToken)[0]?.price) * Number(inputToNum))}`}
                     </Typography>
 
                   </Stack>
@@ -650,7 +672,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                       <TokenColorIcon name={fromToken} size={36} />
                     </Stack>
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      $ 0.00
+                      {inputFromNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data.filter(item => item?.symbol === fromToken)[0]?.price) * Number(inputFromNum))}`}
                     </Typography>
 
                   </Stack>
@@ -692,7 +714,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                     </Stack>
 
                   </Stack>
-                  <Stack spacing={1} sx={{ display: !hidder ? 'none' : 'block', mt: '8px' }}>
+                  {/* <Stack spacing={1} sx={{ display: !hidder ? 'none' : 'block', mt: '8px' }}>
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
                       <Typography sx={{ color: '#6F6F6F' }}>
                         Type
@@ -722,7 +744,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
 
                     </Stack>
 
-                  </Stack>
+                  </Stack> */}
                 </Box>
 
 

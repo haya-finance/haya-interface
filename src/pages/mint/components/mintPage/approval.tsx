@@ -323,16 +323,17 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
 
 
+    setLoading((pre) => {
+      const newloading = [...pre]
+      newloading[index] = true
+      return newloading
+    })
 
 
     await ApproveContract.approve(BasicIssuanceModule, ethers.MaxUint256).then(async (res) => {
 
 
-      setLoading((pre) => {
-        const newloading = [...pre]
-        newloading[index] = true
-        return newloading
-      })
+
 
 
       const res1 = await res.wait()
@@ -359,6 +360,11 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
       // console.log('err', err)
       openNotification('top')
       handleApprovalClose()
+      setLoading((pre) => {
+        const newloading = [...pre]
+        newloading[index] = false
+        return newloading
+      })
 
     })
 

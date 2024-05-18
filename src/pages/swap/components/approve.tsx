@@ -391,6 +391,11 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
     }).catch((err) => {
       openNotification('top')
       handleApprovalClose()
+      setLoading((pre) => {
+        const newloading = [...pre]
+        newloading[index] = false
+        return newloading
+      })
 
     })
 

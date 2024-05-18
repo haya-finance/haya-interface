@@ -406,15 +406,16 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
 
     const ApproveContract = new ethers.Contract(tokenAddress, tokenAbi, await provider)
+    setLoading((pre) => {
+      const newloading = [...pre]
+      newloading[index] = true
+      return newloading
+    })
 
     await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
 
 
-      setLoading((pre) => {
-        const newloading = [...pre]
-        newloading[index] = true
-        return newloading
-      })
+
 
 
       const res1 = await res.wait()
@@ -441,6 +442,11 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
       // console.log('err', err)
       openNotification('top')
       handleApprovalClose()
+      setLoading((pre) => {
+        const newloading = [...pre]
+        newloading[index] = false
+        return newloading
+      })
 
     })
 
@@ -577,6 +583,8 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
               <DialogContent >
                 <Box padding="0px 20px" mb='20px'>
 
+
+
                   {
                     data.map((item, index) => {
                       return (
@@ -619,32 +627,38 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
                             )
                           } */}
 
-                          <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '12px' }}>
-                            <Stack direction="row" spacing="12px" alignItems="center" key={index}>
-                              <TokenColorIcon name={item.symbol.split('-')[0]} size={36} />
-                              <Typography sx={{ color: "#000", fontSize: '20px', fontWeight: 600 }}>
-                                {toToken == "ETH" ? formatNumber(Number(inputFromNum)) : formatNumber(Number(inputToNum))} {item.symbol.split('-')[0]}
+                          {
+                            item.symbol == toToken || item.symbol == fromToken ? (
+                              <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '12px' }}>
+                                <Stack direction="row" spacing="12px" alignItems="center" key={index}>
+                                  <TokenColorIcon name={item.symbol.split('-')[0]} size={36} />
+                                  <Typography sx={{ color: "#000", fontSize: '20px', fontWeight: 600 }}>
+                                    {item.symbol == fromToken ? formatNumber(Number(inputFromNum)) : formatNumber(Number(inputToNum))} {item.symbol.split('-')[0]}
 
-                              </Typography>
-
-                            </Stack>
-                            {
-                              !approval[index] ? (
-                                <ApprovalButton key={index} loading={loading[index]} onClick={() => OnApproval(index, item.num, item.address)}>Approval</ApprovalButton>
-
-                              ) : (
-                                <Stack direction="row" spacing="4px" alignItems="center" key={index}>
-                                  <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 600 }}>
-                                    Approved
                                   </Typography>
-                                  <FaCheck color='#1AAE70' size={22} />
+
                                 </Stack>
+                                {
+                                  !approval[index] ? (
+                                    <ApprovalButton key={index} loading={loading[index]} onClick={() => OnApproval(index, item.num, item.address)}>Approval</ApprovalButton>
+
+                                  ) : (
+                                    <Stack direction="row" spacing="4px" alignItems="center" key={index}>
+                                      <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 600 }}>
+                                        Approved
+                                      </Typography>
+                                      <FaCheck color='#1AAE70' size={22} />
+                                    </Stack>
 
 
-                              )
-                            }
+                                  )
+                                }
 
-                          </Stack>
+                              </Stack>
+                            ) : (
+                              <></>
+                            )
+                          }
                         </>
                       )
                     })
@@ -696,31 +710,38 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
                     data.map((item, index) => {
                       return (
                         <>
-                          <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '12px' }}>
-                            <Stack direction="row" spacing="6px" alignItems="center" key={index}>
-                              <TokenColorIcon name={item.symbol.split('-')[0]} size={36} />
-                              <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 600 }}>
-                                {toToken == 'ETH' ? formatNumber(Number(inputFromNum)) : formatNumber(Number(inputToNum))} {item.symbol.split('-')[0]}
-                              </Typography>
-
-                            </Stack>
-                            {
-                              !approval[index] ? (
-                                <ApprovalButton key={index} loading={loading[index]} onClick={() => OnApproval(index, item.num, item.address)}>Approval</ApprovalButton>
-
-                              ) : (
-                                <Stack direction="row" spacing="4px" alignItems="center" key={index}>
+                          {
+                            item.symbol == toToken || item.symbol == fromToken ? (
+                              <Stack direction="row" justifyContent="space-between" alignItems="center" key={index} sx={{ mt: '12px' }}>
+                                <Stack direction="row" spacing="6px" alignItems="center" key={index}>
+                                  <TokenColorIcon name={item.symbol.split('-')[0]} size={36} />
                                   <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 600 }}>
-                                    Approved
+                                    {item.symbol == fromToken ? formatNumber(Number(inputFromNum)) : formatNumber(Number(inputToNum))} {item.symbol.split('-')[0]}
                                   </Typography>
-                                  <FaCheck color='#1AAE70' size={22} />
+
                                 </Stack>
+                                {
+                                  !approval[index] ? (
+                                    <ApprovalButton key={index} loading={loading[index]} onClick={() => OnApproval(index, item.num, item.address)}>Approval</ApprovalButton>
+
+                                  ) : (
+                                    <Stack direction="row" spacing="4px" alignItems="center" key={index}>
+                                      <Typography sx={{ color: "#000", fontSize: '16px', fontWeight: 600 }}>
+                                        Approved
+                                      </Typography>
+                                      <FaCheck color='#1AAE70' size={22} />
+                                    </Stack>
 
 
-                              )
-                            }
+                                  )
+                                }
 
-                          </Stack>
+                              </Stack>
+                            ) : (
+                              <></>
+                            )
+
+                          }
                         </>
                       )
                     })

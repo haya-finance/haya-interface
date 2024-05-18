@@ -17,6 +17,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     width: '600px',
     padding: '20px 20px',
     borderRadius: '20px',
+    backgroundColor: '#0f1717',
 
 
   },

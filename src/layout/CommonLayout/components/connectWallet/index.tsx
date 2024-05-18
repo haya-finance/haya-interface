@@ -61,7 +61,9 @@ export default function ConnectWallet({ open, handleClose, windowWidth }: Props)
   }, [connectors]);
 
   const handleWalletClick = (connector: any) => {
-    connect({ connector });
+
+    const res = connect({ connector });
+    console.log('res', res)
     // console.log(connect, connectors);
     handleClose();
   };

@@ -561,30 +561,42 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                 address !== undefined ? (
                   <>
                     {
-                      inputToValue === '' || inputReValue === '' ? (
-                        <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                          <SelectButton >Enter an Amount</SelectButton>
-                        </Box>
-
+                      chain?.id == undefined ? (
+                        <>
+                          <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
+                            <ConnectButton onClick={onChangeNetwork} >Switch to Arbitrum Sepolia</ConnectButton>
+                          </Box>
+                        </>
                       ) : (
                         <>
                           {
-                            Number(balance) >= Number(inputToValue) && Number(reBalance) >= Number(inputReValue) ? (
+                            inputToValue === '' || inputReValue === '' ? (
                               <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                                <EnterButton onClick={handleSwapOpen}>Supply</EnterButton>
+                                <SelectButton >Enter an Amount</SelectButton>
                               </Box>
 
                             ) : (
-                              <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                                <SelectButton >Insufficient Balance</SelectButton>
-                              </Box>
+                              <>
+                                {
+                                  Number(balance) >= Number(inputToValue) && Number(reBalance) >= Number(inputReValue) ? (
+                                    <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
+                                      <EnterButton onClick={handleSwapOpen}>Supply</EnterButton>
+                                    </Box>
+
+                                  ) : (
+                                    <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
+                                      <SelectButton >Insufficient Balance</SelectButton>
+                                    </Box>
+
+                                  )
+
+                                }
+
+                              </>
 
                             )
-
                           }
-
                         </>
-
                       )
                     }
                   </>
@@ -593,22 +605,10 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
                 ) : (
                   <>
-                    {
-                      chain?.id === undefined ? (
-                        <>
-                          <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                            <ConnectButton onClick={onChangeNetwork} >Switch to Arbitrum Sepolia</ConnectButton>
-                          </Box>
-                        </>
-                      ) : (
-                        <>
-                          <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                            <ConnectWallet windowWidth={windowWeight} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
-                          </Box>
-                        </>
-                      )
-                    }
+                    <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
+                      <ConnectWallet windowWidth={windowWeight} open={openWallet} handleClose={onClose} />
+                      <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
+                    </Box>
 
                   </>
 
@@ -747,30 +747,44 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                 address !== undefined ? (
                   <>
                     {
-                      inputToValue === '' || inputReValue === '' ? (
-                        <Box sx={{ width: "100%" }}>
-                          <SelectButton >Enter an Amount</SelectButton>
-                        </Box>
-
+                      chain?.id == undefined ? (
+                        <>
+                          <Box sx={{ width: '100%' }}>
+                            <ConnectButton onClick={onChangeNetwork}>
+                              Switch to Arbitrum Sepolia
+                            </ConnectButton>
+                          </Box>
+                        </>
                       ) : (
                         <>
                           {
-                            Number(balance) >= Number(inputToValue) && Number(reBalance) >= Number(inputReValue) ? (
+                            inputToValue === '' || inputReValue === '' ? (
                               <Box sx={{ width: "100%" }}>
-                                <EnterButton onClick={handleSwapOpen}>Supply</EnterButton>
+                                <SelectButton >Enter an Amount</SelectButton>
                               </Box>
 
                             ) : (
-                              <Box sx={{ width: "100%" }}>
-                                <SelectButton >Insufficient Balance</SelectButton>
-                              </Box>
+                              <>
+                                {
+                                  Number(balance) >= Number(inputToValue) && Number(reBalance) >= Number(inputReValue) ? (
+                                    <Box sx={{ width: "100%" }}>
+                                      <EnterButton onClick={handleSwapOpen}>Supply</EnterButton>
+                                    </Box>
+
+                                  ) : (
+                                    <Box sx={{ width: "100%" }}>
+                                      <SelectButton >Insufficient Balance</SelectButton>
+                                    </Box>
+
+                                  )
+
+                                }
+
+                              </>
 
                             )
-
                           }
-
                         </>
-
                       )
                     }
                   </>
@@ -779,26 +793,10 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
                 ) : (
                   <>
-                    {
-                      chain?.id === undefined ? (
-                        <>
-                          <Box sx={{ width: '100%' }}>
-                            <ConnectButton onClick={onChangeNetwork}>
-                              Switch to Arbitrum Sepolia
-                            </ConnectButton>
-                          </Box>
-
-                        </>
-                      ) : (
-                        <>
-                          <Box sx={{ width: '100%' }}>
-                            <ConnectWallet windowWidth={windowWeight} open={openWallet} handleClose={onClose} />
-                            <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
-                          </Box>
-
-                        </>
-                      )
-                    }
+                    <Box sx={{ width: '100%' }}>
+                      <ConnectWallet windowWidth={windowWeight} open={openWallet} handleClose={onClose} />
+                      <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
+                    </Box>
 
                   </>
 

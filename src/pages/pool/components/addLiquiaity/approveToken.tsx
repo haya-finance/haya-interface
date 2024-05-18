@@ -50,6 +50,32 @@ type dataType = {
   allowance: string
 }
 
+function ValueNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.floor(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        // console.log(parts)
+        // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    num *= 10000
+    num = Math.floor(num)
+    num /= 10000
+
+    return String(num)
+
+  }
+}
+
 function formatNumber(num: number) {
 
   if (num % 1 !== 0) {
@@ -276,7 +302,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
     if (toToken == "ETH") {
       setDoneLoading(true)
-      await poolContract.addLiquidity(H30_Address, WETH_address, String(Number(inputFromNum) * (10 ** 18)), String(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+      await poolContract.addLiquidity(WETH_address, H30_Address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
         // console.log('结果222222222222', res)
 
@@ -303,7 +329,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
     } else {
       // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.floor(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
       setDoneLoading(true)
-      await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Number(inputToNum) * (10 ** 18)), BigInt(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+      await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
         // console.log('结果222222222222', res)
 

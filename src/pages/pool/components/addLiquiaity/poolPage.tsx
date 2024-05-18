@@ -390,8 +390,13 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
   const onMax = () => {
     if (pay !== 'Select token') {
-      setInputValue(String(Number(data.filter(item => item.symbol === pay)[0]?.balance)))
-      setInputShowValue(ValueNumber(Number(data.filter(item => item.symbol === pay)[0]?.balance)) ?? '0')
+      setInputValue(String(Number(data?.filter(item => item.symbol === pay)[0]?.balance)))
+      setInputShowValue(ValueNumber(Number(data?.filter(item => item.symbol === pay)[0]?.balance)) ?? '0')
+      const toToken = data?.filter(item => item.symbol === pay)
+      const fromToken = data?.filter(item => item.symbol === receive)
+      const num = (Number(fromToken[0]?.proportion) * Number(toToken[0]?.balance)) / Number(toToken[0]?.proportion)
+      setInputReValue(String(num))
+      setInputReShowValue(ValueNumber(num) ?? '0')
     }
 
   }
@@ -400,6 +405,11 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
     if (pay !== 'Select token') {
       setInputReValue(String(Number(data.filter(item => item.symbol === receive)[0]?.balance)))
       setInputReShowValue(ValueNumber(Number(data.filter(item => item.symbol === receive)[0]?.balance)) ?? '0')
+      const toToken = data.filter(item => item.symbol === pay)
+      const fromToken = data.filter(item => item.symbol === receive)
+      const num = (Number(toToken[0]?.proportion) * Number(fromToken[0]?.balance)) / Number(fromToken[0]?.proportion)
+      setInputValue(String(num))
+      setInputShowValue(ValueNumber(num) ?? '0')
     }
 
   }

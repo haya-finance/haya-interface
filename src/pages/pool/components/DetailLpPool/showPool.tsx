@@ -127,7 +127,7 @@ export default function ShowPool({ windowWeight, balanceOf, data }: DataProps) {
               <MdInfo color='#6F6F6F' style={{ width: '16px', height: '16px', marginTop: '2px' }} />
 
             </Stack>
-            <ShowButton endIcon={!hidden ? <KeyboardArrowUpIcon style={{ width: '20px', height: '20px' }} /> : <KeyboardArrowDownIcon />} onClick={handleChange}>{`$ ${formatNumber(Number(data[0]?.tvl))}`}</ShowButton>
+            <ShowButton endIcon={!hidden ? <KeyboardArrowUpIcon style={{ width: '20px', height: '20px' }} /> : <KeyboardArrowDownIcon />} onClick={handleChange}>{`$ ${formatNumber((Number(Number(balanceOf) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount)) * Number(data[0]?.price)) * 2)}`}</ShowButton>
           </Stack>
           <Box width="100%" sx={{ display: hidden ? 'none' : 'block' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >

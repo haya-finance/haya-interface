@@ -73,6 +73,27 @@ function formatNumber(num: number) {
   }
 }
 
+function formatTwoNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart?.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 2)
+        num = Math.floor(num)
+        num /= 10 ** (i + 2)
+        var parts = num.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    return num.toLocaleString()
+
+  }
+}
+
 const provider = new ethers.JsonRpcProvider(sepolia_rpc)
 
 
@@ -302,7 +323,7 @@ const PoolLpDetail = () => {
                       TVL
                     </Typography>
                     <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                      {`$ ${ValueNumber(Number(data[0]?.tvl))}`}
+                      {`$ ${ValueNumber((Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount)) * Number(data[0]?.price)) * 2)}`}
                     </Typography>
 
 
@@ -312,7 +333,7 @@ const PoolLpDetail = () => {
                       Volume
                     </Typography>
                     <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                      {`$ ${ValueNumber(Number(Number(data[0]?.tvl) / 2))}`}
+                      {`$ ${ValueNumber(Number(Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount)) * Number(data[0]?.price)))}`}
                     </Typography>
 
 
@@ -326,7 +347,7 @@ const PoolLpDetail = () => {
                       H20
                     </Typography>
                     <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                      {formatNumber(Number(data[0]?.H20Amount))}
+                      {formatNumber(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.H20Amount))}
                     </Typography>
 
 
@@ -336,7 +357,7 @@ const PoolLpDetail = () => {
                       ETH
                     </Typography>
                     <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                      {formatNumber(Number(data[0]?.ETHAmount))}
+                      {formatNumber(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount))}
                     </Typography>
 
 
@@ -350,7 +371,7 @@ const PoolLpDetail = () => {
                     {ValueNumber(Number(balance))} LP-H20/ETH
                   </Typography>
                   <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
-                    $ 0.00
+                    {formatTwoNumber(Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount) * Number(data[0]?.price)) + Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.H20Amount) * 100))}
                   </Typography>
                 </Box>
                 <ShowPool windowWeight={windowWidth} data={data} balanceOf={balance} />
@@ -421,7 +442,7 @@ const PoolLpDetail = () => {
                       TVL
                     </Typography>
                     <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                      {`$ ${ValueNumber(Number(data[0]?.tvl))}`}
+                      {`$ ${ValueNumber((Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount)) * Number(data[0]?.price)) * 2)}`}
                     </Typography>
 
 
@@ -431,7 +452,7 @@ const PoolLpDetail = () => {
                       Volume
                     </Typography>
                     <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                      {`$ ${ValueNumber(Number(Number(data[0]?.tvl) / 2))}`}
+                      {`$ ${ValueNumber(Number(Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount)) * Number(data[0]?.price)))}`}
                     </Typography>
 
 
@@ -445,7 +466,7 @@ const PoolLpDetail = () => {
                       H20
                     </Typography>
                     <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                      {formatNumber(Number(data[0]?.H20Amount))}
+                      {formatNumber(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.H20Amount))}
                     </Typography>
 
 
@@ -455,7 +476,7 @@ const PoolLpDetail = () => {
                       ETH
                     </Typography>
                     <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                      {formatNumber(Number(data[0]?.ETHAmount))}
+                      {formatNumber(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount))}
                     </Typography>
 
 
@@ -469,7 +490,8 @@ const PoolLpDetail = () => {
                     {ValueNumber(Number(balance))} LP-H20/ETH
                   </Typography>
                   <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
-                    $ 0.00
+                    {formatTwoNumber(Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount) * Number(data[0]?.price)) + Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.H20Amount) * 100))}
+
                   </Typography>
                 </Box>
                 <ShowPool windowWeight={windowWidth} data={data} balanceOf={balance} />

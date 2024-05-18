@@ -253,7 +253,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
       if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
         // console.log('111111111111111111111')
         setDoneLoading(true)
-        await poolContract.addLiquidity(H30_Address, WETH_address, String(Number(inputFromNum) * (10 ** 18)), String(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+        await poolContract.addLiquidity(WETH_address, H30_Address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
           // console.log('结果222222222222', res)
 
@@ -291,7 +291,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
       if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
         // console.log('111111111111111111111')
         setDoneLoading(true)
-        await poolContract.addLiquidity(H30_Address, WETH_address, String(Number(inputToNum) * (10 ** 18)), String(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+        await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
           // console.log('结果222222222222', res)
 
@@ -311,7 +311,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
 
         }).catch((err) => {
-          // console.log("错误结果", err)
+          console.log("错误结果", err)
           openNotification('top')
           handleSwapClose()
           setDoneLoading(false)

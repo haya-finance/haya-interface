@@ -71,6 +71,14 @@ function formatNumber(num: number) {
   }
 }
 
+type DataType = {
+  tvl: string;
+  price: string;
+  liq: string;
+  ETHAmount: string;
+  H20Amount: string
+}
+
 
 
 const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
@@ -87,6 +95,14 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
 
   const { address } = useAccount()
   const [balance, setBalance] = useState('0')
+
+  const [data, setData] = useState<DataType[]>([{
+    tvl: '0',
+    price: '0',
+    liq: '0',
+    ETHAmount: '0',
+    H20Amount: '0'
+  }])
 
 
   const getPairBalanceOf = async () => {
@@ -118,6 +134,15 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
         await priceFeed.decimals().then(async (res2) => {
           const newtvl = String((Number(res[0]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)
           setTvl(newtvl)
+          await pairContract.totalSupply().then(async (res3) => {
+            await pairContract.decimals().then((res4) => {
+              const arr = [{ tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }]
+              // setData((pre) => pre.map((item) => {
+              //   return { tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }
+              // }))
+              setData(arr)
+            })
+          })
         })
 
       })
@@ -249,7 +274,7 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                                   </Stack>
                                 </Stack>
                                 <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
-                                  {`$ ${formatNumber(Number(tvl))}`}
+                                  {`$ ${formatNumber((Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount)) * Number(data[0]?.price)) * 2)}`}
                                 </Typography>
 
 
@@ -356,7 +381,7 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                                   </Stack>
                                 </Stack>
                                 <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
-                                  {`$ ${formatNumber(Number(tvl))}`}
+                                  {`$ ${formatNumber((Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount)) * Number(data[0]?.price)) * 2)}`}
                                 </Typography>
 
 

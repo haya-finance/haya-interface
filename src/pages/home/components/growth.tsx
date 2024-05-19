@@ -161,7 +161,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                   </Box>
                   <TokenColorIcon name="SPX" size={22} />
                   <Typography sx={{ fontSize: '14px', color: '#C4162E' }}>
-                    spx500
+                    SPY
                   </Typography>
 
                 </Stack>
@@ -290,7 +290,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                   </Box>
                   <TokenColorIcon name="SPX" size={22} />
                   <Typography sx={{ fontSize: '14px', color: '#C4162E' }}>
-                    spx500
+                    SPY
                   </Typography>
 
                 </Stack>

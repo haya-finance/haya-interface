@@ -254,15 +254,18 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
 
   const handleSwap = async () => {
     // const signer = await provider.getSigner()
-    const provider = getEthersSigner(config)
+    const provider = await getEthersSigner(config)
 
 
-    const MintContract = new ethers.Contract(BasicIssuanceModule, basicIssAbi, await provider)
+    const MintContract = new ethers.Contract(BasicIssuanceModule, basicIssAbi, provider)
     setLoading(true)
     setOpenConfirm(true)
     handleSwapClose()
 
-    await MintContract.redeem(H30_Address, BigInt(Number(inputNum) * (10 ** 18)), address).then(async (res) => {
+    MintContract.redeem(H30_Address, BigInt(Number(inputNum) * (10 ** 18)), address).then(async (res: any) => {
+
+      const da = res.hash
+      console.log('daaaaaa', da)
 
       setOpenConfirm(false)
       setOpenSend(true)

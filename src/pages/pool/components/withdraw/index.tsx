@@ -333,6 +333,8 @@ export default function WithdrawPoolPage() {
     getAllowance()
     getData()
     getPairBalanceOf()
+    setValue(0)
+    setInputValue('')
 
   }
 

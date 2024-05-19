@@ -25,6 +25,9 @@ import { NotificationPlacement } from 'antd/es/notification/interface';
 import { LoadingButton } from '@mui/lab';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
+import Confirm from './confirm';
+import Seed from './send';
+import Succeed from './succeed';
 
 
 // const sepolia_rpc = "https://sepolia.infura.io/v3/0edd253962184b628e0cfabc2f91b0ae"
@@ -59,7 +62,8 @@ type TypeProps = {
   inputNum: string;
   name?: string;
   windowWidth: number;
-  windowHeight: number
+  windowHeight: number;
+  onChange: (update: boolean) => void;
 }
 
 function ChangeNumber(num: number) {
@@ -103,7 +107,9 @@ const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 
 
-export default function ApprovalTokens({ open, handleApprovalClose, data, inputNum, name, windowWidth, windowHeight }: TypeProps) {
+export default function ApprovalTokens({ open, handleApprovalClose, data, inputNum, name, windowWidth, windowHeight, onChange }: TypeProps) {
+
+  const [update, setUpdate] = useState(false)
 
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
@@ -228,6 +234,9 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
   // const provider = new ethers.BrowserProvider(window.ethereum)
   const { address } = useAccount();
+  const [openSend, setOpenSend] = useState(false)
+  const [openSucced, setOpenSucced] = useState(false)
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
 
 
   const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
@@ -262,6 +271,12 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
     },
   }));
 
+  const [hash, setHash] = useState('')
+
+  useEffect(() => {
+
+  }, [hash])
+
 
 
   const handleDone = async () => {
@@ -269,9 +284,13 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
     const provider = getEthersSigner(config)
     const MintContract = new ethers.Contract(BasicIssuanceModule, basicIssAbi, await provider)
     setDoneLoading(true)
+    setOpenConfirm(true)
+    handleApprovalClose()
     MintContract.issue(H30_Address, String(Number(inputNum) * (10 ** 18)), address).then(async (res) => {
 
       // console.log('结果222222222222', res)
+      setOpenConfirm(false)
+      setOpenSend(true)
 
 
 
@@ -280,15 +299,19 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
       if (res1.blockNumber == null) {
         // console.log('nulllllllllll')
       } else {
+        setHash(String(res1.hash))
+        setOpenSend(false)
+        setOpenSucced(true)
 
         setDoneLoading(false)
-        handleApprovalClose()
+        // handleApprovalClose()
       }
 
 
     }).catch((err) => {
       // console.log("错误结果", err)
       openNotification('top')
+      setOpenConfirm(false)
       handleApprovalClose()
       setDoneLoading(false)
     })
@@ -308,6 +331,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
     // const signer = await provider.getSigner()
     const provider = getEthersSigner(config)
+
 
 
 
@@ -402,6 +426,30 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
   }, [approval, disable, data])
 
+  const handleConfirmClose = () => {
+    setOpenConfirm(false)
+  }
+
+  const handleSeedClose = () => {
+    setOpenSend(false)
+  }
+
+  const handleSucceedClose = () => {
+    setUpdate(!update)
+    onChange(update)
+    setOpenSucced(false)
+  }
+
+  useEffect(() => {
+
+  }, [openConfirm])
+  useEffect(() => {
+
+  }, [openSend])
+  useEffect(() => {
+
+  }, [openSucced])
+
 
 
 
@@ -447,6 +495,9 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
   return (
     <>
+      <Confirm windowWidth={windowWidth} open={openConfirm} handleConfirmClose={handleConfirmClose} data={data} inputNum={inputNum} />
+      <Seed windowWidth={windowWidth} open={openSend} handleConfirmClose={handleSeedClose} data={data} inputNum={inputNum} />
+      <Succeed hash={hash} windowWidth={windowWidth} open={openSucced} handleConfirmClose={handleSucceedClose} data={data} inputNum={inputNum} />
       {contextHolder}
       {
         windowWidth >= 600 ? (

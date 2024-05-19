@@ -25,6 +25,9 @@ import { LoadingButton } from '@mui/lab';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
 import tokenAbi from 'abi/token.json'
+import Confirm from './confirm';
+import Seed from './send';
+import Succeed from './succeed';
 
 
 // const sepolia_rpc = "https://sepolia.infura.io/v3/0edd253962184b628e0cfabc2f91b0ae"
@@ -112,6 +115,7 @@ type TypeProps = {
   toToken: string;
   fromToken: string;
   inputFromNum: string;
+  onChange: (update: boolean) => void
 }
 
 
@@ -133,7 +137,7 @@ const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 
 
-export default function ApprovalTokens({ open, handleApprovalClose, data, windowWidth, windowHeight, inputFromNum, inputToNum, toToken, fromToken }: TypeProps) {
+export default function ApprovalTokens({ open, onChange, handleApprovalClose, data, windowWidth, windowHeight, inputFromNum, inputToNum, toToken, fromToken }: TypeProps) {
 
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
@@ -291,6 +295,42 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
     },
   }));
 
+  const [openSend, setOpenSend] = useState(false)
+  const [openSucced, setOpenSucced] = useState(false)
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
+  const [update, setUpdate] = useState(false)
+
+
+  const handleConfirmClose = () => {
+    setOpenConfirm(false)
+  }
+
+  const handleSeedClose = () => {
+    setOpenSend(false)
+  }
+
+  const handleSucceedClose = () => {
+    setUpdate(!update)
+    onChange(update)
+    setOpenSucced(false)
+  }
+
+  useEffect(() => {
+
+  }, [openConfirm])
+  useEffect(() => {
+
+  }, [openSend])
+  useEffect(() => {
+
+  }, [openSucced])
+
+  const [hash, setHash] = useState('')
+
+  useEffect(() => {
+
+  }, [hash])
+
 
 
   const handleDone = async () => {
@@ -302,9 +342,13 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
     if (toToken == "ETH") {
       setDoneLoading(true)
+      setOpenConfirm(true)
+      handleApprovalClose()
       await poolContract.addLiquidity(WETH_address, H30_Address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
         // console.log('结果222222222222', res)
+        setOpenConfirm(false)
+        setOpenSend(true)
 
 
 
@@ -313,9 +357,12 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
         if (res1.blockNumber == null) {
           // console.log('nulllllllllll')
         } else {
+          setHash(String(res1.hash))
+          setOpenSend(false)
+          setOpenSucced(true)
 
           setDoneLoading(false)
-          handleApprovalClose()
+          // handleApprovalClose()
         }
 
 
@@ -324,14 +371,19 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
         openNotification('top')
         handleApprovalClose()
         setDoneLoading(false)
+        setOpenConfirm(false)
       })
 
     } else {
       // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.floor(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
       setDoneLoading(true)
+      setOpenConfirm(true)
+      handleApprovalClose()
       await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
         // console.log('结果222222222222', res)
+        setOpenConfirm(false)
+        setOpenSend(true)
 
 
 
@@ -340,9 +392,12 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
         if (res1.blockNumber == null) {
           // console.log('nulllllllllll')
         } else {
+          setHash(String(res1.hash))
+          setOpenSend(false)
+          setOpenSucced(true)
 
           setDoneLoading(false)
-          handleApprovalClose()
+
         }
 
 
@@ -351,6 +406,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
         openNotification('top')
         handleApprovalClose()
         setDoneLoading(false)
+        setOpenConfirm(false)
       })
     }
 
@@ -583,6 +639,10 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
   return (
     <>
       {contextHolder}
+      <Confirm windowWidth={windowWidth} open={openConfirm} handleConfirmClose={handleConfirmClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+      <Seed windowWidth={windowWidth} open={openSend} handleConfirmClose={handleSeedClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+      <Succeed hash={hash} windowWidth={windowWidth} open={openSucced} handleConfirmClose={handleSucceedClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+
       {
         windowWidth >= 600 ? (
           <Box sx={{ width: '100%' }}>

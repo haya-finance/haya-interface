@@ -14,6 +14,7 @@ import ETHColor from './eth';
 import FIL from './fil';
 import FTM from './ftm';
 import GRT from './grt';
+import H20ETH from './h20_eth';
 import HAYColor from './h30';
 import IcpColor from './icp';
 import IMX from './imx';
@@ -91,6 +92,8 @@ const TokenColorIcon = ({ name, size }: Props) => {
       return <SHIBColor size={size} />;
     case 'TONCOIN':
       return <TonCoinColor size={size} />;
+    case 'H20ETH':
+      return <H20ETH size={size} />;
     case 'TON':
       return <TonCoinColor size={size} />;
     case 'LINK':

@@ -216,11 +216,18 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
 
 
   const handleSwapClose = () => {
+
+    setOpenSwap(false)
+
+  }
+
+  const onUpdate = () => {
     setUpdate(!update)
     OnChange(update)
-    setOpenSwap(false)
     setInputValue('')
+
   }
+
 
 
 
@@ -347,7 +354,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
 
 
             <Box sx={{ width: '100%' }}>
-              <RedeemReviewSwap windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} name='H20' windowWidth={windowWidth} />
+              <RedeemReviewSwap windowHeight={windowHeight} onChange={onUpdate} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} name='H20' windowWidth={windowWidth} />
               <Box
                 sx={{
                   p: "12px 20px", backgroundColor: "#f6f6f6", borderRadius: "20px",
@@ -499,7 +506,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
 
 
             <Box sx={{ width: '100%' }}>
-              <RedeemReviewSwap windowHeight={windowHeight} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} name='H20' windowWidth={windowWidth} />
+              <RedeemReviewSwap windowHeight={windowHeight} onChange={onUpdate} open={openSwap} handleSwapClose={handleSwapClose} data={tokensData} inputNum={inputValue} name='H20' windowWidth={windowWidth} />
               <Box
                 sx={{
                   p: "12px 12px", backgroundColor: "#f6f6f6", borderRadius: "20px",

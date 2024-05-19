@@ -28,6 +28,9 @@ import { NotificationPlacement } from 'antd/es/notification/interface';
 import { WarningIcon } from '@chakra-ui/icons';
 
 import ETHH20 from 'assets/images/token/H20_ETH.svg'
+import Confirm from './confirm';
+import Seed from './send';
+import Succeed from './succeed';
 
 
 
@@ -232,6 +235,39 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
   // const [loading, setLoading] = useState(false)
   const { address } = useAccount();
 
+  const [openSend, setOpenSend] = useState(false)
+  const [openSucced, setOpenSucced] = useState(false)
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
+
+  const handleConfirmClose = () => {
+    setOpenConfirm(false)
+  }
+
+  const handleSeedClose = () => {
+    setOpenSend(false)
+  }
+
+  const handleSucceedClose = () => {
+    onChange()
+    setOpenSucced(false)
+  }
+
+  useEffect(() => {
+
+  }, [openConfirm])
+  useEffect(() => {
+
+  }, [openSend])
+  useEffect(() => {
+
+  }, [openSucced])
+
+  const [hash, setHash] = useState('')
+
+  useEffect(() => {
+
+  }, [hash])
+
 
 
   const handleSwap = async () => {
@@ -240,38 +276,77 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
     if (BigInt(allowance) > BigInt(Math.floor(Number(Number(balance) * (num / 100)) * (10 ** 18)))) {
       setDoneLoading(true)
-      await poolContract.removeLiquidity(H30_Address, WETH_address, String(Number(Number(balance) * (num / 100)) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then((res: any) => {
+      setOpenConfirm(true)
+      handleSwapClose()
+      await poolContract.removeLiquidity(H30_Address, WETH_address, String(Number(Number(balance) * (num / 100)) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
         // console.log('结果', res)
         // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+        setOpenConfirm(false)
+        setOpenSend(true)
 
-        setDoneLoading(false)
-        handleSwapClose()
+
+        const res1 = await res.wait()
+
+        if (res1.blockNumber == null) {
+          // console.log('nulllllllllll')
+        } else {
+          setHash(String(res1.hash))
+          setOpenSend(false)
+          setOpenSucced(true)
+
+          setDoneLoading(false)
+          // handleSwapClose()
+        }
+        // handleSwapClose()
         // setInputReValue(String(Number(res[1]) / (10 ** 18)))
       }).catch(err => {
         openNotification('top')
         handleSwapClose()
+        setDoneLoading(false)
+        setOpenConfirm(false)
       })
 
     } else {
       const ApproveContract = new ethers.Contract(pair_Address, tokenAbi, await provider)
       setDoneLoading(true)
+      setOpenConfirm(true)
+      handleSwapClose()
       await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
+
+
+
 
 
 
 
         await res.wait()
 
-        await poolContract.removeLiquidity(H30_Address, WETH_address, String(Number(Number(balance) * (num / 100)) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then((res2: any) => {
+        await poolContract.removeLiquidity(H30_Address, WETH_address, String(Number(Number(balance) * (num / 100)) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res2: any) => {
+
           // console.log('结果', res)
           // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+          setOpenConfirm(false)
+          setOpenSend(true)
 
-          setDoneLoading(false)
-          handleSwapClose()
-          onChange()
+          const res3 = await res2.wait()
+
+          if (res3.blockNumber == null) {
+            // console.log('nulllllllllll')
+          } else {
+            setHash(String(res3.hash))
+            setOpenSend(false)
+            setOpenSucced(true)
+
+            setDoneLoading(false)
+            // handleSwapClose()
+          }
+          // handleSwapClose()
+          // onChange()
         }).catch(err => {
           openNotification('top')
           handleSwapClose()
+          setDoneLoading(false)
+          setOpenConfirm(false)
         })
 
 
@@ -280,6 +355,8 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
         // console.log('err', err)
         openNotification('top')
         handleSwapClose()
+        setDoneLoading(false)
+        setOpenConfirm(false)
 
       })
 
@@ -323,6 +400,10 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
   return (
     <>
       {contextHolder}
+      <Confirm windowWidth={windowWidth} open={openConfirm} handleConfirmClose={handleConfirmClose} data={data} num={num} balance={balance} />
+      <Seed windowWidth={windowWidth} open={openSend} handleConfirmClose={handleSeedClose} data={data} num={num} balance={balance} />
+      <Succeed hash={hash} windowWidth={windowWidth} open={openSucced} handleConfirmClose={handleSucceedClose} data={data} num={num} balance={balance} />
+
 
       {
 

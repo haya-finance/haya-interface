@@ -26,6 +26,9 @@ import { LoadingButton } from '@mui/lab';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
 import ApprovalTokens from './approve';
+import Confirm from './confirm';
+import Seed from './send';
+import Succeed from './succeed';
 
 
 function formatTwoNumber(num: number) {
@@ -180,10 +183,17 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
   const [hidder, setHidder] = useState(true)
 
   const { address } = useAccount()
+  const [hash, setHash] = useState('')
+
+  useEffect(() => {
+
+  }, [hash])
 
   const onShowMore = () => {
     setHidder(!hidder)
   }
+
+
 
   // const provider = new ethers.BrowserProvider(window.ethereum)
   // const notificonfig = {
@@ -253,6 +263,34 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
   // const { address } = useAccount();
 
   const [loading, setLoading] = useState(false)
+
+  const [openSend, setOpenSend] = useState(false)
+  const [openSucced, setOpenSucced] = useState(false)
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
+
+
+  const handleConfirmClose = () => {
+    setOpenConfirm(false)
+  }
+
+  const handleSeedClose = () => {
+    setOpenSend(false)
+  }
+
+  const handleSucceedClose = () => {
+    onUpdate()
+    setOpenSucced(false)
+  }
+
+  useEffect(() => {
+
+  }, [openConfirm])
+  useEffect(() => {
+
+  }, [openSend])
+  useEffect(() => {
+
+  }, [openSucced])
   // console.log(data)
 
 
@@ -274,17 +312,30 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
 
       } else {
         setLoading(true)
+        setOpenConfirm(true)
+        handleSwapClose()
         await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
+          setOpenConfirm(false)
+          setOpenSend(true)
+
           // console.log('结果swap', res)
-          await res.wait()
-          setLoading(false)
-          handleSwapClose()
-          onUpdate()
+          const res1 = await res.wait()
+
+          if (res1.blockNumber == null) {
+            // console.log('nulllllllllll')
+          } else {
+            setHash(String(res1.hash))
+            setOpenSend(false)
+            setOpenSucced(true)
+            setLoading(false)
+            // handleSwapClose()
+          }
         }).catch((err) => {
           openNotification('top')
           handleSwapClose()
           setLoading(false)
+          setOpenConfirm(false)
           // console.log('错误1', err)
         })
 
@@ -303,17 +354,28 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
         } else {
 
           setLoading(true)
+          setOpenConfirm(true)
+          handleSwapClose()
           await swapContract.swapExactTokensForETH(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
             // console.log('结果swap', res)
-            await res.wait()
-            setLoading(false)
-            handleSwapClose()
-            onUpdate()
+            setOpenConfirm(false)
+            setOpenSend(true)
+            const res1 = await res.wait()
+            if (res1.blockNumber == null) {
+              // console.log('nulllllllllll')
+            } else {
+              setHash(String(res1.hash))
+              setOpenSend(false)
+              setOpenSucced(true)
+              setLoading(false)
+            }
+
           }).catch((err) => {
             openNotification('top')
             handleSwapClose()
             setLoading(false)
+            setOpenConfirm(false)
             // console.log('错误1', err)
           })
 
@@ -369,18 +431,32 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
 
         } else {
           setLoading(true)
+          setOpenConfirm(true)
+          handleSwapClose()
           await swapContract.swapExactETHForTokens(BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5, {
             from: address,
             value: BigInt((Number(inputToNum) * (10 ** 18)))
           }).then(async (res) => {
-            await res.wait()
-            setLoading(false)
-            handleSwapClose()
-            onUpdate()
+
+            setOpenConfirm(false)
+            setOpenSend(true)
+            const res1 = await res.wait()
+
+            if (res1.blockNumber == null) {
+              // console.log('nulllllllllll')
+            } else {
+              setHash(String(res1.hash))
+              setOpenSend(false)
+              setOpenSucced(true)
+
+              setLoading(false)
+            }
+
           }).catch((err) => {
             openNotification('top')
             handleSwapClose()
             setLoading(false)
+            setOpenConfirm(false)
           })
           // await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
@@ -478,6 +554,10 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
       <ApprovalTokens onUpdate={onUpdate} slippage={slippage} windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} toToken={toToken} fromToken={fromToken} inputFromNum={inputFromNum} inputToNum={inputToNum} windowWidth={windowWidth} />
 
       {contextHolder}
+      <Confirm windowWidth={windowWidth} open={openConfirm} handleConfirmClose={handleConfirmClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+      <Seed windowWidth={windowWidth} open={openSend} handleConfirmClose={handleSeedClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+      <Succeed hash={hash} windowWidth={windowWidth} open={openSucced} handleConfirmClose={handleSucceedClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+
       {
         windowWidth >= 600 ? (
           <Box sx={{ width: '100%' }}>

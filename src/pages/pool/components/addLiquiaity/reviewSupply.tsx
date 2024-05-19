@@ -27,6 +27,9 @@ import { notification } from 'antd';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import { WarningIcon } from '@chakra-ui/icons';
 import ETHH20 from 'assets/images/token/H20_ETH.svg'
+import Confirm from './confirm';
+import Seed from './send';
+import Succeed from './succeed';
 
 
 
@@ -241,6 +244,41 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
   // const [loading, setLoading] = useState(false)
   const { address } = useAccount();
 
+  const [openSend, setOpenSend] = useState(false)
+  const [openSucced, setOpenSucced] = useState(false)
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
+
+
+  const handleConfirmClose = () => {
+    setOpenConfirm(false)
+  }
+
+  const handleSeedClose = () => {
+    setOpenSend(false)
+  }
+
+  const handleSucceedClose = () => {
+    setUpdate(!update)
+    onChange(update)
+    setOpenSucced(false)
+  }
+
+  useEffect(() => {
+
+  }, [openConfirm])
+  useEffect(() => {
+
+  }, [openSend])
+  useEffect(() => {
+
+  }, [openSucced])
+
+  const [hash, setHash] = useState('')
+
+  useEffect(() => {
+
+  }, [hash])
+
 
 
   const handleSwap = async () => {
@@ -253,9 +291,13 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
       if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
         // console.log('111111111111111111111')
         setDoneLoading(true)
+        setOpenConfirm(true)
+        handleSwapClose()
         await poolContract.addLiquidity(WETH_address, H30_Address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
           // console.log('结果222222222222', res)
+          setOpenConfirm(false)
+          setOpenSend(true)
 
 
 
@@ -264,11 +306,12 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
           if (res1.blockNumber == null) {
             // console.log('nulllllllllll')
           } else {
+            setHash(String(res1.hash))
+            setOpenSend(false)
+            setOpenSucced(true)
 
             setDoneLoading(false)
-            handleSwapClose()
-            setUpdate(!update)
-            onChange(update)
+            // handleSwapClose()
           }
 
 
@@ -277,6 +320,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
           openNotification('top')
           handleSwapClose()
           setDoneLoading(false)
+          setOpenConfirm(false)
         })
 
 
@@ -291,9 +335,13 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
       if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
         // console.log('111111111111111111111')
         setDoneLoading(true)
+        setOpenConfirm(true)
+        handleSwapClose()
         await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
           // console.log('结果222222222222', res)
+          setOpenConfirm(false)
+          setOpenSend(true)
 
 
 
@@ -302,19 +350,20 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
           if (res1.blockNumber == null) {
             // console.log('nulllllllllll')
           } else {
+            setHash(String(res1.hash))
+            setOpenSend(false)
+            setOpenSucced(true)
 
             setDoneLoading(false)
-            handleSwapClose()
-            setUpdate(!update)
-            onChange(update)
           }
 
 
         }).catch((err) => {
-          console.log("错误结果", err)
+          // console.log("错误结果", err)
           openNotification('top')
           handleSwapClose()
           setDoneLoading(false)
+          setOpenConfirm(false)
         })
 
 
@@ -426,8 +475,6 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
   const handleApprovalClose = () => {
     setOpenApproval(false)
-    setUpdate(!update)
-    onChange(update)
   }
 
 
@@ -442,8 +489,12 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
   return (
     <>
-      <ApprovalTokens windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} toToken={toToken} fromToken={fromToken} inputFromNum={inputFromNum} inputToNum={inputToNum} windowWidth={windowWidth} />
+      <ApprovalTokens onChange={onChange} windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} toToken={toToken} fromToken={fromToken} inputFromNum={inputFromNum} inputToNum={inputToNum} windowWidth={windowWidth} />
       {contextHolder}
+      <Confirm windowWidth={windowWidth} open={openConfirm} handleConfirmClose={handleConfirmClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+      <Seed windowWidth={windowWidth} open={openSend} handleConfirmClose={handleSeedClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+      <Succeed hash={hash} windowWidth={windowWidth} open={openSucced} handleConfirmClose={handleSucceedClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+
 
       {
 

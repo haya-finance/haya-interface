@@ -26,10 +26,12 @@ import { useAccount } from 'wagmi';
 import { notification } from 'antd';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import { LoadingButton } from '@mui/lab';
+import Confirm from './confirm';
+import Seed from './send';
+import Succeed from './succeed';
 
 
 // const sepolia_rpc = "https://sepolia.infura.io/v3/0edd253962184b628e0cfabc2f91b0ae"
-
 
 
 
@@ -134,6 +136,7 @@ const OkButton = styled(Button)<ButtonProps>(({ theme }) => ({
 export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name, onChange, windowWidth, windowHeight }: TypeProps) {
   const { address } = useAccount();
   const [doneLoading, setDoneLoading] = useState<boolean>(false)
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
 
 
 
@@ -233,6 +236,8 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
   const [hidder, setHidder] = useState(true)
   const [openApproval, setOpenApproval] = useState(false)
   const [update, setUpdate] = useState(false)
+  const [openSend, setOpenSend] = useState(false)
+  const [openSucced, setOpenSucced] = useState(false)
 
   const onShowMore = () => {
     setHidder(!hidder)
@@ -242,6 +247,12 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
 
   }, [doneLoading])
 
+  const [hash, setHash] = useState('')
+
+  useEffect(() => {
+
+  }, [hash])
+
 
 
 
@@ -250,24 +261,38 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
     if (data.every((item) => BigInt(item.allowance) > BigInt(Math.floor((Number(item.num) * Number(inputNum)) * (10 ** Number(item.decimals)))))) {
       const provider = getEthersSigner(config)
       const MintContract = new ethers.Contract(BasicIssuanceModule, basicIssAbi, await provider)
+      setOpenConfirm(true)
       setDoneLoading(true)
-      MintContract.issue(H30_Address, String(Number(inputNum) * (10 ** 18)), address).then(async (res) => {
+      handleSwapClose()
+      await MintContract.issue(H30_Address, String(Number(inputNum) * (10 ** 18)), address).then(async (res) => {
+        console.log('结果222222222222', res)
+        // console.log('1111111111111111111')
+        setOpenConfirm(false)
+        setOpenSend(true)
 
-        // console.log('结果222222222222', res)
+
+
+
+
+
 
 
 
         const res1 = await res.wait()
+        // console.log('111111111', res1)
+
 
         if (res1.blockNumber == null) {
           // console.log('nulllllllllll')
         } else {
+          setHash(String(res1.hash))
           // console.log('成功')
+          setOpenSend(false)
+          setOpenSucced(true)
 
           setDoneLoading(false)
-          handleSwapClose()
-          setUpdate(!update)
-          onChange(update)
+          // handleSwapClose()
+
         }
 
 
@@ -279,6 +304,7 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
       })
 
 
+
     } else {
       handleSwapClose()
       setOpenApproval(true)
@@ -287,11 +313,35 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
 
   }
 
+  const handleConfirmClose = () => {
+    setOpenConfirm(false)
+  }
+
+  const handleSeedClose = () => {
+    setOpenSend(false)
+  }
+
+  const handleSucceedClose = () => {
+    setUpdate(!update)
+    onChange(update)
+    setOpenSucced(false)
+  }
+
+  useEffect(() => {
+
+  }, [openConfirm])
+  useEffect(() => {
+
+  }, [openSend])
+  useEffect(() => {
+
+  }, [openSucced])
+
 
   const handleApprovalClose = () => {
     setOpenApproval(false)
-    setUpdate(!update)
-    onChange(update)
+    // setUpdate(!update)
+    // onChange(update)
   }
 
   const gotoContract = () => {
@@ -313,12 +363,15 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
 
   return (
     <>
+      <Confirm windowWidth={windowWidth} open={openConfirm} handleConfirmClose={handleConfirmClose} data={data} inputNum={inputNum} />
+      <Seed windowWidth={windowWidth} open={openSend} handleConfirmClose={handleSeedClose} data={data} inputNum={inputNum} />
+      <Succeed hash={hash} windowWidth={windowWidth} open={openSucced} handleConfirmClose={handleSucceedClose} data={data} inputNum={inputNum} />
       {
         windowWidth >= 600 ? (
           <>
             {contextHolder}
             <Box sx={{ width: '100%' }}>
-              <ApprovalTokens windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} name={name} inputNum={inputNum} windowWidth={windowWidth} />
+              <ApprovalTokens windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} name={name} onChange={onChange} inputNum={inputNum} windowWidth={windowWidth} />
               <BootstrapDialog
                 onClose={handleSwapClose}
                 aria-labelledby="customized-dialog-title"
@@ -448,7 +501,7 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
           </>
         ) : (
           <>
-            <ApprovalTokens windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} name={name} inputNum={inputNum} windowWidth={windowWidth} />
+            <ApprovalTokens windowHeight={windowHeight} open={openApproval} onChange={onChange} handleApprovalClose={handleApprovalClose} data={data} name={name} inputNum={inputNum} windowWidth={windowWidth} />
 
             <Drawer anchor='bottom' open={open} onClose={handleSwapClose} sx={{ '& .MuiDrawer-paper': { backgroundColor: '#fff', left: '5px', right: '5px', borderRadius: '20px 20px 0 0' } }}>
               <Box width="auto" padding="20px 10px">

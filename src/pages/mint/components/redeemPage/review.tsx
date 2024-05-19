@@ -14,7 +14,7 @@ import { ButtonProps } from '@mui/material/Button';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // import Web3 from 'web3';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import basicIssAbi from 'abi/basicIssuance.json'
 import { ethers } from 'ethers'
 import { useAccount } from 'wagmi';
@@ -25,6 +25,9 @@ import { LoadingButton } from '@mui/lab';
 import WarningIcon from '@mui/icons-material/Warning';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
+import Seed from './send';
+import Succeed from './succeed';
+import Confirm from './confirm';
 
 
 // const sepolia_rpc = "https://sepolia.infura.io/v3/0edd253962184b628e0cfabc2f91b0ae"
@@ -89,7 +92,8 @@ type dataType = {
   address: string;
   balance: string;
   allowance: string;
-  decimals: string
+  decimals: string;
+
 }
 
 
@@ -100,7 +104,8 @@ type TypeProps = {
   inputNum: string;
   name: string;
   windowWidth: number
-  windowHeight: number
+  windowHeight: number;
+  onChange: (update: boolean) => void
 }
 
 
@@ -130,7 +135,7 @@ function ChangeNumber(num: number) {
 
 
 
-export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum, name, windowWidth, windowHeight }: TypeProps) {
+export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum, name, windowWidth, windowHeight, onChange }: TypeProps) {
 
 
   const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
@@ -178,6 +183,9 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
 
 
   const [api, contextHolder] = notification.useNotification(notificonfig);
+  const [openSend, setOpenSend] = useState(false)
+  const [openSucced, setOpenSucced] = useState(false)
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
 
   const openNotification = (placement: NotificationPlacement) => {
     const key = `open${Date.now()}`;
@@ -236,6 +244,12 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
   // const provider = new ethers.BrowserProvider(window.ethereum)
   const { address } = useAccount();
 
+  const [hash, setHash] = useState('')
+
+  useEffect(() => {
+
+  }, [hash])
+
 
 
   const handleSwap = async () => {
@@ -245,8 +259,13 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
 
     const MintContract = new ethers.Contract(BasicIssuanceModule, basicIssAbi, await provider)
     setLoading(true)
+    setOpenConfirm(true)
+    handleSwapClose()
 
     await MintContract.redeem(H30_Address, BigInt(Number(inputNum) * (10 ** 18)), address).then(async (res) => {
+
+      setOpenConfirm(false)
+      setOpenSend(true)
 
 
 
@@ -255,9 +274,14 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
       if (res1.blockNumber == null) {
         // console.log('nulllllllllll')
       } else {
+        setHash(String(res1.hash))
+        setOpenSend(false)
+        setOpenSucced(true)
+
+
 
         setLoading(false)
-        handleSwapClose()
+        // handleSwapClose()
       }
 
       // console.log('结果222222222222', res)
@@ -268,6 +292,7 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
       handleSwapClose()
       openNotification('top')
       setLoading(false)
+      setOpenConfirm(false)
     })
 
 
@@ -277,9 +302,35 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
 
   }
 
+  const [update, setUpdate] = useState(false)
+
   const gotoContract = () => {
     window.location.assign(`https://sepolia.etherscan.io/address/${BasicIssuanceModule}`)
   }
+
+  const handleConfirmClose = () => {
+    setOpenConfirm(false)
+  }
+
+  const handleSeedClose = () => {
+    setOpenSend(false)
+  }
+
+  const handleSucceedClose = () => {
+    setUpdate(!update)
+    onChange(update)
+    setOpenSucced(false)
+  }
+
+  useEffect(() => {
+
+  }, [openConfirm])
+  useEffect(() => {
+
+  }, [openSend])
+  useEffect(() => {
+
+  }, [openSucced])
 
 
 
@@ -289,6 +340,9 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
   return (
     <>
       {contextHolder}
+      <Confirm windowWidth={windowWidth} open={openConfirm} handleConfirmClose={handleConfirmClose} data={data} inputNum={inputNum} />
+      <Seed windowWidth={windowWidth} open={openSend} handleConfirmClose={handleSeedClose} data={data} inputNum={inputNum} />
+      <Succeed hash={hash} windowWidth={windowWidth} open={openSucced} handleConfirmClose={handleSucceedClose} data={data} inputNum={inputNum} />
       {
         windowWidth >= 600 ? (
           <Box sx={{ width: '100%' }}>

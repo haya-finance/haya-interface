@@ -25,6 +25,9 @@ import { LoadingButton } from '@mui/lab';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
 import tokenAbi from 'abi/token.json';
+import Confirm from './confirm';
+import Seed from './send';
+import Succeed from './succeed';
 
 
 // const sepolia_rpc = "https://sepolia.infura.io/v3/0edd253962184b628e0cfabc2f91b0ae"
@@ -152,6 +155,36 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
   }
 
 
+
+  const [openSend, setOpenSend] = useState(false)
+  const [openSucced, setOpenSucced] = useState(false)
+  const [openConfirm, setOpenConfirm] = useState<boolean>(false)
+
+
+  const handleConfirmClose = () => {
+    setOpenConfirm(false)
+  }
+
+  const handleSeedClose = () => {
+    setOpenSend(false)
+  }
+
+  const handleSucceedClose = () => {
+    onUpdate()
+    setOpenSucced(false)
+  }
+
+  useEffect(() => {
+
+  }, [openConfirm])
+  useEffect(() => {
+
+  }, [openSend])
+  useEffect(() => {
+
+  }, [openSucced])
+
+
   const [api, contextHolder] = notification.useNotification(notificonfig);
 
   const openNotification = (placement: NotificationPlacement) => {
@@ -258,6 +291,13 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
   }));
 
 
+  const [hash, setHash] = useState('')
+
+  useEffect(() => {
+
+  }, [hash])
+
+
 
   const handleDone = async () => {
     // const signer = await provider.getSigner()
@@ -272,17 +312,29 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
 
     if (toToken !== 'ETH' && fromToken !== 'ETH') {
       setDoneLoading(true)
+      setOpenConfirm(true)
+      handleApprovalClose()
       await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
         // console.log('结果swap', res)
-        await res.wait()
-        setDoneLoading(false)
-        handleApprovalClose()
-        onUpdate()
+        setOpenConfirm(false)
+        setOpenSend(true)
+        const res1 = await res.wait()
+
+        if (res1.blockNumber == null) {
+          // console.log('nulllllllllll')
+        } else {
+          setHash(String(res1.hash))
+          setOpenSend(false)
+          setOpenSucced(true)
+          setDoneLoading(false)
+          // handleSwapClose()
+        }
       }).catch((err) => {
         openNotification('top')
         handleApprovalClose()
         setDoneLoading(false)
+        setOpenConfirm(false)
         // console.log('错误1', err)
       })
 
@@ -290,35 +342,61 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
     } else {
       if (toToken !== 'ETH') {
         setDoneLoading(true)
+        setOpenConfirm(true)
+        handleApprovalClose()
         await swapContract.swapExactTokensForETH(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
           // console.log('结果swap', res)
-          await res.wait()
-          setDoneLoading(false)
-          handleApprovalClose()
-          onUpdate()
+          setOpenConfirm(false)
+          setOpenSend(true)
+          const res1 = await res.wait()
+
+          if (res1.blockNumber == null) {
+            // console.log('nulllllllllll')
+          } else {
+            setHash(String(res1.hash))
+            setOpenSend(false)
+            setOpenSucced(true)
+            setDoneLoading(false)
+            // handleSwapClose()
+          }
         }).catch((err) => {
           openNotification('top')
           handleApprovalClose()
           setDoneLoading(false)
+          setOpenConfirm(false)
           // console.log('错误1', err)
         })
 
 
       } else {
         setDoneLoading(true)
+        setOpenConfirm(true)
+        handleApprovalClose()
         await swapContract.swapExactETHForTokens(BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5, {
           from: address,
           value: BigInt((Number(inputToNum) * (10 ** 18)))
         }).then(async (res) => {
-          await res.wait()
-          setDoneLoading(false)
-          handleApprovalClose()
-          onUpdate()
+          setOpenConfirm(false)
+          setOpenSend(true)
+          const res1 = await res.wait()
+
+          if (res1.blockNumber == null) {
+            // console.log('nulllllllllll')
+          } else {
+            setHash(String(res1.hash))
+            setOpenSend(false)
+            setOpenSucced(true)
+            setDoneLoading(false)
+            // handleSwapClose()
+          }
+
+
         }).catch((err) => {
           openNotification('top')
           handleApprovalClose()
           setDoneLoading(false)
+          setOpenConfirm(false)
         })
 
 
@@ -490,6 +568,10 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, window
   return (
     <>
       {contextHolder}
+      <Confirm windowWidth={windowWidth} open={openConfirm} handleConfirmClose={handleConfirmClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+      <Seed windowWidth={windowWidth} open={openSend} handleConfirmClose={handleSeedClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+      <Succeed hash={hash} windowWidth={windowWidth} open={openSucced} handleConfirmClose={handleSucceedClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+
       {
         windowWidth >= 600 ? (
           <Box sx={{ width: '100%' }}>

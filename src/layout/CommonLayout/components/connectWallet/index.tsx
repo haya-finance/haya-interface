@@ -45,8 +45,9 @@ export default function ConnectWallet({ open, handleClose, windowWidth }: Props)
   const [installedWallets] = React.useMemo(() => {
     let installed: any[] = [];
 
-    for (let i = 0; i < connectors.length - 1; i++) {
+    for (let i = 0; i < connectors.length; i++) {
       if (connectors[i].type !== "injected" || connectors[i].icon == undefined) {
+        // console.log(connectors[i])
         // installed.push({
         //   name: connectors[i].name,
         //   icon: `assets/wallet/${connectors[i].name}.png`,
@@ -60,10 +61,18 @@ export default function ConnectWallet({ open, handleClose, windowWidth }: Props)
     return [installed];
   }, [connectors]);
 
+  // console.log(installedWallets)
+
   const handleWalletClick = (connector: any) => {
 
-    const res = connect({ connector });
-    console.log('res', res)
+
+    connect({ connector });
+
+    if (window.ethereum == undefined && connector.id == 'metaMask') {
+      window.open('https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?utm_source=google.com', '_blank')
+
+    }
+
     // console.log(connect, connectors);
     handleClose();
   };

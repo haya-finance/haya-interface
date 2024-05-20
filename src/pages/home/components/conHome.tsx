@@ -81,6 +81,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
   const navigate = useNavigate()
 
   const [tvl, setTvl] = useState('0')
+  const [currPrice, setCurrPrice] = useState('0')
 
   const getData = async () => {
     const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
@@ -90,9 +91,16 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
     await pairContract.getReserves().then(async (res: any) => {
       // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
       await priceFeed.latestRoundData().then(async (res1) => {
+        // console.log(res1)
         await priceFeed.decimals().then(async (res2) => {
+          // console.log(res2)
           const newtvl = String((Number(res[0]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)
+          // console.log(newtvl)
           setTvl(newtvl)
+          const price = String((Number(res[1]) / (10 ** 18)) * (Number(res[0]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))))
+          // console.log('price', price)
+          setCurrPrice(price)
+
         })
 
       })
@@ -111,7 +119,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
 
   useEffect(() => {
 
-  }, [tvl])
+  }, [tvl, currPrice])
 
 
   const goToSwap = () => {
@@ -165,7 +173,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                         Current Price
                       </Typography>
                       <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
-                        $100.00
+                        {`$ ${formatNumber(Number(currPrice))}`}
                       </Typography>
 
                     </Stack>
@@ -244,7 +252,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                       Current Price
                     </Typography>
                     <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
-                      $100.0
+                      {`$ ${formatNumber(Number(currPrice))}`}
                     </Typography>
 
                   </Stack>

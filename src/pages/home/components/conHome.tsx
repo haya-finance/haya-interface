@@ -15,7 +15,8 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { arb_url, ETH_Price_ARB, H30_Address, pair_Address, sepolia_rpc } from 'config';
 import pairAbi from 'abi/pair.json'
-import PriceFeedAbi from 'abi/priceFeeds.json'
+import PriceFeedAbi from 'abi/priceFeeds.json';
+import tokenAbi from 'abi/token.json'
 
 // third party
 
@@ -82,6 +83,27 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
 
   const [tvl, setTvl] = useState('0')
   const [currPrice, setCurrPrice] = useState('0')
+  const [tokenName, setTokenName] = useState([{ H20: 1, ETH: 0 }])
+
+
+  const getTokens = async () => {
+    const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+    await pairContract.token1().then(async (res: any) => {
+      const tokenContract = new ethers.Contract(res, tokenAbi, provider)
+      await tokenContract.symbol().then((res1) => {
+        console.log('1111111', res1)
+        if (res1 == 'H20') {
+          setTokenName((pre) => pre.map((item) => { return { H20: 1, ETH: 0 } }))
+        }
+
+      })
+      console.log('结果', res)
+      // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+    }).catch(err => {
+      console.log('错误输出', err)
+    })
+
+  }
 
   const getData = async () => {
     const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
@@ -94,10 +116,10 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
         // console.log(res1)
         await priceFeed.decimals().then(async (res2) => {
           // console.log(res2)
-          const newtvl = String((Number(res[0]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)
+          const newtvl = String((Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)
           // console.log(newtvl)
           setTvl(newtvl)
-          const price = String((Number(res[1]) / (10 ** 18)) * (Number(res[0]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))))
+          const price = String((Number(res[tokenName[0].H20]) / (10 ** 18)) / (Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))))
           // console.log('price', price)
           setCurrPrice(price)
 
@@ -113,9 +135,14 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
   }
 
   useEffect(() => {
+    getTokens()
     getData()
 
   }, [])
+
+  useEffect(() => {
+
+  }, [tokenName])
 
   useEffect(() => {
 

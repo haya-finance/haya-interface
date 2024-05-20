@@ -633,7 +633,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     <>
 
       <Box sx={{ width: '100%' }}>
-        <SwapReviewSwap onUpdate={onUpdate} windowHeight={windowHeight} slippage={slippage} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
+        <SwapReviewSwap toPrice={toPrice} formPrice={rePrice} onUpdate={onUpdate} windowHeight={windowHeight} slippage={slippage} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
         {
           windowWeight >= 600 ? (
             <>

@@ -141,6 +141,8 @@ type TypeProps = {
   inputToNum: string;
   inputFromNum: string;
   toToken: string;
+  toPrice: string;
+  formPrice: string;
   fromToken: string;
   windowWidth: number;
   slippage: string;
@@ -150,7 +152,7 @@ type TypeProps = {
 
 
 
-export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onUpdate }: TypeProps) {
+export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice, toPrice, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onUpdate }: TypeProps) {
 
 
   const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
@@ -601,7 +603,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                     </Stack>
 
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      {inputToNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data.filter(item => item?.symbol === toToken)[0]?.price) * Number(inputToNum))}`}
+                      {inputToNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(toPrice) * Number(inputToNum))}`}
 
                     </Typography>
 
@@ -630,7 +632,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                       <TokenColorIcon name={fromToken} size={36} />
                     </Stack>
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      {inputFromNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data.filter(item => item?.symbol === fromToken)[0]?.price) * Number(inputFromNum))}`}
+                      {inputFromNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(formPrice) * Number(inputFromNum))}`}
                     </Typography>
 
                   </Stack>
@@ -723,7 +725,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                     </Stack>
 
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      {inputToNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data.filter(item => item?.symbol === toToken)[0]?.price) * Number(inputToNum))}`}
+                      {inputToNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(toPrice) * Number(inputToNum))}`}
                     </Typography>
 
                   </Stack>
@@ -752,7 +754,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
                       <TokenColorIcon name={fromToken} size={36} />
                     </Stack>
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      {inputFromNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data.filter(item => item?.symbol === fromToken)[0]?.price) * Number(inputFromNum))}`}
+                      {inputFromNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(formPrice) * Number(inputFromNum))}`}
                     </Typography>
 
                   </Stack>

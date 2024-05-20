@@ -148,7 +148,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
 
 
   useEffect(() => {
-    // console.log('data', tokensData, H30Data)
+    console.log('data', tokensData, H30Data)
 
   }, [tokensData, H30Data])
 

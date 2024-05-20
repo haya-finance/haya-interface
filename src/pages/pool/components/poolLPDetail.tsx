@@ -140,7 +140,7 @@ const PoolLpDetail = () => {
 
 
     await pairContract.getReserves().then(async (res: any) => {
-      console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+      // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
       await priceFeed.latestRoundData().then(async (res1) => {
         await priceFeed.decimals().then(async (res2) => {
           const newtvl = String((Number(res[0]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)

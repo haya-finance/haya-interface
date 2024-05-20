@@ -279,7 +279,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
       setOpenConfirm(true)
       handleSwapClose()
 
-      await poolContract.removeLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(balance) * (num / 100)) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+      await poolContract.removeLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(balance) * (num / 100) * (10 ** 18))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
         // console.log('结果', res)
         // setInputReValue(String(Number(res[1]) / (10 ** 18)))
         // setOpenConfirm(false)
@@ -324,7 +324,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
         await res.wait()
         console.log('111111111111')
 
-        await poolContract.removeLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(balance) * (num / 100)) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res2: any) => {
+        await poolContract.removeLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(balance) * (num / 100) * (10 ** 18))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res2: any) => {
 
           // console.log('结果', res)
           // setInputReValue(String(Number(res[1]) / (10 ** 18)))

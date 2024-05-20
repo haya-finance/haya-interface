@@ -91,16 +91,16 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
     await pairContract.token1().then(async (res: any) => {
       const tokenContract = new ethers.Contract(res, tokenAbi, provider)
       await tokenContract.symbol().then((res1) => {
-        console.log('1111111', res1)
+        // console.log('1111111', res1)
         if (res1 == 'H20') {
           setTokenName((pre) => pre.map((item) => { return { H20: 1, ETH: 0 } }))
         }
 
       })
-      console.log('结果', res)
+      // console.log('结果', res)
       // setInputReValue(String(Number(res[1]) / (10 ** 18)))
     }).catch(err => {
-      console.log('错误输出', err)
+      // console.log('错误输出', err)
     })
 
   }
@@ -119,7 +119,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
           const newtvl = String((Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)
           // console.log(newtvl)
           setTvl(newtvl)
-          const price = String((Number(res[tokenName[0].H20]) / (10 ** 18)) / (Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))))
+          const price = String((Number(((Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[tokenName[0].H20]) / (10 ** 18)))))
           // console.log('price', price)
           setCurrPrice(price)
 

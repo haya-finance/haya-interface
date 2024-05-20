@@ -61,7 +61,7 @@ function ValueNumber(num: number) {
     for (let i = 0; i < decimalPart.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= 10 ** (i + 4)
-        num = Math.floor(num)
+        num = Math.round(num)
         num /= 10 ** (i + 4)
         var parts = num.toString().split(".");
         // console.log(parts)
@@ -71,7 +71,7 @@ function ValueNumber(num: number) {
     }
   } else {
     num *= 10000
-    num = Math.floor(num)
+    num = Math.round(num)
     num /= 10000
 
     return String(num)
@@ -344,7 +344,7 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
       setDoneLoading(true)
       setOpenConfirm(true)
       handleApprovalClose()
-      await poolContract.addLiquidity(WETH_address, H30_Address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+      await poolContract.addLiquidity(WETH_address, H30_Address, BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
         // console.log('结果222222222222', res)
         // setOpenConfirm(false)
@@ -375,11 +375,11 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
       })
 
     } else {
-      // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.floor(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
+      // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.round(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
       setDoneLoading(true)
       setOpenConfirm(true)
       handleApprovalClose()
-      await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+      await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
         // console.log('结果222222222222', res)
         // setOpenConfirm(false)
@@ -573,7 +573,7 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
     for (let i = 0; i < data.length; i++) {
       if (data[i].symbol == toToken || data[i].symbol == fromToken) {
         if (toToken == 'ETH') {
-          if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
+          if (BigInt(data[i].allowance) > BigInt(Math.round(Number(inputFromNum) * (10 ** 18)))) {
             // console.log('111111111111111111111')
 
             setApproval((pre) => {
@@ -593,7 +593,7 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
           }
 
         } else {
-          if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
+          if (BigInt(data[i].allowance) > BigInt(Math.round(Number(inputToNum) * (10 ** 18)))) {
             // console.log('111111111111111111111')
 
             setApproval((pre) => {

@@ -87,17 +87,17 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       price: '0.00'
 
     },
-    {
-      symbol: 'ETH',
-      address: '0x0d05D33Ab10870069DE5Aa7Ddcd42fbEB8C44dCd',
-      balance: '0',
-      network: chain?.name ?? 'Arbitrum Sepolia',
-      decimasl: '',
-      allowance: '',
-      contract: '0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165',
-      price: '0.00'
+    // {
+    //   symbol: 'ETH',
+    //   address: '0x0d05D33Ab10870069DE5Aa7Ddcd42fbEB8C44dCd',
+    //   balance: '0',
+    //   network: chain?.name ?? 'Arbitrum Sepolia',
+    //   decimasl: '',
+    //   allowance: '',
+    //   contract: '0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165',
+    //   price: '0.00'
 
-    }
+    // }
   ])
 
 

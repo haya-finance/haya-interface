@@ -281,8 +281,8 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
       await poolContract.removeLiquidity(H30_Address, WETH_address, String(Number(Number(balance) * (num / 100)) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
         // console.log('结果', res)
         // setInputReValue(String(Number(res[1]) / (10 ** 18)))
-        setOpenConfirm(false)
-        setOpenSend(true)
+        // setOpenConfirm(false)
+        // setOpenSend(true)
 
 
         const res1 = await res.wait()
@@ -291,7 +291,8 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
           // console.log('nulllllllllll')
         } else {
           setHash(String(res1.hash))
-          setOpenSend(false)
+          setOpenConfirm(false)
+          // setOpenSend(false)
           setOpenSucced(true)
 
           setDoneLoading(false)
@@ -325,8 +326,8 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
           // console.log('结果', res)
           // setInputReValue(String(Number(res[1]) / (10 ** 18)))
-          setOpenConfirm(false)
-          setOpenSend(true)
+          // setOpenConfirm(false)
+          // setOpenSend(true)
 
           const res3 = await res2.wait()
 
@@ -334,7 +335,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
             // console.log('nulllllllllll')
           } else {
             setHash(String(res3.hash))
-            setOpenSend(false)
+            setOpenConfirm(false)
             setOpenSucced(true)
 
             setDoneLoading(false)

@@ -419,9 +419,9 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                     </IndexTokenButton>
                   </Stack>
                   <Stack direction="row" alignItems="start">
-                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                    {/* <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
                       $ 0.00
-                    </Typography>
+                    </Typography> */}
 
                   </Stack>
                 </Box>
@@ -571,9 +571,9 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                     </IndexTokenButton>
                   </Stack>
                   <Stack direction="row" alignItems="start">
-                    <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                    {/* <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
                       $ 0.00
-                    </Typography>
+                    </Typography> */}
 
                   </Stack>
                 </Box>

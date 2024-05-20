@@ -296,8 +296,8 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
         await poolContract.addLiquidity(WETH_address, H30_Address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
           // console.log('结果222222222222', res)
-          setOpenConfirm(false)
-          setOpenSend(true)
+
+          // setOpenSend(true)
 
 
 
@@ -307,7 +307,8 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
             // console.log('nulllllllllll')
           } else {
             setHash(String(res1.hash))
-            setOpenSend(false)
+            setOpenConfirm(false)
+            // setOpenSend(false)
             setOpenSucced(true)
 
             setDoneLoading(false)
@@ -340,8 +341,8 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
         await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
           // console.log('结果222222222222', res)
-          setOpenConfirm(false)
-          setOpenSend(true)
+          // setOpenConfirm(false)
+          // setOpenSend(true)
 
 
 
@@ -351,7 +352,8 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
             // console.log('nulllllllllll')
           } else {
             setHash(String(res1.hash))
-            setOpenSend(false)
+            setOpenConfirm(false)
+            // setOpenSend(false)
             setOpenSucced(true)
 
             setDoneLoading(false)

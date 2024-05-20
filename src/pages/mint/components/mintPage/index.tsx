@@ -403,9 +403,9 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                       {indexToken}
                     </IndexTokenButton>
                   </Stack>
-                  <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                  {/* <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
                     $ 0.00
-                  </Typography>
+                  </Typography> */}
                 </Box>
 
 
@@ -538,9 +538,9 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                       {indexToken}
                     </IndexTokenButton>
                   </Stack>
-                  <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
+                  {/* <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
                     $ 0.00
-                  </Typography>
+                  </Typography> */}
                 </Box>
 
 

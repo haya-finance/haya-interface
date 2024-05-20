@@ -13,7 +13,7 @@ import HistoryNotial from './growth';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
-import { ETH_Price_ARB, pair_Address, sepolia_rpc } from 'config';
+import { arb_url, ETH_Price_ARB, H30_Address, pair_Address, sepolia_rpc } from 'config';
 import pairAbi from 'abi/pair.json'
 import PriceFeedAbi from 'abi/priceFeeds.json'
 
@@ -91,7 +91,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
       // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
       await priceFeed.latestRoundData().then(async (res1) => {
         await priceFeed.decimals().then(async (res2) => {
-          const newtvl = String((Number(res[0]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)
+          const newtvl = String((Number(res[1]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)
           setTvl(newtvl)
         })
 
@@ -121,6 +121,11 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
   useEffect(() => {
 
   }, [windowWidth])
+
+  const goCrantract = () => {
+    window.open(`${arb_url}${H30_Address}`, '_blank')
+
+  }
 
   return (
     <>
@@ -173,7 +178,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                         Market Cap
                       </Typography>
                       <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
-                        -----
+                        {`$ ${formatNumber(Number(tvl))}`}
                       </Typography>
 
                     </Stack>
@@ -194,10 +199,11 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                     <Stack spacing="10px" alignItems="center">
 
                       <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '16px', lineHeight: '14px' }}  >
-                        TVL
+                        Token Address
                       </Typography>
-                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
-                        {`$ ${formatNumber(Number(tvl))}`}
+                      <Typography component="button" onClick={goCrantract} variant="body1" sx={{ cursor: 'pointer', color: '#000', backgroundColor: 'transparent', border: 0, fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
+                        {H30_Address?.substring(0, 6)}...{H30_Address?.substring(H30_Address.length - 6)}
+
                       </Typography>
 
                     </Stack>
@@ -251,7 +257,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                       Market Cap
                     </Typography>
                     <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
-                      ------
+                      {`$ ${formatNumber(Number(tvl))}`}
                     </Typography>
 
                   </Stack>
@@ -261,10 +267,10 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                   <Stack spacing="16px" alignItems="center" padding="20px 20px">
 
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 100, fontSize: '18px', lineHeight: '12px' }}  >
-                      TVL
+                      Token Address
                     </Typography>
-                    <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
-                      {`$ ${formatNumber(Number(tvl))}`}
+                    <Typography variant="body1" onClick={goCrantract} component="button" sx={{ cursor: 'pointer', backgroundColor: 'transparent', border: 0, color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
+                      {H30_Address?.substring(0, 6)}...{H30_Address?.substring(H30_Address.length - 6)}
                     </Typography>
 
                   </Stack>

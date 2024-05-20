@@ -314,10 +314,10 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
         setLoading(true)
         setOpenConfirm(true)
         handleSwapClose()
-        await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+        await swapContract.swapExactTokensForTokens(BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl)))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
-          setOpenConfirm(false)
-          setOpenSend(true)
+          // setOpenConfirm(false)
+          // setOpenSend(true)
 
           // console.log('结果swap', res)
           const res1 = await res.wait()
@@ -326,7 +326,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
             // console.log('nulllllllllll')
           } else {
             setHash(String(res1.hash))
-            setOpenSend(false)
+            setOpenConfirm(false)
             setOpenSucced(true)
             setLoading(false)
             // handleSwapClose()
@@ -359,14 +359,14 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
           await swapContract.swapExactTokensForETH(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
             // console.log('结果swap', res)
-            setOpenConfirm(false)
-            setOpenSend(true)
+            // setOpenConfirm(false)
+            // setOpenSend(true)
             const res1 = await res.wait()
             if (res1.blockNumber == null) {
               // console.log('nulllllllllll')
             } else {
               setHash(String(res1.hash))
-              setOpenSend(false)
+              setOpenConfirm(false)
               setOpenSucced(true)
               setLoading(false)
             }
@@ -438,15 +438,15 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, handleSwap
             value: BigInt((Number(inputToNum) * (10 ** 18)))
           }).then(async (res) => {
 
-            setOpenConfirm(false)
-            setOpenSend(true)
+            // setOpenConfirm(false)
+            // setOpenSend(true)
             const res1 = await res.wait()
 
             if (res1.blockNumber == null) {
               // console.log('nulllllllllll')
             } else {
               setHash(String(res1.hash))
-              setOpenSend(false)
+              setOpenConfirm(false)
               setOpenSucced(true)
 
               setLoading(false)

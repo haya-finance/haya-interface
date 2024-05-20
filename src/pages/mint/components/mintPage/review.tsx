@@ -264,11 +264,12 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
       setOpenConfirm(true)
       setDoneLoading(true)
       handleSwapClose()
-      await MintContract.issue(H30_Address, String(Number(inputNum) * (10 ** 18)), address).then(async (res) => {
-        console.log('结果222222222222', res)
+
+      await MintContract.issue(H30_Address, BigInt(Math.floor(Number(inputNum) * (10 ** 18))), address).then(async (res) => {
+        // console.log('结果222222222222', res)
         // console.log('1111111111111111111')
-        setOpenConfirm(false)
-        setOpenSend(true)
+        // setOpenConfirm(false)
+        // setOpenSend(true)
 
 
 
@@ -287,7 +288,7 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
         } else {
           setHash(String(res1.hash))
           // console.log('成功')
-          setOpenSend(false)
+          setOpenConfirm(false)
           setOpenSucced(true)
 
           setDoneLoading(false)

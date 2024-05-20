@@ -27,55 +27,55 @@ const data: DataType[] = [
   {
     key: '1',
     name: 'BTC',
-    num: '25.13%',
+    num: '25.00%',
     color: '#F7931a'
   },
   {
     key: '2',
     name: 'ETH',
-    num: '24.16%',
+    num: '25.00%',
     color: '#627eea'
   },
   {
     key: '3',
     name: 'BNB',
-    num: '14.92%',
+    num: '13.33%',
     color: '#f3ba2f'
   },
   {
     key: '4',
     name: 'SOL',
-    num: '10.39%',
+    num: '12.00%',
     color: '#8d4ef7'
   },
   {
     key: '5',
     name: 'DOGE',
-    num: '3.56%',
+    num: '3.38%',
     color: '#fff'
   },
   {
     key: '6',
     name: 'TON',
-    num: '3.17%',
+    num: '3.41%',
     color: '#fff'
   },
   {
     key: '7',
     name: 'ADA',
-    num: '2.76%',
+    num: '2.62%',
     color: '#fff'
   },
   {
     key: '8',
     name: 'SHIB',
-    num: '2.40%',
+    num: '2.21%',
     color: '#fff'
   },
   {
     key: '9',
     name: 'AVAX',
-    num: '2.16%',
+    num: '2.14%',
     color: '#fff'
   },
   {
@@ -87,61 +87,61 @@ const data: DataType[] = [
   {
     key: '11',
     name: 'DOT',
-    num: '1.62%',
+    num: '1.57%',
     color: '#fff'
   },
   {
     key: '12',
     name: 'LINK',
-    num: '1.36%',
+    num: '1.53%',
     color: '#fff'
   },
   {
     key: '13',
     name: 'NEAR',
-    num: '1.26%',
+    num: '1.32%',
     color: '#fff'
   },
   {
     key: '14',
     name: 'MATIC',
-    num: '1.20%',
+    num: '1.06%',
     color: '#fff'
   },
   {
     key: '15',
     name: 'LTC',
-    num: '1.05%',
+    num: '0.96%',
     color: '#fff'
   },
   {
     key: '16',
     name: 'UNI',
-    num: '0.79%',
+    num: '0.72%',
     color: '#fff'
   },
   {
     key: '17',
     name: 'RNDR',
-    num: '0.51%',
+    num: '0.61%',
     color: '#fff'
   },
   {
     key: '18',
     name: 'APT',
-    num: '0.64%',
+    num: '0.55%',
     color: '#fff'
   },
   {
     key: '19',
     name: 'FIL',
-    num: '0.54%',
+    num: '0.48%',
     color: '#fff'
   },
   {
     key: '20',
     name: 'ARB',
-    num: '0.49%',
+    num: '0.41%',
     color: '#fff'
   },
 ];
@@ -166,16 +166,16 @@ const Methodology = ({ windowWidth }: TypeProps) => {
             </Typography>
             <Box sx={{ height: '30px', width: '100%', backgroundColor: 'transparent', mb: '20px' }}>
               <Stack direction="row">
-                <Box sx={{ backgroundColor: '#F7931A', width: '25.14%', height: '30px', borderRadius: '20px 0 0 20px' }}>
+                <Box sx={{ backgroundColor: '#F7931A', width: '25%', height: '30px', borderRadius: '20px 0 0 20px' }}>
 
                 </Box>
-                <Box sx={{ backgroundColor: '#627EEA', width: '24.16%', height: '30px' }}>
+                <Box sx={{ backgroundColor: '#627EEA', width: '25%', height: '30px' }}>
 
                 </Box>
-                <Box sx={{ backgroundColor: '#F3BA2F', width: '14.93%', height: '30px' }}>
+                <Box sx={{ backgroundColor: '#F3BA2F', width: '13.33%', height: '30px' }}>
 
                 </Box>
-                <Box sx={{ backgroundColor: '#8D4EF7', width: '10.40%', height: '30px' }}>
+                <Box sx={{ backgroundColor: '#8D4EF7', width: '12%', height: '30px' }}>
 
                 </Box>
                 <Box sx={{ backgroundColor: '#E9ECEA', flex: 1, height: '30px', borderRadius: '0 20px 20px 0' }}>
@@ -351,16 +351,16 @@ const Methodology = ({ windowWidth }: TypeProps) => {
               </Typography>
               <Box sx={{ height: '30px', width: '100%', backgroundColor: 'transparent', mb: '20px' }}>
                 <Stack direction="row">
-                  <Box sx={{ backgroundColor: '#F7931A', width: '25.14%', height: '30px', borderRadius: '20px 0 0 20px' }}>
+                  <Box sx={{ backgroundColor: '#F7931A', width: '25%', height: '30px', borderRadius: '20px 0 0 20px' }}>
 
                   </Box>
-                  <Box sx={{ backgroundColor: '#627EEA', width: '24.16%', height: '30px' }}>
+                  <Box sx={{ backgroundColor: '#627EEA', width: '25%', height: '30px' }}>
 
                   </Box>
-                  <Box sx={{ backgroundColor: '#F3BA2F', width: '14.93%', height: '30px' }}>
+                  <Box sx={{ backgroundColor: '#F3BA2F', width: '13.33%', height: '30px' }}>
 
                   </Box>
-                  <Box sx={{ backgroundColor: '#8D4EF7', width: '10.40%', height: '30px' }}>
+                  <Box sx={{ backgroundColor: '#8D4EF7', width: '12%', height: '30px' }}>
 
                   </Box>
                   <Box sx={{ backgroundColor: '#E9ECEA', flex: 1, height: '30px', borderRadius: '0 20px 20px 0' }}>

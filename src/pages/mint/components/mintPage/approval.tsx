@@ -289,8 +289,8 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
     MintContract.issue(H30_Address, String(Number(inputNum) * (10 ** 18)), address).then(async (res) => {
 
       // console.log('结果222222222222', res)
-      setOpenConfirm(false)
-      setOpenSend(true)
+      // setOpenConfirm(false)
+      // setOpenSend(true)
 
 
 
@@ -300,7 +300,7 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
         // console.log('nulllllllllll')
       } else {
         setHash(String(res1.hash))
-        setOpenSend(false)
+        setOpenConfirm(false)
         setOpenSucced(true)
 
         setDoneLoading(false)

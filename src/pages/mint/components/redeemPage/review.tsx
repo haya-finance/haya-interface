@@ -262,15 +262,14 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
     setOpenConfirm(true)
     handleSwapClose()
 
-    MintContract.redeem(H30_Address, BigInt(Number(inputNum) * (10 ** 18)), address).then(async (res: any) => {
-
-      const da = res.hash
-      console.log('daaaaaa', da)
-
-      setOpenConfirm(false)
-      setOpenSend(true)
+    await MintContract.redeem(H30_Address, BigInt(Number(inputNum) * (10 ** 18)), address).then(async (res: any) => {
 
 
+
+      // console.log('daaaaaa', da)
+
+      // setOpenConfirm(false)
+      // setOpenSend(true)
 
       const res1 = await res.wait()
 
@@ -278,11 +277,8 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
         // console.log('nulllllllllll')
       } else {
         setHash(String(res1.hash))
-        setOpenSend(false)
+        setOpenConfirm(false)
         setOpenSucced(true)
-
-
-
         setLoading(false)
         // handleSwapClose()
       }

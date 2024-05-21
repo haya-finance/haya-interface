@@ -413,6 +413,8 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     },
   }));
 
+  const [WETHAmount, setWETHAmount] = useState('')
+
 
   const Swap = async (value: any) => {
 
@@ -424,9 +426,10 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
     if (pay == 'USDT' || receive == 'USDT' || pay == 'USDC' || receive == 'USDC') {
       await swapContract.getAmountsOut(BigInt(Math.round(Number(value) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl)))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
-        console.log('结果', res)
+        // console.log('结果', res)
         setInputReValue(String(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
         setInputReShowValue(ValueNumber(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
+        setWETHAmount(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === 'WETH')[0].decimasl))))
       }).catch(err => {
         // console.log('err', err)
         setInputReValue('')
@@ -463,6 +466,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
         // console.log('结果', res)
         setInputValue(String(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
         setInputShowValue(ValueNumber(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
+        setWETHAmount(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === 'WETH')[0].decimasl))))
       }).catch(err => {
         // console.log('错误输出', err)
         setInputValue('')
@@ -506,7 +510,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
     } else {
       await swapContract.getAmountsOut(BigInt(Number('1') * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
-        // console.log('结果', res)
+
         setOneValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
       })
     }
@@ -515,12 +519,17 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
   }
 
+  useEffect(() => {
+
+  }, [WETHAmount])
+
   const InputChange = (event: any) => {
     const newValue = event.target.value.replace(/-/, '')
     setInputValue(newValue)
     setInputShowValue(newValue)
 
     if (pay !== 'Select token' && receive !== "Select token") {
+      console.log(newValue)
       Swap(newValue)
     }
     // if (String(event.target.value) == "") {
@@ -713,7 +722,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     <>
 
       <Box sx={{ width: '100%' }}>
-        <SwapReviewSwap toPrice={toPrice} formPrice={rePrice} onUpdate={onUpdate} windowHeight={windowHeight} slippage={slippage} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
+        <SwapReviewSwap WETHAmount={WETHAmount} toPrice={toPrice} formPrice={rePrice} onUpdate={onUpdate} windowHeight={windowHeight} slippage={slippage} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
         {
           windowWeight >= 600 ? (
             <>

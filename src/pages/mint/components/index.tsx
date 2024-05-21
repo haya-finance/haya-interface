@@ -163,7 +163,7 @@ export default function MintPage({ windowWidth, windowHeight }: PropsType) {
                   address: addresses[i],
                   balance: String(Number(BigInt(res1[i])) / (10 ** Number(decimals[i]))),
                   num: String(Number(nums[i]) / (10 ** Number(decimals[i]))),
-                  allowance: String(BigInt(res2[i]) / BigInt((10 ** Number(decimals[i])))),
+                  allowance: String(BigInt(res2[i])),
                   decimals: String(decimals[i])
 
                 })

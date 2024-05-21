@@ -122,7 +122,7 @@ export default function AddPool() {
       // console.log('数据', res2)
       await contract.allowance(address, UniswapSepoliaRouterContract).then((res3: any) => {
 
-        setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, balance: String(Number(res2) / (10 ** 18)), allowance: String(BigInt(res3) / BigInt(10 ** 18)) } : item))
+        setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, balance: String(Number(res2) / (10 ** 18)), allowance: String(BigInt(res3)) } : item))
       })
 
 

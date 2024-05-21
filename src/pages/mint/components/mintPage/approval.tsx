@@ -420,6 +420,8 @@ export default function ApprovalTokens({ open, handleApprovalClose, data, inputN
 
       if (approval.every(item => item == true)) {
         setDisabled(false)
+      } else {
+        setDisabled(true)
       }
 
     }

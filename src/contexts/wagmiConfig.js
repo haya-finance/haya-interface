@@ -3,7 +3,7 @@ import {
   unstable_connector,
 } from '@wagmi/core'
 import { http, createConfig } from 'wagmi'
-import { arbitrum } from 'wagmi/chains'
+import { arbitrumSepolia } from 'wagmi/chains'
 import { walletConnect, coinbaseWallet, injected } from 'wagmi/connectors'
 
 
@@ -13,9 +13,9 @@ const projectId = '823b8497d9c99138b4aebecfa4425469'
 // arbitrum,
 
 export const config = createConfig({
-  chains: [arbitrum],
+  chains: [arbitrumSepolia],
   connectors: [
-    injected({ target: 'metaMask', chains: [arbitrum] }),
+    injected({ target: 'metaMask', chains: [arbitrumSepolia] }),
     walletConnect({ projectId }),
     coinbaseWallet({
       enableMobileWalletLink: true,
@@ -25,7 +25,7 @@ export const config = createConfig({
   ],
   transports: {
     // [mainnet.id]: http(),
-    [arbitrum.id]: fallback([
+    [arbitrumSepolia.id]: fallback([
       unstable_connector(injected, coinbaseWallet, walletConnect),
       http()
     ])

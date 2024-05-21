@@ -17,6 +17,7 @@ type TypeProps = {
   inputFromNum: string;
   toToken: string;
   fromToken: string;
+  WETHAmount: string
 
 }
 
@@ -52,7 +53,7 @@ function ValueNumber(num: number) {
 
 
 
-const Confirm = ({ windowWidth, handleConfirmClose, open, inputFromNum, inputToNum, toToken, fromToken }: TypeProps) => {
+const Confirm = ({ windowWidth, handleConfirmClose, open, inputFromNum, inputToNum, WETHAmount, toToken, fromToken }: TypeProps) => {
 
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
@@ -113,6 +114,22 @@ const Confirm = ({ windowWidth, handleConfirmClose, open, inputFromNum, inputToN
                       </Typography>
 
                     </Stack>
+                    {/* {
+                      toToken == 'USDC' || fromToken == 'USDC' || toToken == 'USDT' || fromToken == 'USDT' ? (
+                        <>
+                          <img src={RightRow} />
+                          <Stack direction="row" spacing="4px" alignItems="center"  >
+                            <TokenColorIcon name='WETH' size={22} />
+                            <Typography variant='body1' sx={{ color: '#000', fontWeight: 600, fontSize: '24px' }}>
+                              {ValueNumber(Number(WETHAmount))} WETH
+                            </Typography>
+
+                          </Stack>
+                        </>
+                      ) : (
+                        <></>
+                      )
+                    } */}
                     <img src={RightRow} />
                     <Stack direction="row" spacing="4px" alignItems="center"  >
                       <TokenColorIcon name={fromToken} size={22} />

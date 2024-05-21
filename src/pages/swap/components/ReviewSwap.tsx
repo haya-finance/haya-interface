@@ -148,11 +148,12 @@ type TypeProps = {
   slippage: string;
   windowHeight: number;
   onUpdate: () => void;
+  WETHAmount: string
 }
 
 
 
-export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice, toPrice, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onUpdate }: TypeProps) {
+export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice, WETHAmount, toPrice, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onUpdate }: TypeProps) {
 
 
   const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
@@ -307,43 +308,87 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice,
 
 
     if (toToken !== 'ETH' && fromToken !== 'ETH') {
-      if (BigInt(data.filter(item => item.symbol === toToken)[0].allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))))) {
+      if (toToken !== 'WETH' && fromToken !== 'WETH') {
+        console.log(BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl)))), Number(data.filter(item => item.symbol === toToken)[0].decimasl))
 
-        handleSwapClose()
-        setOpenApproval(true)
+        if (BigInt(data.filter(item => item.symbol === toToken)[0].allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))))) {
+
+          handleSwapClose()
+          setOpenApproval(true)
+
+        } else {
+          setLoading(true)
+          setOpenConfirm(true)
+          handleSwapClose()
+          await swapContract.swapExactTokensForTokens(BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl)))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+
+            // setOpenConfirm(false)
+            // setOpenSend(true)
+
+            // console.log('结果swap', res)
+            const res1 = await res.wait()
+
+            if (res1.blockNumber == null) {
+              // console.log('nulllllllllll')
+            } else {
+              setHash(String(res1.hash))
+              setOpenConfirm(false)
+              setOpenSucced(true)
+              setLoading(false)
+              // handleSwapClose()
+            }
+          }).catch((err) => {
+            openNotification('top')
+            handleSwapClose()
+            setLoading(false)
+            setOpenConfirm(false)
+            // console.log('错误1', err)
+          })
+
+
+
+
+        }
 
       } else {
-        setLoading(true)
-        setOpenConfirm(true)
-        handleSwapClose()
-        await swapContract.swapExactTokensForTokens(BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl)))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+        if (BigInt(data.filter(item => item.symbol === toToken)[0].allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))))) {
 
-          // setOpenConfirm(false)
-          // setOpenSend(true)
-
-          // console.log('结果swap', res)
-          const res1 = await res.wait()
-
-          if (res1.blockNumber == null) {
-            // console.log('nulllllllllll')
-          } else {
-            setHash(String(res1.hash))
-            setOpenConfirm(false)
-            setOpenSucced(true)
-            setLoading(false)
-            // handleSwapClose()
-          }
-        }).catch((err) => {
-          openNotification('top')
           handleSwapClose()
-          setLoading(false)
-          setOpenConfirm(false)
-          // console.log('错误1', err)
-        })
+          setOpenApproval(true)
+
+        } else {
+          setLoading(true)
+          setOpenConfirm(true)
+          handleSwapClose()
+          await swapContract.swapExactTokensForTokens(BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl)))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+
+            // setOpenConfirm(false)
+            // setOpenSend(true)
+
+            // console.log('结果swap', res)
+            const res1 = await res.wait()
+
+            if (res1.blockNumber == null) {
+              // console.log('nulllllllllll')
+            } else {
+              setHash(String(res1.hash))
+              setOpenConfirm(false)
+              setOpenSucced(true)
+              setLoading(false)
+              // handleSwapClose()
+            }
+          }).catch((err) => {
+            openNotification('top')
+            handleSwapClose()
+            setLoading(false)
+            setOpenConfirm(false)
+            // console.log('错误1', err)
+          })
 
 
 
 
+        }
       }
 
 
@@ -358,7 +403,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice,
           setLoading(true)
           setOpenConfirm(true)
           handleSwapClose()
-          await swapContract.swapExactTokensForETH(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+          await swapContract.swapExactTokensForETH(BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl)))), BigInt(Math.floor((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
 
             // console.log('结果swap', res)
             // setOpenConfirm(false)
@@ -425,56 +470,48 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice,
 
       } else {
 
-        if (BigInt(data.filter(item => item.symbol === toToken)[0].allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))))) {
-          handleSwapClose()
-          setOpenApproval(true)
+        setLoading(true)
+        setOpenConfirm(true)
+        handleSwapClose()
+        await swapContract.swapExactETHForTokens(BigInt(Math.floor((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5, {
+          from: address,
+          value: BigInt(Math.floor((Number(inputToNum) * (10 ** 18))))
+        }).then(async (res) => {
 
+          // setOpenConfirm(false)
+          // setOpenSend(true)
+          const res1 = await res.wait()
 
-
-        } else {
-          setLoading(true)
-          setOpenConfirm(true)
-          handleSwapClose()
-          await swapContract.swapExactETHForTokens(BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5, {
-            from: address,
-            value: BigInt((Number(inputToNum) * (10 ** 18)))
-          }).then(async (res) => {
-
-            // setOpenConfirm(false)
-            // setOpenSend(true)
-            const res1 = await res.wait()
-
-            if (res1.blockNumber == null) {
-              // console.log('nulllllllllll')
-            } else {
-              setHash(String(res1.hash))
-              setOpenConfirm(false)
-              setOpenSucced(true)
-
-              setLoading(false)
-            }
-
-          }).catch((err) => {
-            openNotification('top')
-            handleSwapClose()
-            setLoading(false)
+          if (res1.blockNumber == null) {
+            // console.log('nulllllllllll')
+          } else {
+            setHash(String(res1.hash))
             setOpenConfirm(false)
-          })
-          // await swapContract.swapExactTokensForTokens(BigInt(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))), BigInt(Math.round((1 - (Number(slippage) / 100)) * Number(inputFromNum) * (10 ** Number(data.filter(item => item.symbol === fromToken)[0].decimasl)))), [data.filter(item => item.symbol === toToken)[0].address, data.filter(item => item.symbol === fromToken)[0].address], address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+            setOpenSucced(true)
 
-          //   // console.log('结果swap', res)
-          //   await res.wait()
-          //   setLoading(false)
-          //   handleSwapClose()
-          //   onUpdate()
-          // }).catch((err) => {
-          //   openNotification('top')
-          //   handleSwapClose()
-          //   setLoading(false)
-          //   // console.log('错误1', err)
-          // })
+            setLoading(false)
+          }
 
-        }
+        }).catch((err) => {
+          console.log(err)
+          openNotification('top')
+          handleSwapClose()
+          setLoading(false)
+          setOpenConfirm(false)
+        })
+
+        // if (BigInt(data.filter(item => item.symbol === toToken)[0].allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data.filter(item => item.symbol === toToken)[0].decimasl))))) {
+        //   handleSwapClose()
+        //   setOpenApproval(true)
+
+
+        // } else {
+
+
+
+        // }
+
+
         // const tokenContract = new ethers.Contract(data.filter(item => item.symbol === toToken)[0].address, wethAbi, await provider)
 
         // await tokenContract.deposit({
@@ -553,12 +590,12 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice,
 
   return (
     <>
-      <ApprovalTokens onUpdate={onUpdate} slippage={slippage} windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} toToken={toToken} fromToken={fromToken} inputFromNum={inputFromNum} inputToNum={inputToNum} windowWidth={windowWidth} />
+      <ApprovalTokens WETHAmount={WETHAmount} onUpdate={onUpdate} slippage={slippage} windowHeight={windowHeight} open={openApproval} handleApprovalClose={handleApprovalClose} data={data} toToken={toToken} fromToken={fromToken} inputFromNum={inputFromNum} inputToNum={inputToNum} windowWidth={windowWidth} />
 
       {contextHolder}
-      <Confirm windowWidth={windowWidth} open={openConfirm} handleConfirmClose={handleConfirmClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+      <Confirm WETHAmount={WETHAmount} windowWidth={windowWidth} open={openConfirm} handleConfirmClose={handleConfirmClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
       <Seed windowWidth={windowWidth} open={openSend} handleConfirmClose={handleSeedClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
-      <Succeed hash={hash} windowWidth={windowWidth} open={openSucced} handleConfirmClose={handleSucceedClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
+      <Succeed WETHAmount={WETHAmount} hash={hash} windowWidth={windowWidth} open={openSucced} handleConfirmClose={handleSucceedClose} inputFromNum={inputFromNum} inputToNum={inputToNum} toToken={toToken} fromToken={fromToken} />
 
       {
         windowWidth >= 600 ? (

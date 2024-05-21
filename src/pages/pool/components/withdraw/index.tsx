@@ -299,7 +299,7 @@ export default function WithdrawPoolPage() {
   const getAllowance = async () => {
     const ApproveContract = new ethers.Contract(pair_Address, tokenAbi, provider)
     await ApproveContract.allowance(address, UniswapSepoliaRouterContract).then((res) => {
-      setAllowance(String(BigInt(res) / BigInt(10 ** 18)))
+      setAllowance(String(BigInt(res)))
 
     })
 

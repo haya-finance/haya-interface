@@ -9,7 +9,7 @@ import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
 import SwapSons from './swapPage';
 // import Web3 from 'web3'
 import tokenAbi from 'abi/token.json'
-import { H30_Address, sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
+import { ETH_Price_ARB, H30_Address, sepolia_rpc, UniswapSepoliaRouterContract, ETH_ADDRESS, USDC_address, USDC_PRICE, USDT_ADDRESS, USDT_PRICE, WETH_address } from 'config';
 import { ethers } from 'ethers';
 import { PiWarningBold } from "react-icons/pi";
 import Setting from 'assets/images/icon/Setting.svg';
@@ -45,12 +45,12 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
   const [tokenList, setTokenList] = useState<TokenListType[]>([
     {
       symbol: 'WETH',
-      address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', //'0x0cE40884F9460593Dd804E346E2fE7CA9b35D3c7',
+      address: WETH_address,
       balance: '0',
       network: chain?.name ?? 'Arbitrum One',
       decimasl: '',
       allowance: '',
-      contract: '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612',
+      contract: ETH_Price_ARB,
       price: '0.00'
     },
     {
@@ -66,35 +66,35 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
     },
     {
       symbol: 'USDT',
-      address: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9', //'0xD7fbE1d17b8bAB5e94377428fcDC04904f39c4F4'
+      address: USDT_ADDRESS, //'0xD7fbE1d17b8bAB5e94377428fcDC04904f39c4F4'
       balance: '0',
       network: chain?.name ?? 'Arbitrum One',
       decimasl: '',
       allowance: '',
-      contract: '0x3f3f5dF88dC9F13eac63DF89EC16ef6e7E25DdE7', //'0x80EDee6f667eCc9f63a0a6f55578F870651f06A4',
+      contract: USDT_PRICE, //'0x80EDee6f667eCc9f63a0a6f55578F870651f06A4',
       price: '0.00'
 
 
     },
     {
       symbol: 'USDC',
-      address: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831', //'0x3b88ef38959aC57f69eF2798e03c0E8994F1a3aa',
+      address: USDC_address, //'0x3b88ef38959aC57f69eF2798e03c0E8994F1a3aa',
       balance: '0',
       network: chain?.name ?? 'Arbitrum One',
       decimasl: '',
       allowance: '',
-      contract: '0x50834F3163758fcC1Df9973b6e91f0F0F0434aD3', //'0x0153002d20B96532C639313c2d54c3dA09109309',
+      contract: USDC_PRICE, //'0x0153002d20B96532C639313c2d54c3dA09109309',
       price: '0.00'
 
     },
     {
       symbol: 'ETH',
-      address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+      address: ETH_ADDRESS,
       balance: '0',
       network: chain?.name ?? 'Arbitrum One',
       decimasl: '',
       allowance: '',
-      contract: '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612', //'0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165',
+      contract: ETH_Price_ARB, //'0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165',
       price: '0.00'
 
     }
@@ -108,7 +108,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
 
 
-  const getBalance = async (add: any) => {
+  const getBalance = async (add: any, symbol: any) => {
     const contract = new ethers.Contract(add, tokenAbi, provider)
 
 
@@ -118,7 +118,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       await contract.decimals().then(async (decimasl: any) => {
         await contract.allowance(address, UniswapSepoliaRouterContract).then((allow: any) => {
 
-          setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, balance: String(Number(res2) / (10 ** Number(decimasl))), decimasl: decimasl, allowance: String(BigInt(allow) / BigInt((10 ** Number(decimasl)))) } : item))
+          setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, balance: String(Number(res2) / (10 ** Number(decimasl))), decimasl: decimasl, allowance: String(BigInt(allow)) } : item))
 
 
         })
@@ -151,7 +151,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
 
         } else {
-          getBalance(tokenList[i]?.address)
+          getBalance(tokenList[i]?.address, tokenList[i].symbol)
         }
 
       }
@@ -161,20 +161,21 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
 
   const getEthBalance = async (add: string) => {
-    // const contract = new ethers.Contract(add, tokenAbi, provider)
+    const contract = new ethers.Contract(add, tokenAbi, provider)
     const balance = await provider.getBalance(address ?? '')
+    // console.log('balance', balance)
     setTokenList((pre) => pre.map((item) => item.symbol === 'ETH' ? { ...item, balance: String(Number(balance) / (10 ** 18)), decimasl: String(18), allowance: String(ethers.MaxUint256) } : item))
-    // await contract.decimals().then(async (decimasl: any) => {
-    //   await contract.allowance(address, UniswapSepoliaRouterContract).then((allow: any) => {
+    await contract.decimals().then(async (decimasl: any) => {
+      await contract.allowance(address, UniswapSepoliaRouterContract).then((allow: any) => {
 
-    //     setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, decimasl: decimasl, allowance: String(BigInt(allow) / BigInt((10 ** Number(decimasl)))) } : item))
-
-
-    //   })
+        setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, decimasl: decimasl, allowance: String(BigInt(allow)) } : item))
 
 
+      })
 
-    // })
+
+
+    })
 
   }
 
@@ -196,7 +197,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
 
         } else {
-          getBalance(tokenList[i]?.address)
+          getBalance(tokenList[i]?.address, tokenList[i].symbol)
         }
       }
     }

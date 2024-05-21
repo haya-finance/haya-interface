@@ -19,7 +19,8 @@ type TypeProps = {
   inputFromNum: string;
   toToken: string;
   fromToken: string;
-  hash: string
+  hash: string;
+  WETHAmount: string
 
 }
 
@@ -53,7 +54,7 @@ function ValueNumber(num: number) {
 
 
 
-const Succeed = ({ windowWidth, handleConfirmClose, open, hash, inputFromNum, inputToNum, toToken, fromToken }: TypeProps) => {
+const Succeed = ({ windowWidth, handleConfirmClose, open, hash, inputFromNum, inputToNum, WETHAmount, toToken, fromToken }: TypeProps) => {
 
 
 
@@ -125,6 +126,22 @@ const Succeed = ({ windowWidth, handleConfirmClose, open, hash, inputFromNum, in
                       </Typography>
 
                     </Stack>
+                    {/* {
+                      toToken == 'USDC' || fromToken == 'USDC' || toToken == 'USDT' || fromToken == 'USDT' ? (
+                        <>
+                          <img src={RightRow} />
+                          <Stack direction="row" spacing="4px" alignItems="center"  >
+                            <TokenColorIcon name='WETH' size={22} />
+                            <Typography variant='body1' sx={{ color: '#000', fontWeight: 600, fontSize: '24px' }}>
+                              {ValueNumber(Number(WETHAmount))} WETH
+                            </Typography>
+
+                          </Stack>
+                        </>
+                      ) : (
+                        <></>
+                      )
+                    } */}
                     <img src={RightRow} />
                     <Stack direction="row" spacing="4px" alignItems="center"  >
                       <TokenColorIcon name={fromToken} size={22} />

@@ -424,9 +424,9 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
     if (pay == 'USDT' || receive == 'USDT' || pay == 'USDC' || receive == 'USDC') {
       await swapContract.getAmountsOut(BigInt(Math.round(Number(value) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl)))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
-        // console.log('结果', res)
-        setInputReValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
-        setInputReShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
+        console.log('结果', res)
+        setInputReValue(String(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
+        setInputReShowValue(ValueNumber(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
       }).catch(err => {
         // console.log('err', err)
         setInputReValue('')
@@ -461,8 +461,8 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     if (pay == 'USDT' || receive == 'USDT' || pay == 'USDC' || receive == 'USDC') {
       await swapContract.getAmountsOut(BigInt(Math.round(Number(value) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl)))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === pay)[0].address]).then((res: any) => {
         // console.log('结果', res)
-        setInputValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
-        setInputShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
+        setInputValue(String(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
+        setInputShowValue(ValueNumber(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
       }).catch(err => {
         // console.log('错误输出', err)
         setInputValue('')
@@ -501,7 +501,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     if (pay == 'USDT' || receive == 'USDT' || pay == 'USDC' || receive == 'USDC') {
       await swapContract.getAmountsOut(BigInt(Number('1') * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
         // console.log('结果', res)
-        setOneValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
+        setOneValue(ValueNumber(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
       })
 
     } else {

@@ -430,6 +430,18 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
     OnChange()
   }
 
+  useEffect(() => {
+    if (inputToValue !== '' && inputReValue !== '') {
+      const toToken = data.filter(item => item.symbol === pay)
+      const fromToken = data.filter(item => item.symbol === receive)
+      const num = (Number(fromToken[0].proportion) * Number(inputToValue)) / Number(toToken[0].proportion)
+      setInputReValue(String(num))
+      setInputReShowValue(ValueNumber(num) ?? '0')
+    }
+
+
+  }, [pay, receive])
+
 
 
   return (

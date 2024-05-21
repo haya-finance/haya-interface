@@ -161,20 +161,20 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
 
   const getEthBalance = async (add: string) => {
-    const contract = new ethers.Contract(add, tokenAbi, provider)
+    // const contract = new ethers.Contract(add, tokenAbi, provider)
     const balance = await provider.getBalance(address ?? '')
     setTokenList((pre) => pre.map((item) => item.symbol === 'ETH' ? { ...item, balance: String(Number(balance) / (10 ** 18)), decimasl: String(18), allowance: String(ethers.MaxUint256) } : item))
-    await contract.decimals().then(async (decimasl: any) => {
-      await contract.allowance(address, UniswapSepoliaRouterContract).then((allow: any) => {
+    // await contract.decimals().then(async (decimasl: any) => {
+    //   await contract.allowance(address, UniswapSepoliaRouterContract).then((allow: any) => {
 
-        setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, decimasl: decimasl, allowance: String(BigInt(allow) / BigInt((10 ** Number(decimasl)))) } : item))
-
-
-      })
+    //     setTokenList((pre) => pre.map((item) => item.address === add ? { ...item, decimasl: decimasl, allowance: String(BigInt(allow) / BigInt((10 ** Number(decimasl)))) } : item))
 
 
+    //   })
 
-    })
+
+
+    // })
 
   }
 

@@ -65,7 +65,7 @@ function InputNumber(num: number) {
     for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= 10 ** (i + 2)
-        num = Math.floor(num)
+        num = Math.round(num)
         num /= 10 ** (i + 2)
         var parts = num.toString().split(".");
         // console.log(parts)
@@ -75,7 +75,7 @@ function InputNumber(num: number) {
     }
   } else {
     num *= 100
-    num = Math.floor(num)
+    num = Math.round(num)
     num /= 100
 
     return String(num)
@@ -121,7 +121,7 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty,
                   <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
                     <Stack direction="row" alignItems="center" >
                       <Typography sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 700 }}>
-                        ETH per H30
+                        ETH per H20
                       </Typography>
                     </Stack>
                     <Stack direction="row" alignItems="center" >
@@ -135,13 +135,13 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty,
                   <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
                     <Stack direction="row" alignItems="center" >
                       <Typography sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}>
-                        H30 per ETH
+                        H20 per ETH
                       </Typography>
                     </Stack>
                     <Stack direction="row" alignItems="center" >
                       <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 600 }}>
                         {
-                          toToken === 'H30' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
+                          toToken === 'H20' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
                         }
                       </Typography>
                     </Stack>
@@ -154,7 +154,15 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty,
                     </Stack>
                     <Stack direction="row" alignItems="center" >
                       <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 600 }}>
-                        {InputNumber(Number(inputValue) / Number(toLiquidty)) ?? 0.00} %
+                        {
+                          toToken == 'ETH' ? (
+                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))) / Number(Math.sqrt(Number(toLiquidty) * Number(fromLiquidty)) + Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))))) * 100)) ?? 0.00} %</>
+
+                          ) : (
+                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))) / Math.sqrt(Number(toLiquidty) * Number(fromLiquidty))) * 100)) ?? 0.00}%</>
+                          )
+                        }
+
                       </Typography>
                     </Stack>
                   </Stack>
@@ -190,7 +198,7 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty,
                   <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
                     <Stack direction="row" alignItems="center" >
                       <Typography sx={{ color: '#9B9B9B', fontSize: '13px', fontWeight: 600 }}>
-                        ETH per H30
+                        ETH per H20
                       </Typography>
                     </Stack>
                     <Stack direction="row" alignItems="center" >
@@ -204,13 +212,13 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty,
                   <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
                     <Stack direction="row" alignItems="center" >
                       <Typography sx={{ color: '#9B9B9B', fontSize: '13px', fontWeight: 600 }}>
-                        H30 per ETH
+                        H20 per ETH
                       </Typography>
                     </Stack>
                     <Stack direction="row" alignItems="center" >
                       <Typography sx={{ color: "#464646", fontSize: '13px', fontWeight: 600 }}>
                         {
-                          toToken === 'H30' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
+                          toToken === 'H20' ? ValueNumber(Number((1 * Number(toLiquidty)) / Number(fromLiquidty))) : ValueNumber(Number((1 * Number(fromLiquidty)) / Number(toLiquidty)))
                         }
                       </Typography>
                     </Stack>
@@ -223,7 +231,14 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty,
                     </Stack>
                     <Stack direction="row" alignItems="center" >
                       <Typography sx={{ color: "#464646", fontSize: '13px', fontWeight: 600 }}>
-                        {InputNumber(Number(inputValue) / Number(toLiquidty)) ?? 0.00} %
+                        {
+                          toToken == 'ETH' ? (
+                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))) / Number(Math.sqrt(Number(toLiquidty) * Number(fromLiquidty)) + Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))))) * 100)) ?? 0.00} %</>
+
+                          ) : (
+                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))) / Math.sqrt(Number(toLiquidty) * Number(fromLiquidty))) * 100)) ?? 0.00}%</>
+                          )
+                        }
                       </Typography>
                     </Stack>
                   </Stack>

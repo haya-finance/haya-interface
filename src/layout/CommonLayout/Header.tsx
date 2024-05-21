@@ -258,6 +258,10 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
 
   }
 
+  React.useEffect(() => {
+
+  }, [openWallet, disOpenWallet])
+
 
 
   return (

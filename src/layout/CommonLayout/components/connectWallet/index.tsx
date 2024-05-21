@@ -9,6 +9,7 @@ import WalletList from './walletList';
 import { Box, Drawer, Stack, Typography } from '@mui/material';
 // import MetaMask from 'assets/wallet/metamask.png';
 import { useConnect } from 'wagmi';
+import DisConnectWallet from '../disConnectWallet';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -63,10 +64,26 @@ export default function ConnectWallet({ open, handleClose, windowWidth }: Props)
 
   // console.log(installedWallets)
 
+  const [disOpenWallet, setDisOpenWallet] = React.useState(false)
+
+
+  const onCloseDisConnect = () => {
+    setDisOpenWallet(false)
+  }
+
+  React.useEffect(() => {
+
+  }, [disOpenWallet])
+
   const handleWalletClick = (connector: any) => {
 
 
+
     connect({ connector });
+
+
+
+
 
     if (window.ethereum == undefined && connector.id == 'metaMask') {
       window.open('https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?utm_source=google.com', '_blank')
@@ -75,11 +92,14 @@ export default function ConnectWallet({ open, handleClose, windowWidth }: Props)
 
     // console.log(connect, connectors);
     handleClose();
+
   };
+
 
   return (
     // <React.Fragment>
     <>
+      <DisConnectWallet windowWidth={windowWidth} open={disOpenWallet} handleClose={onCloseDisConnect} />
       {
         windowWidth >= 600 ? (
           <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} maxWidth="xs" sx={{ width: '100%' }}>

@@ -60,6 +60,7 @@ export default function DisConnectWallet({ open, handleClose, windowWidth }: Pro
   const OnDisconnect = () => {
 
     disconnect({ connector })
+    handleClose()
   }
 
   const onCopy = () => {
@@ -74,6 +75,7 @@ export default function DisConnectWallet({ open, handleClose, windowWidth }: Pro
 
     setTimeout(() => {
       setCopy(false)
+      handleClose()
 
     }, 2000)
 

@@ -35,12 +35,34 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
     color: ''
   },
   {
-    name: 'spx500',
+    name: 'SPY',
     value: '2.247767641',
     time: '',
     color: ''
   }
   ])
+
+  const newData: DataType[] = [
+    {
+      name: 'H20',
+      value: '108.5740044',
+      time: '',
+      color: ''
+    },
+    {
+      name: 'BTC',
+      value: '65.72836824',
+      time: '',
+      color: ''
+    },
+    {
+      name: 'SPY',
+      value: '2.247767641',
+      time: '',
+      color: ''
+    }
+
+  ]
 
 
   const onCheckBTC = () => {
@@ -180,7 +202,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                     $H20 Performance
                   </Typography>
                   <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                    {isNaN(Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100).toFixed(2)}%`}
+                    {isNaN(Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100)) ? `${Number((Number(newData.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100).toFixed(2)}%` : `${Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100).toFixed(2)}%`}
                   </Typography>
                 </Stack>
                 <Stack>
@@ -188,7 +210,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                     $BTC Performance
                   </Typography>
                   <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                    {isNaN(Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100).toFixed(2)}%`}
+                    {isNaN(Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100)) ? `${Number((Number(newData.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100).toFixed(2)}%` : `${Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100).toFixed(2)}%`}
                   </Typography>
                 </Stack>
                 <Stack>
@@ -196,7 +218,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                     $SPY Performance
                   </Typography>
                   <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                    {isNaN(Number((Number(data.filter((item) => item.name == 'spx500')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'spx500')[0]?.value) - 1) * 100).toFixed(2)}%`}
+                    {isNaN(Number((Number(data.filter((item) => item.name == 'SPY')[0]?.value) - 1) * 100)) ? `${Number((Number(newData.filter((item) => item.name == 'SPY')[0]?.value) - 1) * 100).toFixed(2)}%` : `${Number((Number(data.filter((item) => item.name == 'SPY')[0]?.value) - 1) * 100).toFixed(2)}%`}
                   </Typography>
                 </Stack>
 
@@ -308,7 +330,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                   $H20 Performance
                 </Typography>
                 <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                  {isNaN(Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100).toFixed(2)}%`}
+                  {isNaN(Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100)) ? `${Number((Number(newData.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100).toFixed(2)}%` : `${Number((Number(data.filter((item) => item.name == 'H20')[0]?.value) - 1) * 100).toFixed(2)}%`}
                 </Typography>
               </Stack>
               <Stack marginBottom="10px">
@@ -316,7 +338,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                   $BTC Performance
                 </Typography>
                 <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                  {isNaN(Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100).toFixed(2)}%`}
+                  {isNaN(Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100)) ? `${Number((Number(newData.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100).toFixed(2)}%` : `${Number((Number(data.filter((item) => item.name == 'BTC')[0]?.value) - 1) * 100).toFixed(2)}%`}
                 </Typography>
               </Stack>
               <Stack>
@@ -324,7 +346,7 @@ const HistoryNotial = ({ windowWidth }: PropsType) => {
                   $SPY Performance
                 </Typography>
                 <Typography sx={{ fontSize: '14px', color: '#717E91' }}>
-                  {isNaN(Number((Number(data.filter((item) => item.name == 'spx500')[0]?.value) - 1) * 100)) ? '0.00%' : `${Number((Number(data.filter((item) => item.name == 'spx500')[0]?.value) - 1) * 100).toFixed(2)}%`}
+                  {isNaN(Number((Number(data.filter((item) => item.name == 'SPY')[0]?.value) - 1) * 100)) ? `${Number((Number(newData.filter((item) => item.name == 'SPY')[0]?.value) - 1) * 100).toFixed(2)}%` : `${Number((Number(data.filter((item) => item.name == 'SPY')[0]?.value) - 1) * 100).toFixed(2)}%`}
                 </Typography>
               </Stack>
 

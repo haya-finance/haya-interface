@@ -171,7 +171,7 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth, onData }: Props)
       },
       {
         color: '#C4162E',
-        name: 'spx500',
+        name: 'SPY',
         type: 'line',
         // smooth: true,
         symbol: 'none',
@@ -337,7 +337,7 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth, onData }: Props)
       },
       {
         color: '#C4162E',
-        name: 'spx500',
+        name: 'SPY',
         type: 'line',
         // smooth: true,
         symbol: 'none',
@@ -442,7 +442,9 @@ const IncomeAreaChart = ({ slot, SpxShow, BtcShow, windowWidth, onData }: Props)
 
 
   useEffect(() => {
-    onData(hoverData)
+    if (hoverData.length !== 0) {
+      onData(hoverData)
+    }
 
   }, [hoverData])
 

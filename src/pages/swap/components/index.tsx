@@ -45,19 +45,19 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
   const [tokenList, setTokenList] = useState<TokenListType[]>([
     {
       symbol: 'WETH',
-      address: '0x0cE40884F9460593Dd804E346E2fE7CA9b35D3c7',
+      address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', //'0x0cE40884F9460593Dd804E346E2fE7CA9b35D3c7',
       balance: '0',
-      network: chain?.name ?? 'Arbitrum Sepolia',
+      network: chain?.name ?? 'Arbitrum One',
       decimasl: '',
       allowance: '',
-      contract: '0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165',
+      contract: '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612',
       price: '0.00'
     },
     {
       symbol: 'H20',
       address: H30_Address,
       balance: '0',
-      network: chain?.name ?? 'Arbitrum Sepolia',
+      network: chain?.name ?? 'Arbitrum One',
       decimasl: '',
       allowance: '',
       price: '0.00',
@@ -66,38 +66,38 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
     },
     {
       symbol: 'USDT',
-      address: '0xD7fbE1d17b8bAB5e94377428fcDC04904f39c4F4',
+      address: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9', //'0xD7fbE1d17b8bAB5e94377428fcDC04904f39c4F4'
       balance: '0',
-      network: chain?.name ?? 'Arbitrum Sepolia',
+      network: chain?.name ?? 'Arbitrum One',
       decimasl: '',
       allowance: '',
-      contract: '0x80EDee6f667eCc9f63a0a6f55578F870651f06A4',
+      contract: '0x3f3f5dF88dC9F13eac63DF89EC16ef6e7E25DdE7', //'0x80EDee6f667eCc9f63a0a6f55578F870651f06A4',
       price: '0.00'
 
 
     },
     {
       symbol: 'USDC',
-      address: '0x3b88ef38959aC57f69eF2798e03c0E8994F1a3aa',
+      address: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831', //'0x3b88ef38959aC57f69eF2798e03c0E8994F1a3aa',
       balance: '0',
-      network: chain?.name ?? 'Arbitrum Sepolia',
+      network: chain?.name ?? 'Arbitrum One',
       decimasl: '',
       allowance: '',
-      contract: '0x0153002d20B96532C639313c2d54c3dA09109309',
+      contract: '0x50834F3163758fcC1Df9973b6e91f0F0F0434aD3', //'0x0153002d20B96532C639313c2d54c3dA09109309',
       price: '0.00'
 
     },
-    // {
-    //   symbol: 'ETH',
-    //   address: '0x0d05D33Ab10870069DE5Aa7Ddcd42fbEB8C44dCd',
-    //   balance: '0',
-    //   network: chain?.name ?? 'Arbitrum Sepolia',
-    //   decimasl: '',
-    //   allowance: '',
-    //   contract: '0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165',
-    //   price: '0.00'
+    {
+      symbol: 'ETH',
+      address: '0x0d05D33Ab10870069DE5Aa7Ddcd42fbEB8C44dCd',
+      balance: '0',
+      network: chain?.name ?? 'Arbitrum One',
+      decimasl: '',
+      allowance: '',
+      contract: '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612', //'0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165',
+      price: '0.00'
 
-    // }
+    }
   ])
 
 
@@ -303,7 +303,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
 
   const onChangeNetwork = () => {
-    switchChain({ chainId: 421614 })
+    switchChain({ chainId: 42161 })
 
   }
 
@@ -481,7 +481,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
                                 <>
                                   <Box sx={{ width: "600px", margin: '0 auto' }}>
                                     <ConnectButton onClick={onChangeNetwork}>
-                                      Switch to Arbitrum Sepolia
+                                      Switch to Arbitrum One
                                     </ConnectButton>
                                   </Box>
                                 </>
@@ -497,7 +497,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
                               chain?.id === undefined ? (
                                 <Box sx={{ width: "100%" }}>
                                   <ConnectButton onClick={onChangeNetwork}>
-                                    Switch to Arbitrum Sepolia
+                                    Switch to Arbitrum One
                                   </ConnectButton>
                                 </Box>
 

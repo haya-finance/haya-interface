@@ -15,7 +15,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // import Web3 from 'web3';
 import { useEffect, useState } from 'react';
-import { H30_Address, pair_Address, UniswapSepoliaRouterContract, WETH_address } from 'config';
+import { arb_url, H30_Address, pair_Address, UniswapSepoliaRouterContract } from 'config';
 import { LoadingButton } from '@mui/lab';
 import tokenAbi from 'abi/token.json'
 import { useAccount } from 'wagmi';
@@ -48,7 +48,7 @@ type DataType = {
 
 
 function ValueNumber(num: number) {
-  console.log('num', num)
+  // console.log('num', num)
 
   if (num % 1 !== 0) {
     const decimalPart = num.toString().split('.')[1]
@@ -274,12 +274,105 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
     const provider = getEthersSigner(config)
     const poolContract = new ethers.Contract(UniswapSepoliaRouterContract, swapabi, await provider)
 
+    // if (BigInt(allowance) > BigInt(Math.floor(Number(Number(balance) * (num / 100)) * (10 ** 18)))) {
+    //   setDoneLoading(true)
+    //   setOpenConfirm(true)
+    //   handleSwapClose()
+
+    //   await poolContract.removeLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(balance) * (num / 100) * (10 ** 18))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+    //     // console.log('结果', res)
+    //     // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+    //     // setOpenConfirm(false)
+    //     // setOpenSend(true)
+
+
+    //     const res1 = await res.wait()
+
+    //     if (res1.blockNumber == null) {
+    //       // console.log('nulllllllllll')
+    //     } else {
+    //       setHash(String(res1.hash))
+    //       setOpenConfirm(false)
+    //       // setOpenSend(false)
+    //       setOpenSucced(true)
+
+    //       setDoneLoading(false)
+    //       // handleSwapClose()
+    //     }
+    //     // handleSwapClose()
+    //     // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+    //   }).catch(err => {
+    //     openNotification('top')
+    //     handleSwapClose()
+    //     setDoneLoading(false)
+    //     setOpenConfirm(false)
+    //   })
+
+    // } else {
+    //   const ApproveContract = new ethers.Contract(pair_Address, tokenAbi, await provider)
+    //   setDoneLoading(true)
+    //   setOpenConfirm(true)
+    //   handleSwapClose()
+    //   await ApproveContract.approve(UniswapSepoliaRouterContract, ethers.MaxUint256).then(async (res) => {
+
+
+
+
+
+
+
+    //     await res.wait()
+    //     console.log('111111111111')
+
+    //     await poolContract.removeLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(balance) * (num / 100) * (10 ** 18))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res2: any) => {
+
+    //       // console.log('结果', res)
+    //       // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+    //       // setOpenConfirm(false)
+    //       // setOpenSend(true)
+
+    //       const res3 = await res2.wait()
+
+    //       if (res3.blockNumber == null) {
+    //         // console.log('nulllllllllll')
+    //       } else {
+    //         setHash(String(res3.hash))
+    //         setOpenConfirm(false)
+    //         setOpenSucced(true)
+
+    //         setDoneLoading(false)
+    //         // handleSwapClose()
+    //       }
+    //       // handleSwapClose()
+    //       // onChange()
+    //     }).catch(err => {
+    //       openNotification('top')
+    //       handleSwapClose()
+    //       setDoneLoading(false)
+    //       setOpenConfirm(false)
+    //     })
+
+
+
+    //   }).catch((err) => {
+    //     // console.log('err', err)
+    //     openNotification('top')
+    //     handleSwapClose()
+    //     setDoneLoading(false)
+    //     setOpenConfirm(false)
+
+    //   })
+
+
+    // }
+
+
     if (BigInt(allowance) > BigInt(Math.floor(Number(Number(balance) * (num / 100)) * (10 ** 18)))) {
       setDoneLoading(true)
       setOpenConfirm(true)
       handleSwapClose()
 
-      await poolContract.removeLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(balance) * (num / 100) * (10 ** 18))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
+      await poolContract.removeLiquidityETH(H30_Address, BigInt(Math.round(Number(balance) * (num / 100) * (10 ** 18))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res: any) => {
         // console.log('结果', res)
         // setInputReValue(String(Number(res[1]) / (10 ** 18)))
         // setOpenConfirm(false)
@@ -322,9 +415,9 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
 
         await res.wait()
-        console.log('111111111111')
+        // console.log('111111111111')
 
-        await poolContract.removeLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(balance) * (num / 100) * (10 ** 18))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res2: any) => {
+        await poolContract.removeLiquidityETH(H30_Address, BigInt(Math.round(Number(balance) * (num / 100) * (10 ** 18))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res2: any) => {
 
           // console.log('结果', res)
           // setInputReValue(String(Number(res[1]) / (10 ** 18)))
@@ -346,6 +439,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
           // handleSwapClose()
           // onChange()
         }).catch(err => {
+          // console.log('1111111', err)
           openNotification('top')
           handleSwapClose()
           setDoneLoading(false)
@@ -386,7 +480,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
 
   const gotoContract = () => {
-    window.location.assign(`https://sepolia.etherscan.io/address/${UniswapSepoliaRouterContract}`)
+    window.location.assign(`${arb_url}${UniswapSepoliaRouterContract}`)
   }
 
   useEffect(() => {

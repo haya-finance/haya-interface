@@ -322,7 +322,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
 
 
   const onChangeNetwork = () => {
-    switchChain({ chainId: 421614 })
+    switchChain({ chainId: 42161 })
 
   }
 
@@ -419,7 +419,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                         <>
                           <Box sx={{ width: "600px", margin: '0 auto', mt: "20px" }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Switch to Arbitrum Sepolia
+                              Switch to Arbitrum One
                             </ConnectNetorkButton>
                           </Box>
                         </>
@@ -554,7 +554,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                         <>
                           <Box sx={{ width: '100%', mt: '10px' }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Switch to Arbitrum Sepolia
+                              Switch to Arbitrum One
                             </ConnectNetorkButton>
                           </Box>
                         </>

@@ -173,16 +173,17 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
 
   // 网络选择
   // 网络数组
+  // 421614
   const networkes: NetworkType[] = [
     {
-      id: 421614,
-      name: 'Arbitrum Sepolia'
+      id: 42161,
+      name: 'Arbitrum One'
     }
   ]
 
   const [network, setNetwork] = React.useState<NetworkType>({
-    id: 421614,
-    name: 'Arbitrum Sepolia'
+    id: 42161,
+    name: 'Arbitrum One'
   })
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const [open, setOpen] = React.useState(false);

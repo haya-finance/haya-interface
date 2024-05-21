@@ -14,7 +14,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // import Web3 from 'web3';
 import { useEffect, useState } from 'react';
-import { H30_Address, UniswapSepoliaRouterContract, WETH_address } from 'config';
+import { arb_url, H30_Address, UniswapSepoliaRouterContract } from 'config';
 import { LoadingButton } from '@mui/lab';
 import { MdAdd } from 'react-icons/md';
 import ApprovalTokens from './approveToken';
@@ -287,110 +287,18 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
     // const signer = await provider.getSigner()
 
-    if (toToken == 'ETH') {
-      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.round(Number(inputFromNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.round(Number(inputToNum) * (10 ** 18)))) {
-        // console.log('111111111111111111111')
-        setDoneLoading(true)
-        setOpenConfirm(true)
-        handleSwapClose()
-        await poolContract.addLiquidity(WETH_address, H30_Address, BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
-
-          // console.log('结果222222222222', res)
-
-          // setOpenSend(true)
-
-
-
-          const res1 = await res.wait()
-
-          if (res1.blockNumber == null) {
-            // console.log('nulllllllllll')
-          } else {
-            setHash(String(res1.hash))
-            setOpenConfirm(false)
-            // setOpenSend(false)
-            setOpenSucced(true)
-
-            setDoneLoading(false)
-            // handleSwapClose()
-          }
-
-
-        }).catch((err) => {
-          // console.log("错误结果", err)
-          openNotification('top')
-          handleSwapClose()
-          setDoneLoading(false)
-          setOpenConfirm(false)
-        })
-
-
-
-
-      } else {
-        handleSwapClose()
-        setOpenApproval(true)
-
-      }
-    } else {
-      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.round(Number(inputToNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.round(Number(inputFromNum) * (10 ** 18)))) {
-        // console.log('111111111111111111111')
-        setDoneLoading(true)
-        setOpenConfirm(true)
-        handleSwapClose()
-        await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
-
-          // console.log('结果222222222222', res)
-          // setOpenConfirm(false)
-          // setOpenSend(true)
-
-
-
-          const res1 = await res.wait()
-
-          if (res1.blockNumber == null) {
-            // console.log('nulllllllllll')
-          } else {
-            setHash(String(res1.hash))
-            setOpenConfirm(false)
-            // setOpenSend(false)
-            setOpenSucced(true)
-
-            setDoneLoading(false)
-          }
-
-
-        }).catch((err) => {
-          // console.log("错误结果", err)
-          openNotification('top')
-          handleSwapClose()
-          setDoneLoading(false)
-          setOpenConfirm(false)
-        })
-
-
-
-
-      } else {
-        handleSwapClose()
-        setOpenApproval(true)
-
-      }
-
-    }
-
     // if (toToken == 'ETH') {
-    //   if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.round(Number(inputFromNum) * (10 ** 18)))) {
+    //   if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.round(Number(inputFromNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.round(Number(inputToNum) * (10 ** 18)))) {
     //     // console.log('111111111111111111111')
-    //     await poolContract.addLiquidityETH(H30_Address, String(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
-    //       from: address,
-    //       value: BigInt(Math.round(Number(inputToNum) * (10 ** 18)))
-
-
-    //     }).then(async (res) => {
+    //     setDoneLoading(true)
+    //     setOpenConfirm(true)
+    //     handleSwapClose()
+    //     await poolContract.addLiquidity(WETH_address, H30_Address, BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
     //       // console.log('结果222222222222', res)
-    //       setDoneLoading(true)
+
+    //       // setOpenSend(true)
+
 
 
     //       const res1 = await res.wait()
@@ -398,11 +306,13 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
     //       if (res1.blockNumber == null) {
     //         // console.log('nulllllllllll')
     //       } else {
+    //         setHash(String(res1.hash))
+    //         setOpenConfirm(false)
+    //         // setOpenSend(false)
+    //         setOpenSucced(true)
 
     //         setDoneLoading(false)
-    //         handleSwapClose()
-    //         setUpdate(!update)
-    //         onChange(update)
+    //         // handleSwapClose()
     //       }
 
 
@@ -410,6 +320,8 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
     //       // console.log("错误结果", err)
     //       openNotification('top')
     //       handleSwapClose()
+    //       setDoneLoading(false)
+    //       setOpenConfirm(false)
     //     })
 
 
@@ -420,18 +332,18 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
     //     setOpenApproval(true)
 
     //   }
-
     // } else {
-    //   if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.round(Number(inputToNum) * (10 ** 18)))) {
+    //   if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.round(Number(inputToNum) * (10 ** 18))) && BigInt(data.filter(item => item.symbol == 'ETH')[0].allowance) > BigInt(Math.round(Number(inputFromNum) * (10 ** 18)))) {
     //     // console.log('111111111111111111111')
-
-    //     await poolContract.addLiquidityETH(H30_Address, BigInt(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
-    //       from: address,
-    //       value: BigInt(Math.round(Number(inputFromNum) * (10 ** 18)))
-    //     }).then(async (res) => {
+    //     setDoneLoading(true)
+    //     setOpenConfirm(true)
+    //     handleSwapClose()
+    //     await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
 
     //       // console.log('结果222222222222', res)
-    //       setDoneLoading(true)
+    //       // setOpenConfirm(false)
+    //       // setOpenSend(true)
+
 
 
     //       const res1 = await res.wait()
@@ -439,11 +351,12 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
     //       if (res1.blockNumber == null) {
     //         // console.log('nulllllllllll')
     //       } else {
+    //         setHash(String(res1.hash))
+    //         setOpenConfirm(false)
+    //         // setOpenSend(false)
+    //         setOpenSucced(true)
 
     //         setDoneLoading(false)
-    //         handleSwapClose()
-    //         setUpdate(!update)
-    //         onChange(update)
     //       }
 
 
@@ -451,7 +364,11 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
     //       // console.log("错误结果", err)
     //       openNotification('top')
     //       handleSwapClose()
+    //       setDoneLoading(false)
+    //       setOpenConfirm(false)
     //     })
+
+
 
 
     //   } else {
@@ -459,7 +376,105 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
     //     setOpenApproval(true)
 
     //   }
+
     // }
+
+    if (toToken == 'ETH') {
+      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.round(Number(inputFromNum) * (10 ** 18)))) {
+        // console.log('111111111111111111111')
+        setDoneLoading(true)
+        setOpenConfirm(true)
+        handleSwapClose()
+        await poolContract.addLiquidityETH(H30_Address, BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+          from: address,
+          value: BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))
+
+
+        }).then(async (res) => {
+
+          // console.log('结果222222222222', res)
+          // setDoneLoading(true)
+
+
+          const res1 = await res.wait()
+
+          if (res1.blockNumber == null) {
+            // console.log('nulllllllllll')
+          } else {
+
+            setHash(String(res1.hash))
+            setOpenConfirm(false)
+            // setOpenSend(false)
+            setOpenSucced(true)
+
+            setDoneLoading(false)
+          }
+
+
+        }).catch((err) => {
+          // console.log("错误结果", err)
+          openNotification('top')
+          handleSwapClose()
+          setDoneLoading(false)
+          setOpenConfirm(false)
+        })
+
+
+
+
+      } else {
+        handleSwapClose()
+        setOpenApproval(true)
+
+      }
+
+    } else {
+      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.round(Number(inputToNum) * (10 ** 18)))) {
+        // console.log('111111111111111111111')
+
+        setDoneLoading(true)
+        setOpenConfirm(true)
+        handleSwapClose()
+
+        await poolContract.addLiquidityETH(H30_Address, BigInt(Math.round(Number(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+          from: address,
+          value: BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18))))
+        }).then(async (res) => {
+
+          // console.log('结果222222222222', res)
+          // setDoneLoading(true)
+
+
+          const res1 = await res.wait()
+
+          if (res1.blockNumber == null) {
+            // console.log('nulllllllllll')
+          } else {
+
+            setHash(String(res1.hash))
+            setOpenConfirm(false)
+            // setOpenSend(false)
+            setOpenSucced(true)
+
+            setDoneLoading(false)
+          }
+
+
+        }).catch((err) => {
+          // console.log("错误结果", err)
+          openNotification('top')
+          handleSwapClose()
+          setDoneLoading(false)
+          setOpenConfirm(false)
+        })
+
+
+      } else {
+        handleSwapClose()
+        setOpenApproval(true)
+
+      }
+    }
 
 
 
@@ -481,7 +496,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
 
   const gotoContract = () => {
-    window.location.assign(`https://sepolia.etherscan.io/address/${UniswapSepoliaRouterContract}`)
+    window.location.assign(`${arb_url}${UniswapSepoliaRouterContract}`)
   }
 
 

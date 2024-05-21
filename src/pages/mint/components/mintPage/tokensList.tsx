@@ -15,12 +15,20 @@ function formatNumber(num: number) {
   if (num % 1 !== 0) {
     const decimalPart = num.toString().split('.')[1]
 
+    console.log(decimalPart)
+
     for (let i = 0; i < decimalPart.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
-        num *= 10 ** (i + 4)
-        num = Math.round(num)
-        num /= 10 ** (i + 4)
-        var parts = num.toString().split(".");
+
+        // num *= (10 ** (i + 4))
+        // console.log(num)
+        // num = Math.round(num)
+        // console.log(num)
+        // num /= (10 ** (i + 4))
+        // console.log(num)
+        // console.log(num.toFixed(i + 4))
+        // num = Number(num.toFixed(i + 4))
+        var parts = num.toFixed(i + 4).split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return parts.join(".");
 

@@ -16,7 +16,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // import Web3 from 'web3';
 import { useEffect, useState } from 'react';
-import { BasicIssuanceModule, H30_Address } from 'config';
+import { arb_url, BasicIssuanceModule, H30_Address } from 'config';
 import ApprovalTokens from './approval';
 import { getEthersSigner } from 'contract/getEthersSigner';
 import { config } from 'contexts/wagmiConfig';
@@ -346,7 +346,7 @@ export default function ReviewSwap({ open, handleSwapClose, data, inputNum, name
   }
 
   const gotoContract = () => {
-    window.location.assign(`https://sepolia.etherscan.io/address/${BasicIssuanceModule}`)
+    window.location.assign(`${arb_url}${BasicIssuanceModule}`)
   }
 
 

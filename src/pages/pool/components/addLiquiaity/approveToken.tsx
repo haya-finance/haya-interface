@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import swapabi from 'abi/swap.json'
 import { ethers } from 'ethers'
 import { useAccount } from 'wagmi';
-import { H30_Address, UniswapSepoliaRouterContract, WETH_address } from 'config';
+import { H30_Address, UniswapSepoliaRouterContract } from 'config';
 import InfoIcon from '@mui/icons-material/Info';
 import { FaCheck } from "react-icons/fa";
 import WarningIcon from '@mui/icons-material/Warning';
@@ -340,16 +340,90 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
     // Math.floor(Number(Number(inputToNum) / Number(inputFromNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))
 
 
+    // if (toToken == "ETH") {
+    //   setDoneLoading(true)
+    //   setOpenConfirm(true)
+    //   handleApprovalClose()
+    //   await poolContract.addLiquidity(WETH_address, H30_Address, BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+
+    //     // console.log('结果222222222222', res)
+    //     // setOpenConfirm(false)
+    //     // setOpenSend(true)
+
+
+
+    //     const res1 = await res.wait()
+
+    //     if (res1.blockNumber == null) {
+    //       // console.log('nulllllllllll')
+    //     } else {
+    //       setHash(String(res1.hash))
+    //       setOpenConfirm(false)
+    //       setOpenSucced(true)
+
+    //       setDoneLoading(false)
+    //       // handleApprovalClose()
+    //     }
+
+
+    //   }).catch((err) => {
+    //     // console.log("错误结果", err)
+    //     openNotification('top')
+    //     handleApprovalClose()
+    //     setDoneLoading(false)
+    //     setOpenConfirm(false)
+    //   })
+
+    // } else {
+    //   // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.round(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
+    //   setDoneLoading(true)
+    //   setOpenConfirm(true)
+    //   handleApprovalClose()
+    //   await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+
+    //     // console.log('结果222222222222', res)
+    //     // setOpenConfirm(false)
+    //     // setOpenSend(true)
+
+
+
+    //     const res1 = await res.wait()
+
+    //     if (res1.blockNumber == null) {
+    //       // console.log('nulllllllllll')
+    //     } else {
+    //       setHash(String(res1.hash))
+    //       setOpenConfirm(false)
+    //       // setOpenSend(false)
+    //       setOpenSucced(true)
+
+    //       setDoneLoading(false)
+
+    //     }
+
+
+    //   }).catch((err) => {
+    //     // console.log("错误结果", err)
+    //     openNotification('top')
+    //     handleApprovalClose()
+    //     setDoneLoading(false)
+    //     setOpenConfirm(false)
+    //   })
+    // }
+
     if (toToken == "ETH") {
       setDoneLoading(true)
       setOpenConfirm(true)
       handleApprovalClose()
-      await poolContract.addLiquidity(WETH_address, H30_Address, BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+      await poolContract.addLiquidityETH(H30_Address, BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+        from: address,
+        value: BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))
+
+
+      }).then(async (res) => {
 
         // console.log('结果222222222222', res)
-        // setOpenConfirm(false)
-        // setOpenSend(true)
-
+        // setDoneLoading(true)
 
 
         const res1 = await res.wait()
@@ -357,12 +431,12 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
         if (res1.blockNumber == null) {
           // console.log('nulllllllllll')
         } else {
+
           setHash(String(res1.hash))
           setOpenConfirm(false)
           setOpenSucced(true)
 
           setDoneLoading(false)
-          // handleApprovalClose()
         }
 
 
@@ -375,16 +449,18 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
       })
 
     } else {
-      // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.round(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
+      // console.log(String(Math.floor(Number(inputFromNum) * (10 ** 18))))
+      // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.floor(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
       setDoneLoading(true)
       setOpenConfirm(true)
       handleApprovalClose()
-      await poolContract.addLiquidity(H30_Address, WETH_address, BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18))), BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5).then(async (res) => {
+      await poolContract.addLiquidityETH(H30_Address, BigInt(Math.round(Number(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+        from: address,
+        value: BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18))))
+      }).then(async (res) => {
 
         // console.log('结果222222222222', res)
-        // setOpenConfirm(false)
-        // setOpenSend(true)
-
+        // setDoneLoading(true)
 
 
         const res1 = await res.wait()
@@ -392,13 +468,13 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
         if (res1.blockNumber == null) {
           // console.log('nulllllllllll')
         } else {
+
           setHash(String(res1.hash))
           setOpenConfirm(false)
           // setOpenSend(false)
           setOpenSucced(true)
 
           setDoneLoading(false)
-
         }
 
 
@@ -410,65 +486,6 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
         setOpenConfirm(false)
       })
     }
-
-    // if (toToken == "ETH") {
-    //   await poolContract.addLiquidityETH(H30_Address, String(Number(inputFromNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
-    //     from: address,
-    //     value: BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))
-
-
-    //   }).then(async (res) => {
-
-    //     // console.log('结果222222222222', res)
-    //     setDoneLoading(true)
-
-
-    //     const res1 = await res.wait()
-
-    //     if (res1.blockNumber == null) {
-    //       // console.log('nulllllllllll')
-    //     } else {
-
-    //       setDoneLoading(false)
-    //       handleApprovalClose()
-    //     }
-
-
-    //   }).catch((err) => {
-    //     // console.log("错误结果", err)
-    //     openNotification('top')
-    //     handleApprovalClose()
-    //   })
-
-    // } else {
-    //   console.log(String(Math.floor(Number(inputFromNum) * (10 ** 18))))
-    //   // console.log('111', String(Number(inputFromNum) * (10 ** 18)), BigInt(Math.floor(Number(Number(inputFromNum) / Number(inputToNum)) * Number(1 + (Number(slippage) / 100)) * (10 ** 18))))
-    //   await poolContract.addLiquidityETH(H30_Address, BigInt(Number(inputToNum) * (10 ** 18)), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
-    //     from: address,
-    //     value: BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))
-    //   }).then(async (res) => {
-
-    //     // console.log('结果222222222222', res)
-    //     setDoneLoading(true)
-
-
-    //     const res1 = await res.wait()
-
-    //     if (res1.blockNumber == null) {
-    //       // console.log('nulllllllllll')
-    //     } else {
-
-    //       setDoneLoading(false)
-    //       handleApprovalClose()
-    //     }
-
-
-    //   }).catch((err) => {
-    //     // console.log("错误结果", err)
-    //     openNotification('top')
-    //     handleApprovalClose()
-    //   })
-    // }
 
 
 

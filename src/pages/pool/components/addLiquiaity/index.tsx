@@ -57,7 +57,7 @@ export default function AddPool() {
       symbol: 'H20',
       address: H30_Address,
       balance: '0',
-      network: chain?.name ?? 'Arbitrum Sepolia',
+      network: chain?.name ?? 'Arbitrum One',
       allowance: '',
       proportion: ''
     },
@@ -65,12 +65,35 @@ export default function AddPool() {
       symbol: 'ETH',
       address: WETH_address,
       balance: '0',
-      network: chain?.name ?? 'Arbitrum Sepolia',
+      network: chain?.name ?? 'Arbitrum One',
       allowance: '',
       proportion: ''
 
     }
   ])
+
+  const [tokenName, setTokenName] = useState([{ H20: 1, ETH: 0 }])
+
+
+
+  const getTokens = async () => {
+    const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+    await pairContract.token1().then(async (res: any) => {
+      const tokenContract = new ethers.Contract(res, tokenAbi, provider)
+      await tokenContract.symbol().then((res1) => {
+        // console.log('1111111', res1)
+        if (res1 == 'H20') {
+          setTokenName((pre) => pre.map((item) => { return { H20: 1, ETH: 0 } }))
+        }
+
+      })
+      // console.log('结果', res)
+      // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+    }).catch(err => {
+      // console.log('错误输出', err)
+    })
+
+  }
 
 
 
@@ -110,12 +133,12 @@ export default function AddPool() {
   }
 
 
-  // const getEthBalance = async () => {
-  //   const balance = await provider.getBalance(address ?? '')
-  //   // console.log("balance", balance)
-  //   setTokenList((pre) => pre.map((item) => item.symbol === 'ETH' ? { ...item, balance: String(Number(balance) / (10 ** 18)), allowance: String(ethers.MaxUint256) } : item))
+  const getEthBalance = async () => {
+    const balance = await provider.getBalance(address ?? '')
+    // console.log("balance", balance)
+    setTokenList((pre) => pre.map((item) => item.symbol === 'ETH' ? { ...item, balance: String(Number(balance) / (10 ** 18)), allowance: String(ethers.MaxUint256) } : item))
 
-  // }
+  }
 
 
 
@@ -124,15 +147,18 @@ export default function AddPool() {
 
 
     for (let i = 0; i < tokenList.length; i++) {
+      getTokens()
       getPairProportion()
       if (address !== undefined) {
-        // if (tokenList[i].symbol == 'ETH') {
-        //   getEthBalance()
+        if (tokenList[i].symbol == 'ETH') {
 
-        // } else {
+          getEthBalance()
 
-        // }
-        getBalance(tokenList[i].address)
+        } else {
+          getBalance(tokenList[i].address)
+
+        }
+
 
       }
     }
@@ -143,6 +169,10 @@ export default function AddPool() {
 
   }, [tokenList])
 
+  useEffect(() => {
+
+  }, [tokenName])
+
 
 
 
@@ -152,16 +182,17 @@ export default function AddPool() {
   useEffect(() => {
 
     for (let i = 0; i < tokenList.length; i++) {
+      getTokens()
       getPairProportion()
 
       if (address !== undefined) {
-        getBalance(tokenList[i].address)
-        //   if (tokenList[i].symbol == 'ETH') {
-        //     getEthBalance()
 
-        //   } else {
-        //     getBalance(tokenList[i].address)
-        //   }
+        if (tokenList[i].symbol == 'ETH') {
+          getEthBalance()
+
+        } else {
+          getBalance(tokenList[i].address)
+        }
       }
     }
 

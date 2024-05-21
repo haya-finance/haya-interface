@@ -13,8 +13,9 @@ import ShowSwap from './showSwap';
 import SwapReviewSwap from './ReviewSwap';
 import { ethers } from 'ethers';
 import SwapAbi from 'abi/swap.json'
-import { sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
-import PriceFeedAbi from 'abi/priceFeeds.json'
+import { ETH_Price_ARB, pair_Address, sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
+import PriceFeedAbi from 'abi/priceFeeds.json';
+import pairAbi from 'abi/pair.json'
 
 import swap from 'assets/images/icon/swap.svg'
 
@@ -181,12 +182,31 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
   async function getToPrice(add: string) {
     if (add == 'H20') {
-      data.forEach(item => {
-        if (item.contract == add) {
-          item.price = '100'
-        }
+      const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+      const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
+
+
+      await pairContract.getReserves().then(async (res: any) => {
+        // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+        await priceFeed.latestRoundData().then(async (res1) => {
+          // console.log(res1)
+          await priceFeed.decimals().then(async (res2) => {
+
+            data.forEach(item => {
+              if (item.contract == add) {
+                item.price = String((Number(((Number(res[0]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[1]) / (10 ** 18)))))
+              }
+            })
+            setToPrice(String((Number(((Number(res[0]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[1]) / (10 ** 18))))))
+
+          })
+
+        })
+
+      }).catch(err => {
+        // console.log('错误输出', err)
       })
-      setToPrice('100')
+
 
     } else {
       const priceFeed = new ethers.Contract(add, PriceFeedAbi, provider);
@@ -194,10 +214,10 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
         await priceFeed.decimals().then(async (res2) => {
           data.forEach(item => {
             if (item.contract == add) {
-              item.price = String((Number(res1[2]) / (10 ** Number(res2))))
+              item.price = String((Number(res1[1]) / (10 ** Number(res2))))
             }
           })
-          setToPrice(String((Number(res1[2]) / (10 ** Number(res2)))))
+          setToPrice(String((Number(res1[1]) / (10 ** Number(res2)))))
           // console.log((Number(res1[2]) / (10 ** Number(res2))))
 
 

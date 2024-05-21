@@ -123,9 +123,9 @@ function ValueNumber(num: number) {
 
     for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
-        num *= 10 ** (i + 4)
+        num *= (10 ** (i + 4))
         num = Math.floor(num)
-        num /= 10 ** (i + 4)
+        num /= (10 ** (i + 4))
         var parts = num.toString().split(".");
         // console.log(parts)
         // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -238,12 +238,28 @@ export default function WithdrawPoolPage() {
   const getPairBalanceOf = async () => {
     const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
     await pairContract.balanceOf(address).then(async (res1) => {
+
       await pairContract.decimals().then((res2) => {
 
-        setBalance(String(Number(res1) / (10 ** Number(res2))))
+
+        if (Number(ValueNumber(Number(String(Number(res1) / (10 ** Number(res2)))))) !== 0) {
+
+          setBalance(String(Number(res1) / (10 ** Number(res2))))
+
+
+        } else {
+          navigate('/pool')
+
+
+        }
+
+
       }).catch((err) => {
 
       })
+
+
+
 
     }).catch((err) => {
 
@@ -382,7 +398,7 @@ export default function WithdrawPoolPage() {
   }
 
   const valuetext = (even: any, newValue: number | number[]) => {
-    console.log(newValue)
+    // console.log(newValue)
     setInputValue(`${newValue}%`)
     setValue(newValue as number)
 
@@ -392,9 +408,7 @@ export default function WithdrawPoolPage() {
 
   }, [value])
 
-  console.log('3333', Number(balance) / Number(data[0]?.liq))
 
-  console.log('222', ValueNumber(Number((Number(balance) / Number(data[0]?.liq)) * Number(data[0]?.ETHAmount) * Number(value / 100))))
 
 
 

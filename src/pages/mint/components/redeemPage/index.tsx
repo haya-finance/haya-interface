@@ -336,7 +336,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
 
 
   const onChangeNetwork = () => {
-    switchChain({ chainId: 421614 })
+    switchChain({ chainId: 42161 })
 
   }
 
@@ -450,7 +450,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                         <>
                           <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Switch to Arbitrum Sepolia
+                              Switch to Arbitrum One
                             </ConnectNetorkButton>
                           </Box>
                         </>
@@ -601,7 +601,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                         <>
                           <Box sx={{ width: '100%' }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Switch to Arbitrum Sepolia
+                              Switch to Arbitrum One
                             </ConnectNetorkButton>
                           </Box>
                         </>

@@ -418,7 +418,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
 
   const onChangeNetwork = () => {
-    switchChain({ chainId: 421614 })
+    switchChain({ chainId: 42161 })
 
   }
 
@@ -564,7 +564,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                       chain?.id == undefined ? (
                         <>
                           <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                            <ConnectButton onClick={onChangeNetwork} >Switch to Arbitrum Sepolia</ConnectButton>
+                            <ConnectButton onClick={onChangeNetwork} >Switch to Arbitrum One</ConnectButton>
                           </Box>
                         </>
                       ) : (
@@ -751,7 +751,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                         <>
                           <Box sx={{ width: '100%' }}>
                             <ConnectButton onClick={onChangeNetwork}>
-                              Switch to Arbitrum Sepolia
+                              Switch to Arbitrum One
                             </ConnectButton>
                           </Box>
                         </>

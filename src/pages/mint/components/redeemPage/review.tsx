@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import basicIssAbi from 'abi/basicIssuance.json'
 import { ethers } from 'ethers'
 import { useAccount } from 'wagmi';
-import { BasicIssuanceModule, H30_Address } from 'config';
+import { arb_url, BasicIssuanceModule, H30_Address } from 'config';
 import { notification } from 'antd';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import { LoadingButton } from '@mui/lab';
@@ -304,7 +304,7 @@ export default function RedeemReviewSwap({ open, handleSwapClose, data, inputNum
   const [update, setUpdate] = useState(false)
 
   const gotoContract = () => {
-    window.location.assign(`https://sepolia.etherscan.io/address/${BasicIssuanceModule}`)
+    window.location.assign(`${arb_url}${BasicIssuanceModule}`)
   }
 
   const handleConfirmClose = () => {

@@ -72,6 +72,8 @@ const TokenColorIcon = ({ name, size }: Props) => {
       return <DefiPulseIndex size={size} />
     case 'MATIC':
       return <Matic size={size} />
+    case 'WMATIC':
+      return <Matic size={size} />
     case 'MVI':
       return <MVI size={size} />
     case 'WETH':
@@ -79,6 +81,8 @@ const TokenColorIcon = ({ name, size }: Props) => {
     case 'ADA':
       return <ADAColor size={size} />
     case 'AVAX':
+      return <AVAXColor size={size} />
+    case 'WAVAX':
       return <AVAXColor size={size} />
     case 'DOGE':
       return <DOGEColor size={size} />

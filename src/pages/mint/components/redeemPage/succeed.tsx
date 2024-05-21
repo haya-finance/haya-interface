@@ -7,6 +7,7 @@ import TokenColorIcon from "assets/tokens";
 import RightRow from 'assets/Arrow-right.svg';
 import check from 'assets/Check-rig.svg'
 import { useEffect } from "react";
+import { hash_url } from "config";
 
 
 type dataType = {
@@ -86,7 +87,7 @@ const Succeed = ({ windowWidth, hash, handleConfirmClose, open, data, inputNum }
 
 
   const goHash = () => {
-    window.location.assign(`https://sepolia.arbiscan.io/tx/${hash}`)
+    window.location.assign(`${hash_url}${hash}`)
   }
 
   return (

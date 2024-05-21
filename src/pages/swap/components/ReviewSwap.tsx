@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers'
 import SwapAbi from 'abi/swap.json'
 import { useAccount } from 'wagmi';
-import { UniswapSepoliaRouterContract } from 'config';
+import { arb_url, UniswapSepoliaRouterContract } from 'config';
 import WarningIcon from '@mui/icons-material/Warning';
 import { LoadingButton } from '@mui/lab';
 import { getEthersSigner } from 'contract/getEthersSigner';
@@ -532,7 +532,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice,
 
 
   const gotoContract = () => {
-    window.location.assign(`https://sepolia.etherscan.io/address/${UniswapSepoliaRouterContract}`)
+    window.location.assign(`${arb_url}${UniswapSepoliaRouterContract}`)
   }
 
   const handleApprovalClose = () => {

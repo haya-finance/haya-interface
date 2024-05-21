@@ -132,11 +132,12 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
       // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
       await priceFeed.latestRoundData().then(async (res1) => {
         await priceFeed.decimals().then(async (res2) => {
-          const newtvl = String((Number(res[0]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)
+          const newtvl = String((Number(res[0]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2))) * 2)
+
           setTvl(newtvl)
           await pairContract.totalSupply().then(async (res3) => {
             await pairContract.decimals().then((res4) => {
-              const arr = [{ tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }]
+              const arr = [{ tvl: newtvl, price: String(Number(res1[1]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }]
               // setData((pre) => pre.map((item) => {
               //   return { tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }
               // }))
@@ -155,7 +156,7 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
   }
 
   useEffect(() => {
-    console.log(tvl)
+    // console.log(tvl)
 
   }, [tvl])
 
@@ -259,7 +260,7 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                     ) : (
                       <>
                         {
-                          Number(balance) > 0 ? (
+                          Number(balance) !== 0 ? (
                             <Box component="button" sx={{ cursor: 'pointer', backgroundColor: 'transparent', border: 'none', width: '100%', padding: 0 }} onClick={GoTOLpDetail}>
                               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ padding: '12px 20px' }}>
                                 <Stack direction="row" alignItems="center" spacing="2px">

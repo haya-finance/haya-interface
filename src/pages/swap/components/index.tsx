@@ -89,7 +89,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
     },
     {
       symbol: 'ETH',
-      address: '0x0d05D33Ab10870069DE5Aa7Ddcd42fbEB8C44dCd',
+      address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
       balance: '0',
       network: chain?.name ?? 'Arbitrum One',
       decimasl: '',

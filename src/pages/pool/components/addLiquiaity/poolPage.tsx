@@ -373,7 +373,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
     if (address !== undefined) {
       const tokens = data.filter(item => item.symbol === pay)
-      console.log(tokens)
+      // console.log(tokens)
       setBalance(String(Number(tokens[0]?.balance)))
       const reTokens = data.filter(item => item.symbol === receive)
       setReBalance(String(Number(reTokens[0]?.balance)))

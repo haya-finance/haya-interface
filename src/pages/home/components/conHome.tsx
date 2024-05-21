@@ -83,7 +83,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
 
   const [tvl, setTvl] = useState('0')
   const [currPrice, setCurrPrice] = useState('0')
-  const [tokenName, setTokenName] = useState([{ H20: 1, ETH: 0 }])
+  const [tokenName, setTokenName] = useState([{ H20: 0, ETH: 1 }])
 
 
   const getTokens = async () => {
@@ -94,6 +94,9 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
         // console.log('1111111', res1)
         if (res1 == 'H20') {
           setTokenName((pre) => pre.map((item) => { return { H20: 1, ETH: 0 } }))
+        } else {
+          setTokenName((pre) => pre.map((item) => { return { H20: 0, ETH: 1 } }))
+
         }
 
       })
@@ -116,7 +119,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
         // console.log(res1)
         await priceFeed.decimals().then(async (res2) => {
           // console.log(res2)
-          const newtvl = String((Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[2]) / (10 ** Number(res2))) * 2)
+          const newtvl = String((Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2))) * 2)
           // console.log(newtvl)
           setTvl(newtvl)
           const price = String((Number(((Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[tokenName[0].H20]) / (10 ** 18)))))

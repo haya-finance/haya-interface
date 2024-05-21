@@ -194,10 +194,10 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
             data.forEach(item => {
               if (item.contract == add) {
-                item.price = String((Number(((Number(res[0]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[1]) / (10 ** 18)))))
+                item.price = String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18)))))
               }
             })
-            setToPrice(String((Number(((Number(res[0]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[1]) / (10 ** 18))))))
+            setToPrice(String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18))))))
 
           })
 
@@ -228,12 +228,30 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
   async function getRePrice(add: string) {
     if (add == 'H20') {
-      data.forEach(item => {
-        if (item.contract == add) {
-          item.price = '100'
-        }
+      const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+      const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
+
+
+      await pairContract.getReserves().then(async (res: any) => {
+        // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+        await priceFeed.latestRoundData().then(async (res1) => {
+          // console.log(res1)
+          await priceFeed.decimals().then(async (res2) => {
+
+            data.forEach(item => {
+              if (item.contract == add) {
+                item.price = String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18)))))
+              }
+            })
+            setRePrice(String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18))))))
+
+          })
+
+        })
+
+      }).catch(err => {
+        // console.log('错误输出', err)
       })
-      setRePrice('100')
 
     } else {
       const priceFeed = new ethers.Contract(add, PriceFeedAbi, provider);
@@ -241,10 +259,10 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
         await priceFeed.decimals().then(async (res2) => {
           data.forEach(item => {
             if (item.contract == add) {
-              item.price = String((Number(res1[2]) / (10 ** Number(res2))))
+              item.price = String((Number(res1[1]) / (10 ** Number(res2))))
             }
           })
-          setRePrice(String((Number(res1[2]) / (10 ** Number(res2)))))
+          setRePrice(String((Number(res1[1]) / (10 ** Number(res2)))))
           // console.log((Number(res1[2]) / (10 ** Number(res2))))
 
 
@@ -404,16 +422,29 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
     // console.log(data.filter(item => item.symbol == pay)[0].address, data.filter(item => item.symbol == receive)[0].address, swapContract)
 
-    await swapContract.getAmountsOut(BigInt(Number(value) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
-      // console.log('结果', res)
-      setInputReValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
-      setInputReShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
-    }).catch(err => {
-      // console.log('err', err)
-      setInputReValue('')
-      setInputReShowValue('')
-      // console.log('错误输出', err)
-    })
+    if (pay == 'USDT' || receive == 'USDT' || pay == 'USDC' || receive == 'USDC') {
+      await swapContract.getAmountsOut(BigInt(Math.round(Number(value) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl)))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
+        // console.log('结果', res)
+        setInputReValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
+        setInputReShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
+      }).catch(err => {
+        // console.log('err', err)
+        setInputReValue('')
+        setInputReShowValue('')
+        // console.log('错误输出', err)
+      })
+    } else {
+      await swapContract.getAmountsOut(BigInt(Math.round(Number(value) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl)))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
+        // console.log('结果', res)
+        setInputReValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
+        setInputReShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
+      }).catch(err => {
+        // console.log('err', err)
+        setInputReValue('')
+        setInputReShowValue('')
+        // console.log('错误输出', err)
+      })
+    }
 
   }
 
@@ -427,16 +458,32 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
     // console.log(BigInt(Number(value) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === pay)[0].address])
 
-    await swapContract.getAmountsOut(BigInt(Number(value) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === pay)[0].address]).then((res: any) => {
-      // console.log('结果', res)
-      setInputValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
-      setInputShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
-    }).catch(err => {
-      // console.log('错误输出', err)
-      setInputValue('')
-      setInputShowValue('')
+    if (pay == 'USDT' || receive == 'USDT' || pay == 'USDC' || receive == 'USDC') {
+      await swapContract.getAmountsOut(BigInt(Math.round(Number(value) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl)))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === pay)[0].address]).then((res: any) => {
+        // console.log('结果', res)
+        setInputValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
+        setInputShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
+      }).catch(err => {
+        // console.log('错误输出', err)
+        setInputValue('')
+        setInputShowValue('')
 
-    })
+      })
+
+    } else {
+      await swapContract.getAmountsOut(BigInt(Math.round(Number(value) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl)))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === pay)[0].address]).then((res: any) => {
+        // console.log('结果', res)
+        setInputValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
+        setInputShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
+      }).catch(err => {
+        // console.log('错误输出', err)
+        setInputValue('')
+        setInputShowValue('')
+
+      })
+    }
+
+
 
   }
 
@@ -451,10 +498,20 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
     const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, provider)
 
-    await swapContract.getAmountsOut(BigInt(Number('1') * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
-      // console.log('结果', res)
-      setOneValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
-    })
+    if (pay == 'USDT' || receive == 'USDT' || pay == 'USDC' || receive == 'USDC') {
+      await swapContract.getAmountsOut(BigInt(Number('1') * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
+        // console.log('结果', res)
+        setOneValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
+      })
+
+    } else {
+      await swapContract.getAmountsOut(BigInt(Number('1') * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
+        // console.log('结果', res)
+        setOneValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
+      })
+    }
+
+
 
   }
 
@@ -569,7 +626,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
   useEffect(() => {
 
-    console.log('data', data)
+    // console.log('data', data)
 
 
 
@@ -600,6 +657,9 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
         Swap(inputToValue)
       } else if (inputReValue !== "" && inputToValue == "") {
         ReSwap(inputReValue)
+      } else if (inputToValue !== "" && inputReValue !== "") {
+        // console.log('11111')
+        Swap(inputToValue)
       }
     }
 

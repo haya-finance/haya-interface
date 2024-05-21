@@ -106,8 +106,8 @@ export default function AddPool() {
     const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
 
     await pairContract.getReserves().then(async (res: any) => {
-      setTokenList((pre) => pre.map((item) => item.symbol === 'H20' ? { ...item, proportion: String(Number(res[1]) / (10 ** 18)) } : item))
-      setTokenList((pre) => pre.map((item) => item.symbol === 'ETH' ? { ...item, proportion: String(Number(res[0]) / (10 ** 18)) } : item))
+      setTokenList((pre) => pre.map((item) => item.symbol === 'H20' ? { ...item, proportion: String(Number(res[0]) / (10 ** 18)) } : item))
+      setTokenList((pre) => pre.map((item) => item.symbol === 'ETH' ? { ...item, proportion: String(Number(res[1]) / (10 ** 18)) } : item))
     })
 
   }

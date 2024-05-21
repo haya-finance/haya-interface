@@ -85,7 +85,7 @@ const Succeed = ({ windowWidth, handleConfirmClose, open, data, num, balance, ha
 
 
   const goHash = () => {
-    window.location.assign(`${hash_url}${hash}`)
+    window.open(`${hash_url}${hash}`, '_blank')
   }
 
   return (

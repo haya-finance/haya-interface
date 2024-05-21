@@ -15,7 +15,7 @@ function formatNumber(num: number) {
   if (num % 1 !== 0) {
     const decimalPart = num.toString().split('.')[1]
 
-    console.log(decimalPart)
+    // console.log(decimalPart)
 
     for (let i = 0; i < decimalPart.length; i++) {
       if (Number(decimalPart[i]) !== 0) {

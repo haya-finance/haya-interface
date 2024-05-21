@@ -148,7 +148,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
           num *= 10 ** (i + 4)
           num = Math.floor(num)
           num /= 10 ** (i + 4)
-          console.log(num)
+          // console.log(num)
 
           // num = Number(parseFloat(String(num)).toFixed((i + 4)))
           var parts = num.toString().split(".");

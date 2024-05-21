@@ -256,7 +256,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
   const [firstChange, setFirstChange] = useState(false);
 
   useEffect(() => {
-    console.log(firstChange)
+    // console.log(firstChange)
     if (!firstChange) {
       // 首次变化时执行的操作
       if (inputValue !== '') {

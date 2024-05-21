@@ -472,7 +472,7 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
 
   useEffect(() => {
-    console.log(doneLoading)
+    // console.log(doneLoading)
 
   }, [doneLoading])
 

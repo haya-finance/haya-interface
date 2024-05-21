@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import exchange from 'assets/images/Exchange.svg'
 import { UniswapSepoliaRouterContract } from 'config';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -26,6 +26,10 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, oneSwap, li
   const handleChange = () => {
     setHidder(!hidder)
   }
+
+  useEffect(() => {
+
+  }, [oneSwap])
 
   return (
     <Box sx={windowWeight >= 600 ? {

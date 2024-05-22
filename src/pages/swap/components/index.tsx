@@ -323,7 +323,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
               <Stack direction="row" justifyContent="space-between" width="600px" margin="0 auto" mb="20px">
                 <Stack direction="row" spacing={1}>
                   <Box sx={{ p: '4px 12px', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '13px', fontWeight: 600, borderRadius: "20px", cursor: 'pointer', border: 0 }} component="button" onClick={() => OnCheckTitel(0)}>
-                    Swap
+                    Swap test
                   </Box>
                 </Stack>
                 <Box >

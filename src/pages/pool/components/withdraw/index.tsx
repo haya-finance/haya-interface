@@ -452,7 +452,7 @@ export default function WithdrawPoolPage() {
                     <Stack direction="row" alignItems="center" spacing="4px">
                       <MdOutlineArrowBackIosNew />
                       <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
-                        Widthdraw liquidity
+                        Withdraw liquidity
                       </Typography>
                     </Stack>
                   </Box>
@@ -554,7 +554,7 @@ export default function WithdrawPoolPage() {
                     <Stack direction="row" alignItems="center" spacing="4px">
                       <MdOutlineArrowBackIosNew />
                       <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
-                        Widthdraw liquidity
+                        Withdraw liquidity
                       </Typography>
                     </Stack>
                   </Box>

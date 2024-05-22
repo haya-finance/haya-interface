@@ -417,6 +417,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
 
   const Swap = async (value: any) => {
+    // console.log(value)
 
     // console.log(signer)
 
@@ -523,14 +524,13 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
   }, [WETHAmount])
 
-  const InputChange = (event: any) => {
-    const newValue = event.target.value.replace(/-/, '')
+  const InputChange = async (event: any) => {
+    const newValue = event.target.value.replace(/[A-Za-z\-]/, '')
     setInputValue(newValue)
     setInputShowValue(newValue)
 
     if (pay !== 'Select token' && receive !== "Select token") {
-      console.log(newValue)
-      Swap(newValue)
+      await Swap(String(Number(newValue)))
     }
     // if (String(event.target.value) == "") {
     //   console.log('1111')
@@ -548,12 +548,12 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
   }
 
   const InputFromChange = (event: any) => {
-    const newValue = event.target.value.replace(/-/, '')
+    const newValue = event.target.value.replace(/[A-Za-z\-]/, '')
     setInputReValue(newValue)
     setInputReShowValue(newValue)
     if (pay !== 'Select token' && receive !== "Select token") {
       // console.log('数量', newValue)
-      ReSwap(newValue)
+      ReSwap(String(Number(newValue)))
     }
 
 

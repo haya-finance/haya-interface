@@ -4,6 +4,7 @@ import {
 } from '@wagmi/core'
 import { http, createConfig } from 'wagmi'
 import { arbitrum } from 'wagmi/chains'
+// import { arbitrumSepolia } from 'wagmi/chains'
 import { walletConnect, coinbaseWallet, injected } from 'wagmi/connectors'
 
 

@@ -19,7 +19,8 @@ type DataType = {
   price: string;
   liq: string;
   ETHAmount: string;
-  H20Amount: string
+  H20Amount: string;
+  h20Price: string
 }
 
 
@@ -80,11 +81,40 @@ const PoolDetail = () => {
   const [data, setData] = useState<DataType[]>([{
     tvl: '0',
     price: '0',
+    h20Price: '0',
     liq: '0',
     ETHAmount: '0',
     H20Amount: '0'
   }])
   const navigate = useNavigate()
+
+
+  // const [tokenName, setTokenName] = useState([{ H20: 1, ETH: 0 }])
+
+
+
+  // const getTokens = async () => {
+  //   const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+  //   await pairContract.token1().then(async (res: any) => {
+  //     const tokenContract = new ethers.Contract(res, tokenAbi, provider)
+  //     await tokenContract.symbol().then((res1) => {
+  //       // console.log('1111111', res1)
+  //       if (res1 == 'H20') {
+  //         setTokenName((pre) => pre.map((item) => { return { H20: 1, ETH: 0 } }))
+  //       } else {
+  //         setTokenName((pre) => pre.map((item) => { return { H20: 0, ETH: 1 } }))
+  //       }
+
+  //     })
+  //     // console.log('结果', res)
+  //     // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+  //   }).catch(err => {
+  //     // console.log('错误输出', err)
+  //   })
+
+  // }
+
+
 
 
 
@@ -94,30 +124,50 @@ const PoolDetail = () => {
     const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
 
 
-    await pairContract.getReserves().then(async (res: any) => {
-      // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
-      await priceFeed.latestRoundData().then(async (res1) => {
-        await priceFeed.decimals().then(async (res2) => {
-          const newtvl = String((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2))) * 2)
-          await pairContract.totalSupply().then(async (res3) => {
-            await pairContract.decimals().then((res4) => {
-              const arr = [{ tvl: newtvl, price: String(Number(res1[1]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[1]) / (10 ** 18)), H20Amount: String(Number(res[0]) / (10 ** 18)) }]
-              // setData((pre) => pre.map((item) => {
-              //   return { tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }
-              // }))
-              setData(arr)
-            })
-          })
-        })
+    const res1 = await pairContract.getReserves()
+    const res2 = await priceFeed.latestRoundData()
+    const res3 = await pairContract.totalSupply()
+    const res4 = await pairContract.decimals()
 
-      })
 
-    }).catch(err => {
-      // console.log('错误输出', err)
+    Promise.all([res1, res2, res3, res4]).then((result) => {
+
+      const newtvl = String((Number(result[0][1]) / (10 ** 18)) * (Number(result[1][1]) / (10 ** 8)) * 2)
+      const h20_price = String((Number(result[0][1]) / (10 ** 18)) * (Number(result[1][1]) / (10 ** 8)) / (Number(result[0][0]) / (10 ** 18)))
+      const arr = [{ tvl: newtvl, h20Price: h20_price, price: String(Number(result[1][1]) / (10 ** 8)), liq: String(Number(result[2]) / (10 ** Number(result[3]))), ETHAmount: String(Number(result[0][1]) / (10 ** 18)), H20Amount: String(Number(result[0][0]) / (10 ** 18)) }]
+      // setData((pre) => pre.map((item) => {
+      //   return { tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }
+      // }))
+      setData(arr)
+
     })
+
+    // await pairContract.getReserves().then(async (res: any) => {
+    //   // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+    //   await priceFeed.latestRoundData().then(async (res1) => {
+    //     await priceFeed.decimals().then(async (res2) => {
+    //       const newtvl = String((Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2))) * 2)
+    //       const h20_price = String((Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2))) / (Number(res[tokenName[0].H20]) / (10 ** 18)))
+    //       await pairContract.totalSupply().then(async (res3) => {
+    //         await pairContract.decimals().then((res4) => {
+    //           const arr = [{ tvl: newtvl, h20Price: h20_price, price: String(Number(res1[1]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[tokenName[0].ETH]) / (10 ** 18)), H20Amount: String(Number(res[tokenName[0].H20]) / (10 ** 18)) }]
+    //           // setData((pre) => pre.map((item) => {
+    //           //   return { tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }
+    //           // }))
+    //           setData(arr)
+    //         })
+    //       })
+    //     })
+
+    //   })
+
+    // }).catch(err => {
+    //   // console.log('错误输出', err)
+    // })
 
 
   }
+
 
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
@@ -325,16 +375,16 @@ const PoolDetail = () => {
 
 
                     </Stack>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
                       <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
                         Volume
                       </Typography>
                       <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                        {`$ ${ValueNumber(Number(Number(data[0]?.tvl) / 2))}`}
+                        {`$ ${ValueNumber(Number(Number(data[0]?.ETHAmount) * Number(data[0]?.price)) + Number(Number(data[0]?.H20Amount) * Number(data[0]?.h20Price)))}`}
                       </Typography>
 
 
-                    </Stack>
+                    </Stack> */}
                     <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
                     <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
                       Pool reserve
@@ -435,16 +485,16 @@ const PoolDetail = () => {
 
 
                     </Stack>
-                    <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
+                    {/* <Stack direction="row" alignItems="center" justifyContent="space-between" marginBottom="10px">
                       <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
                         Volume
                       </Typography>
                       <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                        {`$ ${ValueNumber(Number(Number(data[0]?.tvl) / 2))}`}
+                        {`$ ${ValueNumber(Number(Number(data[0]?.ETHAmount) * Number(data[0]?.price)) + Number(Number(data[0]?.H20Amount) * Number(data[0]?.h20Price)))}`}
                       </Typography>
 
 
-                    </Stack>
+                    </Stack> */}
                     <Box sx={{ height: '0.5px', backgroundColor: '#c0c0c0', width: '100%' }}></Box>
                     <Typography sx={{ color: "#464646", fontSize: '12px', padding: '10px 0', fontWeight: 600 }}>
                       Pool reserve

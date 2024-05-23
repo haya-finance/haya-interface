@@ -269,31 +269,90 @@ export default function WithdrawPoolPage() {
 
   }
 
-
-
   const getData = async () => {
 
     const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
 
 
-    await pairContract.getReserves().then(async (res: any) => {
-      // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
-      await pairContract.totalSupply().then(async (res3) => {
-        await pairContract.decimals().then((res4) => {
-          const arr = [{ liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[1]) / (10 ** 18)), H20Amount: String(Number(res[0]) / (10 ** 18)) }]
-          // setData((pre) => pre.map((item) => {
-          //   return { tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }
-          // }))
-          setData(arr)
-        })
-      })
 
-    }).catch(err => {
-      // console.log('错误输出', err)
+
+
+    const res1 = await pairContract.getReserves()
+    const res3 = await pairContract.totalSupply()
+    const res4 = await pairContract.decimals()
+
+
+
+    Promise.all([res1, res3, res4]).then((result) => {
+
+      const arr = [{ liq: String(Number(result[1]) / (10 ** Number(result[2]))), ETHAmount: String(Number(result[0][1]) / (10 ** 18)), H20Amount: String(Number(result[0][0]) / (10 ** 18)) }]
+      // setData((pre) => pre.map((item) => {
+      //   return { tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }
+      // }))
+      setData(arr)
+
     })
 
 
   }
+
+
+
+
+  // const getData = async () => {
+
+  //   const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+
+  //   await pairContract.token1().then(async (res: any) => {
+  //     const tokenContract = new ethers.Contract(res, tokenAbi, provider)
+  //     await tokenContract.symbol().then(async (res1) => {
+  //       // console.log('1111111', res1)
+  //       if (res1 == 'H20') {
+  //         await pairContract.getReserves().then(async (res: any) => {
+  //           // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+  //           await pairContract.totalSupply().then(async (res3) => {
+  //             await pairContract.decimals().then((res4) => {
+  //               const arr = [{ liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }]
+  //               // setData((pre) => pre.map((item) => {
+  //               //   return { tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }
+  //               // }))
+  //               setData(arr)
+  //             })
+  //           })
+
+  //         }).catch(err => {
+  //           // console.log('错误输出', err)
+  //         })
+  //       } else {
+  //         await pairContract.getReserves().then(async (res: any) => {
+  //           // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+  //           await pairContract.totalSupply().then(async (res3) => {
+  //             await pairContract.decimals().then((res4) => {
+  //               const arr = [{ liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[1]) / (10 ** 18)), H20Amount: String(Number(res[0]) / (10 ** 18)) }]
+  //               // setData((pre) => pre.map((item) => {
+  //               //   return { tvl: newtvl, price: String(Number(res1[2]) / (10 ** Number(res2))), liq: String(Number(res3) / (10 ** Number(res4))), ETHAmount: String(Number(res[0]) / (10 ** 18)), H20Amount: String(Number(res[1]) / (10 ** 18)) }
+  //               // }))
+  //               setData(arr)
+  //             })
+  //           })
+
+  //         }).catch(err => {
+  //           // console.log('错误输出', err)
+  //         })
+  //       }
+
+  //     })
+  //     // console.log('结果', res)
+  //     // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+  //   }).catch(err => {
+  //     // console.log('错误输出', err)
+  //   })
+
+
+
+
+
+  // }
 
 
   const getAllowance = async () => {

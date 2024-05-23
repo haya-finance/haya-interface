@@ -15,7 +15,7 @@ const Networks = ({ name, size }: Props) => {
       return <Ethereum size={size} />;
     case 'Arbitrum':
       return <Arbitrum size={size} />;
-    case 'Arbitrum One':
+    case 'Arbitrum Sepolia':
       return <Arbitrum size={size} />;
     case "Arbitrum One":
       return <Arbitrum size={size} />;

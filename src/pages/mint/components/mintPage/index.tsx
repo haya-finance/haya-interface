@@ -10,6 +10,7 @@ import { ButtonProps } from '@mui/material/Button';
 import TokensList from './tokensList';
 import ReviewSwap from './review';
 import InputBase from '@mui/material/InputBase';
+import { network_Name, net_id } from 'config';
 
 // import Select, { components } from 'react-select'
 // const web3 = new Web3(sepolia_rpc)
@@ -214,6 +215,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
     backgroundColor: '#1AAE70',
     '&:hover': {
       backgroundColor: '#19A56A',
+      color: '#fff',
     },
   }));
 
@@ -322,7 +324,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
 
 
   const onChangeNetwork = () => {
-    switchChain({ chainId: 42161 })
+    switchChain({ chainId: net_id })
 
   }
 
@@ -345,7 +347,11 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                   sx={{
                     width: "600px", margin: "0 auto", mb: '20px'
                   }}
-                ><TokensList data={tokensData} inputNum={inputValue} name='H20' windowWidth={windowWidth} /></Box>
+                >
+                  <TokensList data={tokensData} inputNum={inputValue} name='H20' windowWidth={windowWidth} />
+
+
+                </Box>
 
               )
             }
@@ -419,7 +425,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                         <>
                           <Box sx={{ width: "600px", margin: '0 auto', mt: "20px" }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Switch to Arbitrum One
+                              Switch to {`${network_Name}`}
                             </ConnectNetorkButton>
                           </Box>
                         </>
@@ -554,7 +560,7 @@ const MintSon = ({ windowWidth, tokensData, H30Data, onUpdate, windowHeight }: P
                         <>
                           <Box sx={{ width: '100%', mt: '10px' }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Switch to Arbitrum One
+                              Switch to {`${network_Name}`}
                             </ConnectNetorkButton>
                           </Box>
                         </>

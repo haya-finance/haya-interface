@@ -1,7 +1,7 @@
 
 
 // material-ui
-import { Box, Container, Stack, Typography } from '@mui/material';
+import { Box, Container, IconButton, Skeleton, Stack, Typography } from '@mui/material';
 
 import FooterBlock from 'layout/CommonLayout/FooterBlock';
 // import ConnectPage from './listProduct';
@@ -16,7 +16,7 @@ import { ethers } from 'ethers';
 import { arb_url, ETH_Price_ARB, H30_Address, pair_Address, sepolia_rpc } from 'config';
 import pairAbi from 'abi/pair.json'
 import PriceFeedAbi from 'abi/priceFeeds.json';
-import tokenAbi from 'abi/token.json'
+import copyIcon from 'assets/images/icon/Copy.svg'
 
 // third party
 
@@ -83,69 +83,111 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
 
   const [tvl, setTvl] = useState('0')
   const [currPrice, setCurrPrice] = useState('0')
-  const [tokenName, setTokenName] = useState([{ H20: 0, ETH: 1 }])
 
 
-  const getTokens = async () => {
-    const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
-    await pairContract.token1().then(async (res: any) => {
-      const tokenContract = new ethers.Contract(res, tokenAbi, provider)
-      await tokenContract.symbol().then((res1) => {
-        // console.log('1111111', res1)
-        if (res1 == 'H20') {
-          setTokenName((pre) => pre.map((item) => { return { H20: 1, ETH: 0 } }))
-        } else {
-          setTokenName((pre) => pre.map((item) => { return { H20: 0, ETH: 1 } }))
 
-        }
+  // const getData = async () => {
+  //   const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+  //   const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
 
-      })
-      // console.log('结果', res)
-      // setInputReValue(String(Number(res[1]) / (10 ** 18)))
-    }).catch(err => {
-      // console.log('错误输出', err)
-    })
+  //   await pairContract.token1().then(async (res: any) => {
+  //     const tokenContract = new ethers.Contract(res, tokenAbi, provider)
+  //     await tokenContract.symbol().then(async (res1) => {
+  //       // console.log('1111111', res1)
+  //       if (res1 == 'H20') {
+  //         await pairContract.getReserves().then(async (res: any) => {
+  //           // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+  //           await priceFeed.latestRoundData().then(async (res1) => {
+  //             // console.log(res1)
+  //             await priceFeed.decimals().then(async (res2) => {
+  //               // console.log(res2)
+  //               const newtvl = String((Number(res[0]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2))) * 2)
+  //               // console.log(newtvl)
+  //               setTvl(newtvl)
+  //               const price = String((Number(((Number(res[0]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[1]) / (10 ** 18)))))
+  //               // console.log('price', price)
+  //               setCurrPrice(price)
 
-  }
+  //             })
+
+  //           })
+
+  //         }).catch(err => {
+  //           // console.log('错误输出', err)
+  //         })
+  //       } else {
+  //         await pairContract.getReserves().then(async (res: any) => {
+  //           // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+  //           await priceFeed.latestRoundData().then(async (res1) => {
+  //             // console.log(res1)
+  //             await priceFeed.decimals().then(async (res2) => {
+  //               // console.log(res2)
+  //               const newtvl = String((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2))) * 2)
+  //               // console.log(newtvl)
+  //               setTvl(newtvl)
+  //               const price = String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18)))))
+  //               // console.log('price', price)
+  //               setCurrPrice(price)
+
+  //             })
+
+  //           })
+
+  //         }).catch(err => {
+  //           // console.log('错误输出', err)
+  //         })
+
+  //       }
+
+  //     })
+  //     // console.log('结果', res)
+  //     // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+  //   }).catch(err => {
+  //     // console.log('错误输出', err)
+  //   })
+
+
+
+  // }
+
 
   const getData = async () => {
     const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
     const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
 
 
-    await pairContract.getReserves().then(async (res: any) => {
-      // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
-      await priceFeed.latestRoundData().then(async (res1) => {
-        // console.log(res1)
-        await priceFeed.decimals().then(async (res2) => {
-          // console.log(res2)
-          const newtvl = String((Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2))) * 2)
-          // console.log(newtvl)
-          setTvl(newtvl)
-          const price = String((Number(((Number(res[tokenName[0].ETH]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[tokenName[0].H20]) / (10 ** 18)))))
-          // console.log('price', price)
-          setCurrPrice(price)
-
-        })
-
-      })
-
-    }).catch(err => {
-      // console.log('错误输出', err)
+    const res = await pairContract.getReserves()
+    const res1 = await priceFeed.latestRoundData()
+    Promise.all([res, res1]).then((result) => {
+      const newtvl = String((Number(result[0][1]) / (10 ** 18)) * (Number(result[1][1]) / (10 ** 8)) * 2)
+      // console.log(newtvl)
+      setTvl(newtvl)
+      const price = String((Number(((Number(result[0][1]) / (10 ** 18)) * (Number(result[1][1]) / (10 ** 8))) / (Number(result[0][0]) / (10 ** 18)))))
+      // console.log('price', price)
+      setCurrPrice(price)
     })
+
+
+    // const newtvl = String((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2))) * 2)
+    //     // console.log(newtvl)
+    //     setTvl(newtvl)
+    //     const price = String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18)))))
+    //     // console.log('price', price)
+    //     setCurrPrice(price)
+
+
+
+
 
 
   }
 
+
   useEffect(() => {
-    getTokens()
     getData()
 
   }, [])
 
-  useEffect(() => {
-
-  }, [tokenName])
 
   useEffect(() => {
 
@@ -163,6 +205,10 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
   const goCrantract = () => {
     window.open(`${arb_url}${H30_Address}`, '_blank')
 
+  }
+
+  const onCopy = () => {
+    navigator.clipboard.writeText(H30_Address as string)
   }
 
   return (
@@ -202,9 +248,19 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                       <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '16px', lineHeight: '14px' }}  >
                         Current Price
                       </Typography>
-                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
-                        {`$ ${formatNumber(Number(currPrice))}`}
-                      </Typography>
+
+                      {
+                        Number(currPrice) == 0 ? (
+                          <Skeleton variant="text" sx={{ fontSize: '18px', lineHeight: '20px', width: '100px', height: '20px' }} />
+
+                        ) : (
+                          <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
+                            {`$ ${formatNumber(Number(currPrice))}`}
+                          </Typography>
+
+
+                        )
+                      }
 
                     </Stack>
                     <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '40px' }}></Box>
@@ -213,11 +269,22 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                     <Stack spacing="10px" alignItems="center">
 
                       <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '16px', lineHeight: '14px' }}  >
-                        Market Cap
+                        Total Value Locked
                       </Typography>
-                      <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
-                        {`$ ${formatNumber(Number(tvl))}`}
-                      </Typography>
+
+                      {
+                        Number(tvl) == 0 ? (
+                          <Skeleton variant="text" sx={{ fontSize: '18px', lineHeight: '20px', width: '100px', height: '20px' }} />
+
+                        ) : (
+                          <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
+                            {`$ ${formatNumber(Number(tvl))}`}
+                          </Typography>
+
+
+                        )
+                      }
+
 
                     </Stack>
                     <Box sx={{ width: '1px', backgroundColor: '#9b9b9b', height: '40px' }}></Box>
@@ -239,10 +306,15 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                       <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '16px', lineHeight: '14px' }}  >
                         Token Address
                       </Typography>
-                      <Typography component="button" onClick={goCrantract} variant="body1" sx={{ cursor: 'pointer', color: '#000', backgroundColor: 'transparent', border: 0, fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
-                        {H30_Address?.substring(0, 6)}...{H30_Address?.substring(H30_Address.length - 6)}
+                      <Stack direction="row" alignItems="center" spacing="10px">
+                        <Typography component="button" onClick={goCrantract} variant="body1" sx={{ cursor: 'pointer', color: '#000', backgroundColor: 'transparent', border: 0, fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
+                          {H30_Address?.substring(0, 6)}...{H30_Address?.substring(H30_Address.length - 6)}
 
-                      </Typography>
+                        </Typography>
+                        <IconButton sx={{ width: '24px', height: '24px' }} onClick={onCopy}>
+                          <img src={copyIcon} />
+                        </IconButton>
+                      </Stack>
 
                     </Stack>
 
@@ -281,9 +353,19 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 100, fontSize: '18px', lineHeight: '12px' }}  >
                       Current Price
                     </Typography>
-                    <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
-                      {`$ ${formatNumber(Number(currPrice))}`}
-                    </Typography>
+                    {
+                      Number(currPrice) == 0 ? (
+                        <Skeleton variant="text" sx={{ fontSize: '20px', lineHeight: '20px', width: '100px', height: '20px' }} />
+
+                      ) : (
+                        <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
+                          {`$ ${formatNumber(Number(currPrice))}`}
+                        </Typography>
+
+
+                      )
+                    }
+
 
                   </Stack>
                   <Box sx={{ width: '100%', backgroundColor: '#f6f6f6', height: '1px' }}></Box>
@@ -292,11 +374,21 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                   <Stack spacing="16px" alignItems="center" padding="20px 20px">
 
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 100, fontSize: '18px', lineHeight: '12px' }}  >
-                      Market Cap
+                      Total Value Locked
                     </Typography>
-                    <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
-                      {`$ ${formatNumber(Number(tvl))}`}
-                    </Typography>
+                    {
+                      Number(tvl) == 0 ? (
+                        <Skeleton variant="text" sx={{ fontSize: '20px', lineHeight: '20px', width: '100px', height: '20px' }} />
+
+                      ) : (
+                        <Typography variant="body1" sx={{ color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
+                          {`$ ${formatNumber(Number(tvl))}`}
+                        </Typography>
+
+
+                      )
+                    }
+
 
                   </Stack>
 
@@ -307,9 +399,15 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 100, fontSize: '18px', lineHeight: '12px' }}  >
                       Token Address
                     </Typography>
-                    <Typography variant="body1" onClick={goCrantract} component="button" sx={{ cursor: 'pointer', backgroundColor: 'transparent', border: 0, color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
-                      {H30_Address?.substring(0, 6)}...{H30_Address?.substring(H30_Address.length - 6)}
-                    </Typography>
+                    <Stack direction="row" alignItems="center" spacing="16px">
+                      <Typography variant="body1" onClick={goCrantract} component="button" sx={{ cursor: 'pointer', backgroundColor: 'transparent', border: 0, color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
+                        {H30_Address?.substring(0, 6)}...{H30_Address?.substring(H30_Address.length - 6)}
+                      </Typography>
+                      <IconButton sx={{ width: '24px', height: '24px' }} onClick={onCopy}>
+                        <img src={copyIcon} />
+                      </IconButton>
+
+                    </Stack>
 
                   </Stack>
 

@@ -141,8 +141,6 @@ type TypeProps = {
   inputToNum: string;
   inputFromNum: string;
   toToken: string;
-  toPrice: string;
-  formPrice: string;
   fromToken: string;
   windowWidth: number;
   slippage: string;
@@ -153,7 +151,7 @@ type TypeProps = {
 
 
 
-export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice, WETHAmount, toPrice, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onUpdate }: TypeProps) {
+export default function SwapReviewSwap({ slippage, open, windowWidth, WETHAmount, handleSwapClose, data, inputToNum, inputFromNum, toToken, fromToken, windowHeight, onUpdate }: TypeProps) {
 
 
   const SwapButton = styled(LoadingButton)<ButtonProps>(({ theme }) => ({
@@ -640,7 +638,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice,
                     </Stack>
 
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      {inputToNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(toPrice) * Number(inputToNum))}`}
+                      {inputToNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data?.filter((item) => item.symbol == toToken)[0]?.price) * Number(inputToNum))}`}
 
                     </Typography>
 
@@ -669,7 +667,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice,
                       <TokenColorIcon name={fromToken} size={36} />
                     </Stack>
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      {inputFromNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(formPrice) * Number(inputFromNum))}`}
+                      {inputFromNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data?.filter((item) => item.symbol == fromToken)[0]?.price) * Number(inputFromNum))}`}
                     </Typography>
 
                   </Stack>
@@ -717,7 +715,43 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice,
               </DialogContent>
               <DialogActions>
                 <SwapButton loading={loading} onClick={handleSwap}>
-                  Confirm Swap
+                  {
+                    toToken == 'ETH' ? (
+                      <>
+                        Confirm Swap
+                      </>
+
+                    ) : (
+                      <>
+                        {
+                          data?.filter(item => item.symbol === toToken)[0]?.allowance !== undefined && Math.floor(Number(inputToNum) * (10 ** Number(data?.filter(item => item.symbol === toToken)[0]?.decimasl))) !== undefined ?
+                            (
+                              <>
+                                {
+                                  BigInt(data?.filter(item => item.symbol === toToken)[0]?.allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data?.filter(item => item.symbol === toToken)[0]?.decimasl)))) ?
+                                    (
+                                      <>
+                                        Approve & Confirm Swap
+                                      </>
+
+                                    ) : (
+                                      <>Confirm Swap</>
+                                    )
+                                }
+                              </>
+
+                            ) :
+                            (
+                              <></>
+                            )
+
+                        }
+
+                      </>
+
+                    )
+                  }
+
                 </SwapButton>
               </DialogActions>
             </BootstrapDialog>
@@ -762,7 +796,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice,
                     </Stack>
 
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      {inputToNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(toPrice) * Number(inputToNum))}`}
+                      {inputToNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data?.filter((item) => item.symbol == toToken)[0]?.price) * Number(inputToNum))}`}
                     </Typography>
 
                   </Stack>
@@ -791,7 +825,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice,
                       <TokenColorIcon name={fromToken} size={36} />
                     </Stack>
                     <Typography variant='body1' sx={{ fontSize: '13px', fontWeight: 600 }} color="#9b9b9b">
-                      {inputFromNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(formPrice) * Number(inputFromNum))}`}
+                      {inputFromNum == "" ? '$ 0.00' : `$ ${formatTwoNumber(Number(data?.filter((item) => item.symbol == fromToken)[0]?.price) * Number(inputFromNum))}`}
                     </Typography>
 
                   </Stack>
@@ -868,7 +902,42 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, formPrice,
 
 
                 <SwapButton loading={loading} onClick={handleSwap}>
-                  Confirm Swap
+                  {
+                    toToken == 'ETH' ? (
+                      <>
+                        Confirm Swap
+                      </>
+
+                    ) : (
+                      <>
+                        {
+                          data?.filter(item => item.symbol === toToken)[0]?.allowance !== undefined && Math.floor(Number(inputToNum) * (10 ** Number(data?.filter(item => item.symbol === toToken)[0]?.decimasl))) !== undefined ?
+                            (
+                              <>
+                                {
+                                  BigInt(data?.filter(item => item.symbol === toToken)[0]?.allowance) < BigInt(Math.floor(Number(inputToNum) * (10 ** Number(data?.filter(item => item.symbol === toToken)[0]?.decimasl)))) ?
+                                    (
+                                      <>
+                                        Approve & Confirm Swap
+                                      </>
+
+                                    ) : (
+                                      <>Confirm Swap</>
+                                    )
+                                }
+                              </>
+
+                            ) :
+                            (
+                              <></>
+                            )
+
+                        }
+
+                      </>
+
+                    )
+                  }
                 </SwapButton>
 
               </Box>

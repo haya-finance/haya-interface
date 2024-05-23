@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 // import Web3 from 'web3'
 import tokenAbi from 'abi/token.json'
-import { H30_Address, pair_Address, sepolia_rpc, UniswapSepoliaRouterContract, WETH_address } from 'config';
+import { H30_Address, network_Name, pair_Address, sepolia_rpc, UniswapSepoliaRouterContract, WETH_address } from 'config';
 import { ethers } from 'ethers';
 import PoolSons from './poolPage';
 import pairAbi from 'abi/pair.json'
@@ -57,7 +57,7 @@ export default function AddPool() {
       symbol: 'H20',
       address: H30_Address,
       balance: '0',
-      network: chain?.name ?? 'Arbitrum One',
+      network: chain?.name ?? `${network_Name}`,
       allowance: '',
       proportion: ''
     },
@@ -65,35 +65,13 @@ export default function AddPool() {
       symbol: 'ETH',
       address: WETH_address,
       balance: '0',
-      network: chain?.name ?? 'Arbitrum One',
+      network: chain?.name ?? `${network_Name}`,
       allowance: '',
       proportion: ''
 
     }
   ])
 
-  const [tokenName, setTokenName] = useState([{ H20: 1, ETH: 0 }])
-
-
-
-  const getTokens = async () => {
-    const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
-    await pairContract.token1().then(async (res: any) => {
-      const tokenContract = new ethers.Contract(res, tokenAbi, provider)
-      await tokenContract.symbol().then((res1) => {
-        // console.log('1111111', res1)
-        if (res1 == 'H20') {
-          setTokenName((pre) => pre.map((item) => { return { H20: 1, ETH: 0 } }))
-        }
-
-      })
-      // console.log('结果', res)
-      // setInputReValue(String(Number(res[1]) / (10 ** 18)))
-    }).catch(err => {
-      // console.log('错误输出', err)
-    })
-
-  }
 
 
 
@@ -102,6 +80,37 @@ export default function AddPool() {
 
 
   // 获取池子的比例
+  // const getPairProportion = async () => {
+  //   const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+
+  //   await pairContract.token1().then(async (res: any) => {
+  //     const tokenContract = new ethers.Contract(res, tokenAbi, provider)
+  //     await tokenContract.symbol().then(async (res1) => {
+  //       // console.log('1111111', res1)
+  //       if (res1 == 'H20') {
+  //         await pairContract.getReserves().then(async (res: any) => {
+  //           setTokenList((pre) => pre.map((item) => item.symbol === 'H20' ? { ...item, proportion: String(Number(res[1]) / (10 ** 18)) } : item))
+  //           setTokenList((pre) => pre.map((item) => item.symbol === 'ETH' ? { ...item, proportion: String(Number(res[0]) / (10 ** 18)) } : item))
+  //         })
+  //       } else {
+  //         await pairContract.getReserves().then(async (res: any) => {
+  //           setTokenList((pre) => pre.map((item) => item.symbol === 'H20' ? { ...item, proportion: String(Number(res[0]) / (10 ** 18)) } : item))
+  //           setTokenList((pre) => pre.map((item) => item.symbol === 'ETH' ? { ...item, proportion: String(Number(res[1]) / (10 ** 18)) } : item))
+  //         })
+  //       }
+
+  //     })
+  //     // console.log('结果', res)
+  //     // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+  //   }).catch(err => {
+  //     // console.log('错误输出', err)
+  //   })
+
+
+
+  // }
+
+
   const getPairProportion = async () => {
     const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
 
@@ -109,6 +118,8 @@ export default function AddPool() {
       setTokenList((pre) => pre.map((item) => item.symbol === 'H20' ? { ...item, proportion: String(Number(res[0]) / (10 ** 18)) } : item))
       setTokenList((pre) => pre.map((item) => item.symbol === 'ETH' ? { ...item, proportion: String(Number(res[1]) / (10 ** 18)) } : item))
     })
+
+
 
   }
 
@@ -147,7 +158,6 @@ export default function AddPool() {
 
 
     for (let i = 0; i < tokenList.length; i++) {
-      getTokens()
       getPairProportion()
       if (address !== undefined) {
         if (tokenList[i].symbol == 'ETH') {
@@ -169,9 +179,6 @@ export default function AddPool() {
 
   }, [tokenList])
 
-  useEffect(() => {
-
-  }, [tokenName])
 
 
 
@@ -182,7 +189,7 @@ export default function AddPool() {
   useEffect(() => {
 
     for (let i = 0; i < tokenList.length; i++) {
-      getTokens()
+
       getPairProportion()
 
       if (address !== undefined) {

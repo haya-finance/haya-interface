@@ -12,6 +12,7 @@ import RedeemReviewSwap from './review';
 import RedeemSelectIndexToken from './selectIndexToken';
 // import { sepolia_rpc} from 'config';
 import InputBase from '@mui/material/InputBase';
+import { network_Name, net_id } from 'config';
 // import { MdAddBox, MdIndeterminateCheckBox } from 'react-icons/md';
 
 // import Select, { components } from 'react-select'
@@ -336,7 +337,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
 
 
   const onChangeNetwork = () => {
-    switchChain({ chainId: 42161 })
+    switchChain({ chainId: net_id })
 
   }
 
@@ -437,7 +438,12 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                     sx={{
                       width: "600px", margin: "0 auto", mt: '20px'
                     }}
-                  ><RedeemTokensList data={tokensData} inputNum={inputValue} windowWidth={windowWidth} /></Box>
+                  >
+                    <RedeemTokensList data={tokensData} inputNum={inputValue} windowWidth={windowWidth} />
+
+
+
+                  </Box>
 
                 )
               }
@@ -450,7 +456,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                         <>
                           <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Switch to Arbitrum One
+                              Switch to {`${network_Name}`}
                             </ConnectNetorkButton>
                           </Box>
                         </>
@@ -601,7 +607,7 @@ const RedeemSon = ({ windowWidth, tokensData, H30Data, OnChange, windowHeight }:
                         <>
                           <Box sx={{ width: '100%' }}>
                             <ConnectNetorkButton onClick={onChangeNetwork}>
-                              Switch to Arbitrum One
+                              Switch to {`${network_Name}`}
                             </ConnectNetorkButton>
                           </Box>
                         </>

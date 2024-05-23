@@ -19,7 +19,7 @@ type DataType = {
 type DataProps = {
   windowWeight: number,
   data: DataType[],
-  balanceOf: string
+  balanceOf: string;
 
 
 
@@ -138,7 +138,7 @@ export default function ShowPool({ windowWeight, balanceOf, data }: DataProps) {
               </Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 600 }}>
-                  0.05%
+                  {`${ValueNumber(Number(Math.sqrt(Number(Number(balanceOf) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount)) * Number(Number(balanceOf) / Number(data[0]?.liq) * Number(data[0]?.H20Amount))) / Math.sqrt(Number(data[0]?.ETHAmount) * Number(data[0]?.H20Amount))) * 100)}%`}
                 </Typography>
               </Stack>
             </Stack>

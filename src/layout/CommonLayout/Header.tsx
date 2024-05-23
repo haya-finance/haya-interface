@@ -35,6 +35,7 @@ import { useAccount, useSwitchChain } from 'wagmi';
 import DisConnectWallet from './components/disConnectWallet';
 import ConnectWallet from './components/connectWallet';
 import WalletIcon from 'assets/images/wallet';
+import { network_Name, net_id } from 'config';
 
 // =============================================|| COMPONENTS - APP BAR ||============================================= //
 
@@ -176,14 +177,14 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
   // 421614
   const networkes: NetworkType[] = [
     {
-      id: 42161,
-      name: 'Arbitrum One'
+      id: net_id,
+      name: network_Name
     }
   ]
 
   const [network, setNetwork] = React.useState<NetworkType>({
-    id: 42161,
-    name: 'Arbitrum One'
+    id: net_id,
+    name: network_Name
   })
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const [open, setOpen] = React.useState(false);

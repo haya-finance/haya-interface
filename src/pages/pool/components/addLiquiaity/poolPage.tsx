@@ -16,6 +16,7 @@ import SelectAddOneToken from './select_add_token_one';
 import SelectAddTwoToken from './select_add_token_two';
 import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
 import addIcon from 'assets/images/icon/add.svg'
+import { network_Name, net_id } from 'config';
 
 // import Select, { components } from 'react-select'
 
@@ -418,7 +419,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
 
   const onChangeNetwork = () => {
-    switchChain({ chainId: 42161 })
+    switchChain({ chainId: net_id })
 
   }
 
@@ -576,7 +577,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                       chain?.id == undefined ? (
                         <>
                           <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                            <ConnectButton onClick={onChangeNetwork} >Switch to Arbitrum One</ConnectButton>
+                            <ConnectButton onClick={onChangeNetwork} >Switch to {`${network_Name}`}</ConnectButton>
                           </Box>
                         </>
                       ) : (
@@ -763,7 +764,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                         <>
                           <Box sx={{ width: '100%' }}>
                             <ConnectButton onClick={onChangeNetwork}>
-                              Switch to Arbitrum One
+                              Switch to {`${network_Name}`}
                             </ConnectButton>
                           </Box>
                         </>

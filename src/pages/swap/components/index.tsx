@@ -9,10 +9,12 @@ import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
 import SwapSons from './swapPage';
 // import Web3 from 'web3'
 import tokenAbi from 'abi/token.json'
-import { ETH_Price_ARB, H30_Address, sepolia_rpc, UniswapSepoliaRouterContract, ETH_ADDRESS, USDC_address, USDC_PRICE, USDT_ADDRESS, USDT_PRICE, WETH_address } from 'config';
+import { ETH_Price_ARB, H30_Address, sepolia_rpc, UniswapSepoliaRouterContract, ETH_ADDRESS, USDC_address, USDC_PRICE, USDT_ADDRESS, USDT_PRICE, WETH_address, net_id, network_Name, pair_Address } from 'config';
 import { ethers } from 'ethers';
 import { PiWarningBold } from "react-icons/pi";
 import Setting from 'assets/images/icon/Setting.svg';
+import PriceFeedAbi from 'abi/priceFeeds.json';
+import pairAbi from 'abi/pair.json'
 
 // const web3 = new Web3(sepolia_rpc)
 const provider = new ethers.JsonRpcProvider(sepolia_rpc)
@@ -30,8 +32,8 @@ type TokenListType = {
   network: string;
   decimasl: string;
   allowance: string;
-  contract?: string;
-  price?: string;
+  contract: string;
+  price: string;
 }
 
 export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
@@ -47,7 +49,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       symbol: 'WETH',
       address: WETH_address,
       balance: '0',
-      network: chain?.name ?? 'Arbitrum One',
+      network: chain?.name ?? `${network_Name}`,
       decimasl: '',
       allowance: '',
       contract: ETH_Price_ARB,
@@ -57,7 +59,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       symbol: 'H20',
       address: H30_Address,
       balance: '0',
-      network: chain?.name ?? 'Arbitrum One',
+      network: chain?.name ?? `${network_Name}`,
       decimasl: '',
       allowance: '',
       price: '0.00',
@@ -68,7 +70,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       symbol: 'USDT',
       address: USDT_ADDRESS, //'0xD7fbE1d17b8bAB5e94377428fcDC04904f39c4F4'
       balance: '0',
-      network: chain?.name ?? 'Arbitrum One',
+      network: chain?.name ?? `${network_Name}`,
       decimasl: '',
       allowance: '',
       contract: USDT_PRICE, //'0x80EDee6f667eCc9f63a0a6f55578F870651f06A4',
@@ -80,7 +82,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       symbol: 'USDC',
       address: USDC_address, //'0x3b88ef38959aC57f69eF2798e03c0E8994F1a3aa',
       balance: '0',
-      network: chain?.name ?? 'Arbitrum One',
+      network: chain?.name ?? `${network_Name}`,
       decimasl: '',
       allowance: '',
       contract: USDC_PRICE, //'0x0153002d20B96532C639313c2d54c3dA09109309',
@@ -91,7 +93,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
       symbol: 'ETH',
       address: ETH_ADDRESS,
       balance: '0',
-      network: chain?.name ?? 'Arbitrum One',
+      network: chain?.name ?? `${network_Name}`,
       decimasl: '',
       allowance: '',
       contract: ETH_Price_ARB, //'0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165',
@@ -99,6 +101,77 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
     }
   ])
+
+
+  async function getPrice(add: string, symbol: string) {
+    if (symbol == 'H20') {
+      const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+      const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
+
+      await pairContract.token1().then(async (res: any) => {
+        const tokenContract = new ethers.Contract(res, tokenAbi, provider)
+        await tokenContract.symbol().then(async (res1) => {
+          // console.log('1111111', res1)
+          if (res1 == 'H20') {
+            await pairContract.getReserves().then(async (res: any) => {
+              // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+              await priceFeed.latestRoundData().then(async (res1) => {
+                // console.log(res1)
+                await priceFeed.decimals().then(async (res2) => {
+
+                  setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(((Number(res[0]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[1]) / (10 ** 18))))) } : item))
+
+                })
+
+              })
+
+            }).catch(err => {
+              // console.log('错误输出', err)
+            })
+
+          } else {
+            await pairContract.getReserves().then(async (res: any) => {
+              // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+              await priceFeed.latestRoundData().then(async (res1) => {
+                // console.log(res1)
+                await priceFeed.decimals().then(async (res2) => {
+
+                  setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18))))) } : item))
+
+
+
+                })
+
+              })
+
+            }).catch(err => {
+              // console.log('错误输出', err)
+            })
+
+          }
+
+        })
+        // console.log('结果', res)
+        // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+      }).catch(err => {
+        // console.log('错误输出', err)
+      })
+
+
+
+
+    } else {
+      const priceFeed = new ethers.Contract(add, PriceFeedAbi, provider);
+      await priceFeed.latestRoundData().then(async (res1) => {
+        await priceFeed.decimals().then(async (res2) => {
+
+          setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(res1[1]) / (10 ** Number(res2)))) } : item))
+
+
+        })
+      })
+    }
+  }
 
 
 
@@ -185,6 +258,8 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
   useEffect(() => {
 
     for (let i = 0; i < tokenList.length; i++) {
+      getPrice(tokenList[i].contract, tokenList[i].symbol)
+
 
 
 
@@ -304,7 +379,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
 
   const onChangeNetwork = () => {
-    switchChain({ chainId: 42161 })
+    switchChain({ chainId: net_id })
 
   }
 
@@ -323,7 +398,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
               <Stack direction="row" justifyContent="space-between" width="600px" margin="0 auto" mb="20px">
                 <Stack direction="row" spacing={1}>
                   <Box sx={{ p: '4px 12px', backgroundColor: '#f6f6f6', color: '#1AAE70', fontSize: '13px', fontWeight: 600, borderRadius: "20px", cursor: 'pointer', border: 0 }} component="button" onClick={() => OnCheckTitel(0)}>
-                    Swap test
+                    Swap
                   </Box>
                 </Stack>
                 <Box >
@@ -482,7 +557,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
                                 <>
                                   <Box sx={{ width: "600px", margin: '0 auto' }}>
                                     <ConnectButton onClick={onChangeNetwork}>
-                                      Switch to Arbitrum One
+                                      Switch to {`${network_Name}`}
                                     </ConnectButton>
                                   </Box>
                                 </>
@@ -498,7 +573,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
                               chain?.id === undefined ? (
                                 <Box sx={{ width: "100%" }}>
                                   <ConnectButton onClick={onChangeNetwork}>
-                                    Switch to Arbitrum One
+                                    Switch to {`${network_Name}`}
                                   </ConnectButton>
                                 </Box>
 

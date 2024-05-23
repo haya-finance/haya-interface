@@ -13,9 +13,8 @@ import ShowSwap from './showSwap';
 import SwapReviewSwap from './ReviewSwap';
 import { ethers } from 'ethers';
 import SwapAbi from 'abi/swap.json'
-import { ETH_Price_ARB, pair_Address, sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
-import PriceFeedAbi from 'abi/priceFeeds.json';
-import pairAbi from 'abi/pair.json'
+import { sepolia_rpc, UniswapSepoliaRouterContract } from 'config';
+
 
 import swap from 'assets/images/icon/swap.svg'
 
@@ -154,8 +153,10 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
   const { address, chain } = useAccount();
   const [disable, setDisable] = React.useState(true)
-  const [toPrice, setToPrice] = React.useState('0')
-  const [rePrice, setRePrice] = React.useState('0')
+
+
+
+
 
 
 
@@ -180,96 +181,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
   }, [chain?.id])
 
-  async function getToPrice(add: string) {
-    if (add == 'H20') {
-      const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
-      const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
 
-
-      await pairContract.getReserves().then(async (res: any) => {
-        // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
-        await priceFeed.latestRoundData().then(async (res1) => {
-          // console.log(res1)
-          await priceFeed.decimals().then(async (res2) => {
-
-            data.forEach(item => {
-              if (item.contract == add) {
-                item.price = String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18)))))
-              }
-            })
-            setToPrice(String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18))))))
-
-          })
-
-        })
-
-      }).catch(err => {
-        // console.log('错误输出', err)
-      })
-
-
-    } else {
-      const priceFeed = new ethers.Contract(add, PriceFeedAbi, provider);
-      await priceFeed.latestRoundData().then(async (res1) => {
-        await priceFeed.decimals().then(async (res2) => {
-          data.forEach(item => {
-            if (item.contract == add) {
-              item.price = String((Number(res1[1]) / (10 ** Number(res2))))
-            }
-          })
-          setToPrice(String((Number(res1[1]) / (10 ** Number(res2)))))
-          // console.log((Number(res1[2]) / (10 ** Number(res2))))
-
-
-        })
-      })
-    }
-  }
-
-  async function getRePrice(add: string) {
-    if (add == 'H20') {
-      const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
-      const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
-
-
-      await pairContract.getReserves().then(async (res: any) => {
-        // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
-        await priceFeed.latestRoundData().then(async (res1) => {
-          // console.log(res1)
-          await priceFeed.decimals().then(async (res2) => {
-
-            data.forEach(item => {
-              if (item.contract == add) {
-                item.price = String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18)))))
-              }
-            })
-            setRePrice(String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18))))))
-
-          })
-
-        })
-
-      }).catch(err => {
-        // console.log('错误输出', err)
-      })
-
-    } else {
-      const priceFeed = new ethers.Contract(add, PriceFeedAbi, provider);
-      await priceFeed.latestRoundData().then(async (res1) => {
-        await priceFeed.decimals().then(async (res2) => {
-          data.forEach(item => {
-            if (item.contract == add) {
-              item.price = String((Number(res1[1]) / (10 ** Number(res2))))
-            }
-          })
-          setRePrice(String((Number(res1[1]) / (10 ** Number(res2)))))
-          // console.log((Number(res1[2]) / (10 ** Number(res2))))
-
-
-        })
-      })
-    }
-  }
 
 
   const [open, setOpen] = React.useState(false);
@@ -425,8 +337,8 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     // console.log(data.filter(item => item.symbol == pay)[0].address, data.filter(item => item.symbol == receive)[0].address, swapContract)
 
     if (pay == 'USDT' || receive == 'USDT' || pay == 'USDC' || receive == 'USDC') {
-      await swapContract.getAmountsOut(BigInt(Math.round(Number(value) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl)))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
-        // console.log('结果', res)
+      await swapContract.getAmountsOut(BigInt(Math.round(Number(Number(value) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
+        // console.log('结果', res, String(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
         setInputReValue(String(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
         setInputReShowValue(ValueNumber(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
         setWETHAmount(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === 'WETH')[0].decimasl))))
@@ -437,7 +349,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
         // console.log('错误输出', err)
       })
     } else {
-      await swapContract.getAmountsOut(BigInt(Math.round(Number(value) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl)))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
+      await swapContract.getAmountsOut(BigInt(Math.round(Number(Number(value)) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl)))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
         // console.log('结果', res)
         setInputReValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
         setInputReShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
@@ -462,7 +374,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     // console.log(BigInt(Number(value) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === pay)[0].address])
 
     if (pay == 'USDT' || receive == 'USDT' || pay == 'USDC' || receive == 'USDC') {
-      await swapContract.getAmountsOut(BigInt(Math.round(Number(value) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl)))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === pay)[0].address]).then((res: any) => {
+      await swapContract.getAmountsOut(BigInt(Math.round(Number(Number(value)) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl)))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === pay)[0].address]).then((res: any) => {
         // console.log('结果', res)
         setInputValue(String(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
         setInputShowValue(ValueNumber(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
@@ -475,7 +387,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
       })
 
     } else {
-      await swapContract.getAmountsOut(BigInt(Math.round(Number(value) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl)))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === pay)[0].address]).then((res: any) => {
+      await swapContract.getAmountsOut(BigInt(Math.round(Number(Number(value)) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl)))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === pay)[0].address]).then((res: any) => {
         // console.log('结果', res)
         setInputValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
         setInputShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
@@ -503,13 +415,13 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     const swapContract = new ethers.Contract(UniswapSepoliaRouterContract, SwapAbi, provider)
 
     if (pay == 'USDT' || receive == 'USDT' || pay == 'USDC' || receive == 'USDC') {
-      await swapContract.getAmountsOut(BigInt(Number('1') * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
+      await swapContract.getAmountsOut(BigInt(Number(1) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
         // console.log('结果', res)
         setOneValue(ValueNumber(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
       })
 
     } else {
-      await swapContract.getAmountsOut(BigInt(Number('1') * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
+      await swapContract.getAmountsOut(BigInt(Number(1) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
 
         setOneValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
       })
@@ -524,11 +436,11 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
   }, [WETHAmount])
 
   const InputChange = (event: any) => {
-    const newValue = event.target.value.replace(/-/, '')
+    const newValue = event.target.value.replace(/[^0-9.]/g, '')
     setInputValue(newValue)
     setInputShowValue(newValue)
 
-    if (pay !== 'Select token' && receive !== "Select token") {
+    if (pay !== 'Select token' && receive !== "Select token" && !isNaN(Number(newValue))) {
       console.log(newValue)
       Swap(newValue)
     }
@@ -548,7 +460,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
   }
 
   const InputFromChange = (event: any) => {
-    const newValue = event.target.value.replace(/-/, '')
+    const newValue = event.target.value.replace(/[^0-9.]/g, '')
     setInputReValue(newValue)
     setInputReShowValue(newValue)
     if (pay !== 'Select token' && receive !== "Select token") {
@@ -559,7 +471,12 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
   }
 
+  const onFocus = () => {
+    // console.log('111111111111111')
+  }
+
   const handleBlur = () => {
+    // console.log('111')
     const parsedValue = parseFloat(inputToValue)
     if (!isNaN(parsedValue) && parsedValue < 0) {
       setInputValue(String(Math.abs(parsedValue)))
@@ -590,36 +507,27 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
       // setDisable(false)
       const tokens = data.filter(item => item.symbol === pay)
       setBalance(String(Number(tokens[0]?.balance)))
-    } else if (address !== undefined && receive !== "Select token") {
+    } else {
+      setBalance('0')
+
+    }
+
+
+    if (address !== undefined && receive !== "Select token") {
       const Retokens = data.filter(item => item.symbol === receive)
       setReBalance(String(Number(Retokens[0]?.balance)))
 
+
+    } else {
+      setReBalance('0')
 
     }
 
   }, [address, data, receive, pay, balance, reBalance])
 
 
-  useEffect(() => {
-    if (pay !== "Select token" && receive == "Select token") {
-      const tokens = data.filter(item => item.symbol === pay)
-      getToPrice(tokens[0]?.contract)
-    } else if (receive !== "Select token" && pay == "Select token") {
-      const tokens = data.filter(item => item.symbol === receive)
-      getRePrice(tokens[0]?.contract)
 
-    } else if (receive !== "Select token" && pay !== "Select token") {
-      const tokens1 = data.filter(item => item.symbol === pay)
-      getToPrice(tokens1[0]?.contract)
-      const tokens = data.filter(item => item.symbol === receive)
-      getRePrice(tokens[0]?.contract)
 
-    }
-  }, [receive, pay])
-
-  useEffect(() => {
-
-  }, [toPrice, rePrice])
 
 
 
@@ -627,6 +535,12 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     const to = pay
     setPay(receive)
     setReceive(to)
+    const toValue = inputToValue
+    const toShowValue = inputToShowValue
+    setInputValue(inputReValue)
+    setInputShowValue(inputReShowValue)
+    setInputReValue(toValue)
+    setInputReShowValue(toShowValue)
   }
 
 
@@ -634,29 +548,6 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
 
   useEffect(() => {
-
-    // console.log('data', data)
-
-
-
-
-
-    if (pay !== "Select token" && address !== undefined) {
-      const tokens = data.filter(item => item.symbol === pay)
-      // console.log('tokens', tokens)
-      setBalance(String(Number(tokens[0]?.balance)))
-    } else {
-      setBalance('0')
-    }
-
-    if (receive !== "Select token" && address !== undefined) {
-      const tokens = data.filter(item => item.symbol === receive)
-      // console.log('tokens', tokens)
-      setReBalance(String(Number(tokens[0]?.balance)))
-    } else {
-      setReBalance('0')
-
-    }
 
     if (pay !== 'Select token' && receive !== 'Select token') {
 
@@ -666,13 +557,16 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
         Swap(inputToValue)
       } else if (inputReValue !== "" && inputToValue == "") {
         ReSwap(inputReValue)
-      } else if (inputToValue !== "" && inputReValue !== "") {
-        // console.log('11111')
+      } else if (inputReValue !== "" && inputToValue !== "") {
         Swap(inputToValue)
       }
     }
 
   }, [pay, receive, data, balance, reBalance])
+
+
+
+
 
 
 
@@ -722,7 +616,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     <>
 
       <Box sx={{ width: '100%' }}>
-        <SwapReviewSwap WETHAmount={WETHAmount} toPrice={toPrice} formPrice={rePrice} onUpdate={onUpdate} windowHeight={windowHeight} slippage={slippage} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
+        <SwapReviewSwap WETHAmount={WETHAmount} onUpdate={onUpdate} windowHeight={windowHeight} slippage={slippage} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
         {
           windowWeight >= 600 ? (
             <>
@@ -762,7 +656,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
                     <Stack alignItems="center" direction="row" sx={{ padding: '10px 0' }} justifyContent="space-between" spacing={2}>
                       <Stack flex={1} >
-                        <BootstrapInput onBlur={handleBlur} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#000' : '#EE3354', fontSize: '32px' }} />
+                        <BootstrapInput onFocus={onFocus} onBlur={handleBlur} value={inputToShowValue} onChange={InputChange} placeholder="0" sx={{ width: '100%', color: Number(balance) >= Number(inputToValue) ? '#000' : '#EE3354', fontSize: '32px' }} />
                       </Stack>
 
                       {
@@ -820,7 +714,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
                     <Stack direction="row" alignItems="start">
                       <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
-                        {inputToValue !== "" ? `$ ${formatNumber(Number(toPrice) * Number(inputToValue))}` : '$ 0.00'}
+                        {inputToValue !== "" ? `$ ${formatNumber(Number(data?.filter((item) => item.symbol == pay)[0]?.price) * Number(inputToValue))}` : '$ 0.00'}
                       </Typography>
 
                     </Stack>
@@ -912,7 +806,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
                     </Stack>
                     <Stack direction="row" alignItems="start">
                       <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
-                        {inputReValue == "" ? '$ 0.00' : `$ ${formatNumber(Number(rePrice) * Number(inputReValue))}`}
+                        {inputReValue == "" ? '$ 0.00' : `$ ${formatNumber(Number(data?.filter((item) => item.symbol == receive)[0]?.price) * Number(inputReValue))}`}
                       </Typography>
                     </Stack>
                   </Box>
@@ -1087,7 +981,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
                     </Stack>
                     <Stack direction="row" alignItems="start">
                       <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
-                        {inputToValue == "" ? '$ 0.00' : `$ ${formatNumber(Number(toPrice) * Number(inputToValue))}`}
+                        {inputToValue == "" ? '$ 0.00' : `$ ${formatNumber(Number(data?.filter((item) => item.symbol == pay)[0]?.price) * Number(inputToValue))}`}
                       </Typography>
 
 
@@ -1179,7 +1073,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
                     </Stack>
                     <Stack direction="row" alignItems="start">
                       <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: 600 }} color="#9b9b9b">
-                        {inputReValue == "" ? '$ 0.00' : `$ ${formatNumber(Number(rePrice) * Number(inputReValue))}`}
+                        {inputReValue == "" ? '$ 0.00' : `$ ${formatNumber(Number(data?.filter((item) => item.symbol == receive)[0]?.price) * Number(inputReValue))}`}
                       </Typography>
                     </Stack>
                   </Box>

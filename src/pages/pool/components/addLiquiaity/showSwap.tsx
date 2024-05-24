@@ -14,7 +14,8 @@ type DataProps = {
   windowWeight: number,
   toLiquidty: string,
   fromLiquidty: string,
-  inputValue: string
+  inputValue: string,
+  reValue: string,
 
 
 }
@@ -90,7 +91,7 @@ function InputNumber(num: number) {
 
 
 
-export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty, fromLiquidty, inputValue }: DataProps) {
+export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty, fromLiquidty, inputValue, reValue }: DataProps) {
 
   const [hidden, setHidden] = React.useState(true)
   const handleChange = () => {
@@ -156,10 +157,10 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty,
                       <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 600 }}>
                         {
                           toToken == 'ETH' ? (
-                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))) / Number(Math.sqrt(Number(toLiquidty) * Number(fromLiquidty)) + Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))))) * 100)) ?? 0.00} %</>
+                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number(reValue))) / Number(Math.sqrt(Number(toLiquidty) * Number(fromLiquidty)) + Math.sqrt(Number(inputValue) * Number(reValue))) * 100)) ?? 0.00} %</>
 
                           ) : (
-                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))) / Math.sqrt(Number(toLiquidty) * Number(fromLiquidty))) * 100)) ?? 0.00}%</>
+                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number(reValue))) / Number(Math.sqrt(Number(toLiquidty) * Number(fromLiquidty)) + Math.sqrt(Number(inputValue) * Number(reValue))) * 100)) ?? 0.00} %</>
                           )
                         }
 
@@ -233,10 +234,10 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, toLiquidty,
                       <Typography sx={{ color: "#464646", fontSize: '13px', fontWeight: 600 }}>
                         {
                           toToken == 'ETH' ? (
-                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))) / Number(Math.sqrt(Number(toLiquidty) * Number(fromLiquidty)) + Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))))) * 100)) ?? 0.00} %</>
+                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number(reValue))) / Number(Math.sqrt(Number(toLiquidty) * Number(fromLiquidty)) + Math.sqrt(Number(inputValue) * Number(reValue))) * 100)) ?? 0.00} %</>
 
                           ) : (
-                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number((1 * Number(fromLiquidty)) / Number(toLiquidty))) / Math.sqrt(Number(toLiquidty) * Number(fromLiquidty))) * 100)) ?? 0.00}%</>
+                            <>{Number(InputNumber(Number(Math.sqrt(Number(inputValue) * Number(reValue))) / Number(Math.sqrt(Number(toLiquidty) * Number(fromLiquidty)) + Math.sqrt(Number(inputValue) * Number(reValue))) * 100)) ?? 0.00} %</>
                           )
                         }
                       </Typography>

@@ -592,7 +592,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                 inputToValue === '' && inputReValue === '' ? (
                   <></>
                 ) : (
-                  <ShowSwap inputValue={inputToValue} toLiquidty={data.filter(item => item.symbol === pay)[0].proportion} fromLiquidty={data.filter(item => item.symbol === receive)[0].proportion} windowWeight={windowWeight} toToken={pay} fromToken={receive} />
+                  <ShowSwap inputValue={inputToValue} reValue={inputReValue} toLiquidty={data.filter(item => item.symbol === pay)[0].proportion} fromLiquidty={data.filter(item => item.symbol === receive)[0].proportion} windowWeight={windowWeight} toToken={pay} fromToken={receive} />
 
                 )
               }
@@ -778,7 +778,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                       p: '10px 12px', backgroundColor: "#fff",
                       width: "100%", marginBottom: "10px"
                     }}
-                  ><ShowSwap inputValue={inputToValue} toLiquidty={data?.filter(item => item.symbol === pay)[0]?.proportion} fromLiquidty={data?.filter(item => item.symbol === receive)[0]?.proportion} windowWeight={windowWeight} toToken={pay} fromToken={receive} /></Box>
+                  ><ShowSwap inputValue={inputToValue} reValue={inputReValue} toLiquidty={data?.filter(item => item.symbol === pay)[0]?.proportion} fromLiquidty={data?.filter(item => item.symbol === receive)[0]?.proportion} windowWeight={windowWeight} toToken={pay} fromToken={receive} /></Box>
 
                 )
               }

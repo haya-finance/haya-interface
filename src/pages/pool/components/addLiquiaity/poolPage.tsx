@@ -74,7 +74,7 @@ function formatNumber(num: number) {
     for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= 10 ** (i + 4)
-        num = Math.floor(num)
+        num = Math.round(num)
         num /= 10 ** (i + 4)
         var parts = num.toString().split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -88,6 +88,32 @@ function formatNumber(num: number) {
 }
 
 function ValueNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart?.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.round(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        // console.log(parts)
+        // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    num *= 10000
+    num = Math.round(num)
+    num /= 10000
+
+    return String(num)
+
+  }
+}
+
+function ValueMaxNumber(num: number) {
 
   if (num % 1 !== 0) {
     const decimalPart = num.toString().split('.')[1]
@@ -391,26 +417,26 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
 
   const onMax = () => {
     if (pay !== 'Select token') {
-      setInputValue(String(Number(data?.filter(item => item.symbol === pay)[0]?.balance)))
-      setInputShowValue(ValueNumber(Number(data?.filter(item => item.symbol === pay)[0]?.balance)) ?? '0')
+      setInputValue(ValueMaxNumber(Number(data?.filter(item => item.symbol === pay)[0]?.balance)) ?? '0')
+      setInputShowValue(ValueMaxNumber(Number(data?.filter(item => item.symbol === pay)[0]?.balance)) ?? '0')
       const toToken = data?.filter(item => item.symbol === pay)
       const fromToken = data?.filter(item => item.symbol === receive)
       const num = (Number(fromToken[0]?.proportion) * Number(toToken[0]?.balance)) / Number(toToken[0]?.proportion)
-      setInputReValue(String(num))
-      setInputReShowValue(ValueNumber(num) ?? '0')
+      setInputReValue(ValueMaxNumber(num) ?? '0')
+      setInputReShowValue(ValueMaxNumber(num) ?? '0')
     }
 
   }
 
   const onReMax = () => {
     if (pay !== 'Select token') {
-      setInputReValue(String(Number(data.filter(item => item.symbol === receive)[0]?.balance)))
-      setInputReShowValue(ValueNumber(Number(data.filter(item => item.symbol === receive)[0]?.balance)) ?? '0')
+      setInputReValue(ValueMaxNumber(Number(data.filter(item => item.symbol === receive)[0]?.balance)) ?? '0')
+      setInputReShowValue(ValueMaxNumber(Number(data.filter(item => item.symbol === receive)[0]?.balance)) ?? '0')
       const toToken = data.filter(item => item.symbol === pay)
       const fromToken = data.filter(item => item.symbol === receive)
       const num = (Number(toToken[0]?.proportion) * Number(fromToken[0]?.balance)) / Number(fromToken[0]?.proportion)
-      setInputValue(String(num))
-      setInputShowValue(ValueNumber(num) ?? '0')
+      setInputValue(ValueMaxNumber(num) ?? '0')
+      setInputShowValue(ValueMaxNumber(num) ?? '0')
     }
 
   }

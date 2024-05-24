@@ -97,10 +97,10 @@ function formatNumber(num: number) {
 
     for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
-        num *= 10 ** (i + 2)
-        num = Math.floor(num)
-        num /= 10 ** (i + 2)
-        var parts = num.toString().split(".");
+        // num *= 10 ** (i + 2)
+        // num = Math.round(num)
+        // num /= 10 ** (i + 2)
+        var parts = num.toFixed(2).split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return parts.join(".");
       }
@@ -113,6 +113,32 @@ function formatNumber(num: number) {
 
 
 function ValueNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= 10 ** (i + 4)
+        num = Math.round(num)
+        num /= 10 ** (i + 4)
+        var parts = num.toString().split(".");
+        // console.log(parts)
+        // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    num *= 10000
+    num = Math.round(num)
+    num /= 10000
+
+    return String(num)
+
+  }
+}
+
+function ValueMaxNumber(num: number) {
 
   if (num % 1 !== 0) {
     const decimalPart = num.toString().split('.')[1]
@@ -326,6 +352,9 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
   }));
 
   const [WETHAmount, setWETHAmount] = useState('')
+  const [re, setRe] = useState(false)
+
+  const [enthough, setEnthough] = useState(false)
 
 
   const Swap = async (value: any) => {
@@ -343,21 +372,37 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
         setInputReValue(String(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
         setInputReShowValue(ValueNumber(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
         setWETHAmount(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === 'WETH')[0].decimasl))))
+        setRe(false)
+        setEnthough(false)
       }).catch(err => {
         // console.log('err', err)
         setInputReValue('')
         setInputReShowValue('')
+        setRe(false)
+        if (err.revert['args'][0] == 'ds-math-sub-underflow') {
+          setEnthough(true)
+        } else {
+          setEnthough(false)
+        }
         // console.log('错误输出', err)
       })
     } else {
       await swapContract.getAmountsOut(BigInt(Math.round(Number(Number(value)) * (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl)))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
         // console.log('结果', res)
+        setRe(false)
+        setEnthough(false)
         setInputReValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))))
         setInputReShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))) ?? '')
       }).catch(err => {
         // console.log('err', err)
         setInputReValue('')
         setInputReShowValue('')
+        setRe(false)
+        if (err.revert['args'][0] == 'ds-math-sub-underflow') {
+          setEnthough(true)
+        } else {
+          setEnthough(false)
+        }
         // console.log('错误输出', err)
       })
     }
@@ -375,27 +420,46 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     // console.log(BigInt(Number(value) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === pay)[0].address])
 
     if (pay == 'USDT' || receive == 'USDT' || pay == 'USDC' || receive == 'USDC') {
-      await swapContract.getAmountsOut(BigInt(Math.round(Number(Number(value)) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl)))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === pay)[0].address]).then((res: any) => {
+      await swapContract.getAmountsIn(BigInt(Math.round(Number(Number(value)) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl)))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === 'WETH')[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
         // console.log('结果', res)
-        setInputValue(String(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
-        setInputShowValue(ValueNumber(Number(res[2]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
+        setRe(true)
+        setEnthough(false)
+        setInputValue(String(Number(res[0]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
+        setInputShowValue(ValueNumber(Number(res[0]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
         setWETHAmount(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === 'WETH')[0].decimasl))))
       }).catch(err => {
+        setRe(true)
         // console.log('错误输出', err)
         setInputValue('')
         setInputShowValue('')
+        if (err.revert['args'][0] == 'ds-math-sub-underflow') {
+          setEnthough(true)
+        } else {
+          setEnthough(false)
+        }
 
       })
 
     } else {
-      await swapContract.getAmountsOut(BigInt(Math.round(Number(Number(value)) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl)))), [data.filter(item => item.symbol === receive)[0].address, data.filter(item => item.symbol === pay)[0].address]).then((res: any) => {
-        // console.log('结果', res)
-        setInputValue(String(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
-        setInputShowValue(ValueNumber(Number(res[1]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
+      // console.log(value)
+      await swapContract.getAmountsIn(BigInt(Math.round(Number(Number(value)) * (10 ** Number(data.filter(item => item.symbol === receive)[0].decimasl)))), [data.filter(item => item.symbol === pay)[0].address, data.filter(item => item.symbol === receive)[0].address]).then((res: any) => {
+        // console.log(res)
+        setRe(true)
+        setEnthough(false)
+        setInputValue(String(Number(res[0]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))))
+        setInputShowValue(ValueNumber(Number(res[0]) / (10 ** Number(data.filter(item => item.symbol === pay)[0].decimasl))) ?? '')
       }).catch(err => {
-        // console.log('错误输出', err)
+        setRe(true)
         setInputValue('')
         setInputShowValue('')
+        // console.log('错误输出', err)
+        if (err.revert['args'][0] == 'ds-math-sub-underflow') {
+          setEnthough(true)
+        } else {
+          setEnthough(false)
+        }
+        // console.log(err.revert['args'][0])
+
 
       })
     }
@@ -403,6 +467,10 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
 
   }
+
+  useEffect(() => {
+
+  }, [enthough])
 
 
   useEffect(() => {
@@ -459,6 +527,11 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
 
 
   }
+
+
+  useEffect(() => {
+
+  }, [re])
 
   const InputFromChange = (event: any) => {
     const newValue = event.target.value.replace(/[^0-9.]/g, '')
@@ -563,7 +636,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
       }
     }
 
-  }, [pay, receive, data, balance, reBalance])
+  }, [pay, receive, data])
 
 
 
@@ -583,8 +656,8 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
   const onMax = () => {
     if (pay !== 'Select token') {
       const tokens = data.filter(item => item?.symbol === pay)
-      setInputValue(String(Number(tokens[0]?.balance)))
-      setInputShowValue(ValueNumber(Number(tokens[0]?.balance)) ?? '0')
+      setInputValue(ValueMaxNumber(Number(tokens[0]?.balance)) ?? '0')
+      setInputShowValue(ValueMaxNumber(Number(tokens[0]?.balance)) ?? '0')
       Swap(String(Number(tokens[0]?.balance)))
     } else {
       setInputValue('0')
@@ -598,8 +671,8 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
   const onReMax = () => {
     if (receive !== 'Select token') {
       const tokens = data.filter(item => item?.symbol === receive)
-      setInputReValue(String(Number(tokens[0]?.balance)))
-      setInputReShowValue(ValueNumber(Number(tokens[0]?.balance)) ?? '0')
+      setInputReValue(ValueMaxNumber(Number(tokens[0]?.balance)) ?? '0')
+      setInputReShowValue(ValueMaxNumber(Number(tokens[0]?.balance)) ?? '0')
       ReSwap(String(Number(tokens[0]?.balance)))
 
     } else {
@@ -617,7 +690,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     <>
 
       <Box sx={{ width: '100%' }}>
-        <SwapReviewSwap WETHAmount={WETHAmount} onUpdate={onUpdate} windowHeight={windowHeight} slippage={slippage} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
+        <SwapReviewSwap re={re} WETHAmount={WETHAmount} onUpdate={onUpdate} windowHeight={windowHeight} slippage={slippage} open={openSwap} handleSwapClose={handleSwapClose} data={data} inputFromNum={inputReValue} inputToNum={inputToValue} toToken={pay} fromToken={receive} windowWidth={windowWeight} />
         {
           windowWeight >= 600 ? (
             <>
@@ -842,9 +915,19 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
                         <>
                           {
                             inputToValue === '' || inputReValue === '' ? (
-                              <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                <SelectButton >Enter an Amount</SelectButton>
-                              </Box>
+                              <>
+                                {
+                                  enthough ? (
+                                    <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                      <SelectButton >Insufficient liquidity for this trade</SelectButton>
+                                    </Box>
+                                  ) : (
+                                    <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                      <SelectButton >Enter an Amount</SelectButton>
+                                    </Box>
+                                  )
+                                }
+                              </>
 
                             ) : (
                               <>
@@ -855,9 +938,11 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
                                     </Box>
 
                                   ) : (
-                                    <Box sx={{ width: "600px", margin: '0 auto' }}>
-                                      <SelectButton >Insufficient balane</SelectButton>
-                                    </Box>
+                                    <>
+                                      <Box sx={{ width: "600px", margin: '0 auto' }}>
+                                        <SelectButton >Insufficient balane</SelectButton>
+                                      </Box>
+                                    </>
 
                                   )
 
@@ -1110,9 +1195,21 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
                         <>
                           {
                             inputToValue === '' || inputReValue === '' ? (
-                              <Box sx={{ width: '100%' }}>
-                                <SelectButton >Enter an Amount</SelectButton>
-                              </Box>
+                              <>
+                                {
+                                  enthough ? (
+                                    <Box sx={{ width: '100%' }}>
+                                      <SelectButton >Insufficient liquidity for this trade</SelectButton>
+                                    </Box>
+
+                                  ) : (
+                                    <Box sx={{ width: '100%' }}>
+                                      <SelectButton >Enter an Amount</SelectButton>
+                                    </Box>
+                                  )
+                                }
+                              </>
+
 
                             ) : (
                               <>

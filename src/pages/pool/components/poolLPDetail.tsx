@@ -11,7 +11,7 @@ import PriceFeedAbi from 'abi/priceFeeds.json'
 import pairAbi from 'abi/pair.json'
 import { useAccount } from "wagmi";
 import ETHH20 from 'assets/images/token/H20_ETH.svg'
-import TokenColorIcon from "assets/tokens";
+// import TokenColorIcon from "assets/tokens";
 
 
 
@@ -74,26 +74,26 @@ function formatNumber(num: number) {
   }
 }
 
-function formatTwoNumber(num: number) {
+// function formatTwoNumber(num: number) {
 
-  if (num % 1 !== 0) {
-    const decimalPart = num.toString().split('.')[1]
+//   if (num % 1 !== 0) {
+//     const decimalPart = num.toString().split('.')[1]
 
-    for (let i = 0; i < decimalPart?.length; i++) {
-      if (Number(decimalPart[i]) !== 0) {
-        num *= 10 ** (i + 2)
-        num = Math.floor(num)
-        num /= 10 ** (i + 2)
-        var parts = num.toString().split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
-      }
-    }
-  } else {
-    return num.toLocaleString()
+//     for (let i = 0; i < decimalPart?.length; i++) {
+//       if (Number(decimalPart[i]) !== 0) {
+//         num *= 10 ** (i + 2)
+//         num = Math.floor(num)
+//         num /= 10 ** (i + 2)
+//         var parts = num.toString().split(".");
+//         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+//         return parts.join(".");
+//       }
+//     }
+//   } else {
+//     return num.toLocaleString()
 
-  }
-}
+//   }
+// }
 
 const provider = new ethers.JsonRpcProvider(sepolia_rpc)
 
@@ -456,7 +456,7 @@ const PoolLpDetail = () => {
 
                   </Stack>
                 </Box>
-                <Box sx={{ padding: '12px 20px', backgroundColor: '#1B1B1B', borderRadius: '20px', marginTop: '10px' }}>
+                <Box sx={{ padding: '12px 20px', backgroundColor: '#1B1B1B', borderRadius: '20px', marginTop: '10px', marginBottom: '10px' }}>
                   <Typography sx={{ color: "#9B9B9B", fontSize: '14px', fontWeight: 600, marginBottom: '10px' }}>
                     My Liquidity
                   </Typography>
@@ -505,7 +505,7 @@ const PoolLpDetail = () => {
                   </Typography> */}
                 </Box>
 
-                <Box sx={{ padding: '12px 20px', backgroundColor: '#1B1B1B', borderRadius: '20px', marginBottom: '20px', marginTop: '10px' }}>
+                {/* <Box sx={{ padding: '12px 20px', backgroundColor: '#1B1B1B', borderRadius: '20px', marginBottom: '20px', marginTop: '10px' }}>
                   <Typography sx={{ color: "#9B9B9B", fontSize: '14px', fontWeight: 600, marginBottom: '10px' }}>
                     My Liquidity reward
                   </Typography>
@@ -561,11 +561,7 @@ const PoolLpDetail = () => {
                   </Stack>
 
 
-                  {/* <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
-                    {formatTwoNumber(Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount) * Number(data[0]?.price)) + Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.H20Amount) * 100))}
-                  </Typography> */}
-                </Box>
-                {/* <ShowPool windowWeight={windowWidth} data={data} balanceOf={balance} /> */}
+                </Box> */}
                 <AddButton onClick={addLiquity} sx={{ margin: '0 0 20px 0' }}>
                   Supply More
                 </AddButton>
@@ -699,7 +695,7 @@ const PoolLpDetail = () => {
 
 
 
-                <Box sx={{ padding: '12px 10px', backgroundColor: '#1B1B1B', borderRadius: '20px' }}>
+                <Box sx={{ padding: '12px 10px', backgroundColor: '#1B1B1B', borderRadius: '20px', marginBottom: '10px' }}>
                   <Typography sx={{ color: "#9B9B9B", fontSize: '13px', fontWeight: 600, marginBottom: '10px' }}>
                     My Liquidity
                   </Typography>
@@ -743,7 +739,7 @@ const PoolLpDetail = () => {
                   </Stack>
 
                 </Box>
-                <Box sx={{ padding: '12px 10px', backgroundColor: '#1B1B1B', borderRadius: '20px', marginBottom: '10px', marginTop: '10px' }}>
+                {/* <Box sx={{ padding: '12px 10px', backgroundColor: '#1B1B1B', borderRadius: '20px', marginBottom: '10px', marginTop: '10px' }}>
                   <Typography sx={{ color: "#9B9B9B", fontSize: '13px', fontWeight: 600, marginBottom: '10px' }}>
                     My Liquidity reward
                   </Typography>
@@ -797,14 +793,8 @@ const PoolLpDetail = () => {
                       </Stack>
                     </Stack>
                   </Stack>
+                </Box> */}
 
-
-                  {/* <Typography sx={{ color: "#9B9B9B", fontSize: '12px', fontWeight: 500 }}>
-                    {formatTwoNumber(Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.ETHAmount) * Number(data[0]?.price)) + Number(Number(balance) / Number(data[0]?.liq) * Number(data[0]?.H20Amount) * 100))}
-                  </Typography> */}
-                </Box>
-
-                {/* <ShowPool windowWeight={windowWidth} data={data} balanceOf={balance} /> */}
                 <AddButton onClick={addLiquity} sx={{ margin: '0 0 10px 0' }}>
                   Supply More
                 </AddButton>

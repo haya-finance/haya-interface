@@ -318,9 +318,6 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                       <Link className='header-link' to="/pool" sx={{ fontSize: '14px', lineHeight: '24px', fontWeight: 600, p: 0, color: currentPath === '/pool' ? '#1aae70' : '#464646' }} component={RouterLink} underline="none">
                         Pool
                       </Link>
-                      {/* <Link className='header-link' to="/pool" sx={{ fontSize: '14px', lineHeight: '24px', fontWeight: 600, p: 0, color: currentPath === '/pool' ? '#1aae70' : '#464646' }} component={RouterLink} underline="none">
-                        Mine
-                      </Link> */}
                       <Link className='header-link' to="/mint" sx={{ fontSize: '14px', lineHeight: '24px', fontWeight: 600, p: 0, color: currentPath === '/mint' ? '#1aae70' : '#464646' }} component={RouterLink} underline="none">
                         Mint
                       </Link>
@@ -546,9 +543,6 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                 <NavtionButton sx={{ backgroundColor: currentPath === '/pool' ? '#f6f6f6' : 'transparent', color: currentPath === '/pool' ? '#1aae70' : '#464646', borderRadius: currentPath === '/pool' ? '20px' : 0 }} onClick={() => onClickNav('/pool')}>
                   Pool
                 </NavtionButton>
-                {/* <NavtionButton sx={{ backgroundColor: currentPath === '/pool' ? '#f6f6f6' : 'transparent', color: currentPath === '/pool' ? '#1aae70' : '#464646', borderRadius: currentPath === '/pool' ? '20px' : 0 }} onClick={() => onClickNav('/pool')}>
-                  Mine
-                </NavtionButton> */}
                 <NavtionButton sx={{ backgroundColor: currentPath === '/mint' ? '#f6f6f6' : 'transparent', color: currentPath === '/mint' ? '#1aae70' : '#464646', borderRadius: currentPath === '/mint' ? '20px' : 0 }} onClick={() => onClickNav('/mint')}>
                   Mint
                 </NavtionButton>

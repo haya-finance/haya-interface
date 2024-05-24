@@ -48,7 +48,7 @@ function ValueNumber(num: number) {
     for (let i = 0; i < decimalPart.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= 10 ** (i + 4)
-        num = Math.round(num)
+        num = Math.floor(num)
         num /= 10 ** (i + 4)
         var parts = num.toString().split(".");
         // console.log(parts)
@@ -58,7 +58,7 @@ function ValueNumber(num: number) {
     }
   } else {
     num *= 10000
-    num = Math.round(num)
+    num = Math.floor(num)
     num /= 10000
 
     return String(num)
@@ -179,6 +179,13 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
   }
 
+  const [errValue, setErrValue] = useState('The transaction submission was either cancelled or failed.')
+
+
+  useEffect(() => {
+
+  }, [errValue])
+
 
   const [api, contextHolder] = notification.useNotification(notificonfig);
 
@@ -192,7 +199,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
               <Stack width="100%" alignItems="center" textAlign="center" padding="20px 0" spacing="10px">
                 <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
                 <Typography variant='body1' sx={{ fontSize: '18px', fontWeight: 600, lineHeight: '24px' }} color="#000">
-                  The transaction submission was either cancelled or failed.
+                  {errValue}
                 </Typography>
               </Stack>
               <OkButton onClick={() => api.destroy()}>
@@ -201,10 +208,10 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
             </>
           ) : (
             <>
-              <Stack direction="row" width="100%" alignItems="center" textAlign="center" spacing="10px">
+              <Stack padding="10px 0" width="100%" alignItems="center" textAlign="center" spacing="10px">
                 <WarningIcon style={{ color: '#9b9b9b', width: '24px', height: '24px' }} fontSize="large" />
                 <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
-                  Coming soon
+                  {errValue}
                 </Typography>
               </Stack>
             </>
@@ -380,14 +387,14 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
     // }
 
     if (toToken == 'ETH') {
-      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.round(Number(inputFromNum) * (10 ** 18)))) {
+      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
         // console.log('111111111111111111111')
         setDoneLoading(true)
         setOpenConfirm(true)
         handleSwapClose()
-        await poolContract.addLiquidityETH(H30_Address, BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+        await poolContract.addLiquidityETH(H30_Address, BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
           from: address,
-          value: BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))
+          value: BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))
 
 
         }).then(async (res) => {
@@ -413,6 +420,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
         }).catch((err) => {
           // console.log("错误结果", err)
+          setErrValue(err.revert['args'][0])
           openNotification('top')
           handleSwapClose()
           setDoneLoading(false)
@@ -429,16 +437,16 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
       }
 
     } else {
-      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.round(Number(inputToNum) * (10 ** 18)))) {
+      if (BigInt(data.filter(item => item.symbol == 'H20')[0].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
         // console.log('111111111111111111111')
 
         setDoneLoading(true)
         setOpenConfirm(true)
         handleSwapClose()
 
-        await poolContract.addLiquidityETH(H30_Address, BigInt(Math.round(Number(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+        await poolContract.addLiquidityETH(H30_Address, BigInt(Math.floor(Number(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
           from: address,
-          value: BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18))))
+          value: BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18))))
         }).then(async (res) => {
 
           // console.log('结果222222222222', res)
@@ -462,6 +470,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
         }).catch((err) => {
           // console.log("错误结果", err)
+          setErrValue(err.revert['args'][0])
           openNotification('top')
           handleSwapClose()
           setDoneLoading(false)
@@ -470,6 +479,7 @@ export default function ReviewSupply({ open, windowWidth, handleSwapClose, data,
 
 
       } else {
+        // console.log('11111111111111111111122222222222')
         handleSwapClose()
         setOpenApproval(true)
 

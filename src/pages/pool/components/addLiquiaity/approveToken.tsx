@@ -87,7 +87,7 @@ function formatNumber(num: number) {
     for (let i = 0; i < decimalPart.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= 10 ** (i + 4)
-        num = Math.round(num)
+        num = Math.floor(num)
         num /= 10 ** (i + 4)
         var parts = num.toString().split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -192,6 +192,13 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
 
   const [api, contextHolder] = notification.useNotification(notificonfig);
 
+  const [errValue, setErrValue] = useState('The transaction submission was either cancelled or failed.')
+
+
+  useEffect(() => {
+
+  }, [errValue])
+
   const openNotification = (placement: NotificationPlacement) => {
     const key = `open${Date.now()}`;
     const btn = (
@@ -202,7 +209,7 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
               <Stack width="100%" alignItems="center" textAlign="center" padding="20px 0" spacing="10px">
                 <WarningIcon style={{ color: '#9b9b9b' }} fontSize="large" />
                 <Typography variant='body1' sx={{ fontSize: '18px', fontWeight: 600, lineHeight: '24px' }} color="#000">
-                  The transaction submission was either cancelled or failed.
+                  {errValue}
                 </Typography>
               </Stack>
               <OkButton onClick={() => api.destroy()}>
@@ -214,7 +221,7 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
               <Stack direction="row" width="100%" alignItems="center" textAlign="center" spacing="10px">
                 <WarningIcon style={{ color: '#9b9b9b', width: '24px', height: '24px' }} fontSize="large" />
                 <Typography variant='body1' sx={{ fontSize: '14px', fontWeight: 600, lineHeight: '18px' }} color="#000">
-                  Coming soon
+                  {errValue}
                 </Typography>
               </Stack>
             </>
@@ -415,9 +422,9 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
       setDoneLoading(true)
       setOpenConfirm(true)
       handleApprovalClose()
-      await poolContract.addLiquidityETH(H30_Address, BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+      await poolContract.addLiquidityETH(H30_Address, BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
         from: address,
-        value: BigInt(Math.round(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))
+        value: BigInt(Math.floor(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))
 
 
       }).then(async (res) => {
@@ -442,6 +449,7 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
 
       }).catch((err) => {
         // console.log("错误结果", err)
+        setErrValue(err.revert['args'][0])
         openNotification('top')
         handleApprovalClose()
         setDoneLoading(false)
@@ -454,9 +462,9 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
       setDoneLoading(true)
       setOpenConfirm(true)
       handleApprovalClose()
-      await poolContract.addLiquidityETH(H30_Address, BigInt(Math.round(Number(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
+      await poolContract.addLiquidityETH(H30_Address, BigInt(Math.floor(Number(Number(ValueNumber(Number(inputToNum))) * (10 ** 18)))), String(0), String(0), address, new Date().getTime() + 1000 * 60 * 5, {
         from: address,
-        value: BigInt(Math.round(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18))))
+        value: BigInt(Math.floor(Number(Number(ValueNumber(Number(inputFromNum))) * (10 ** 18))))
       }).then(async (res) => {
 
         // console.log('结果222222222222', res)
@@ -479,6 +487,7 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
 
 
       }).catch((err) => {
+        setErrValue(err.revert['args'][0])
         // console.log("错误结果", err)
         openNotification('top')
         handleApprovalClose()
@@ -590,9 +599,10 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
   useEffect(() => {
 
     for (let i = 0; i < data.length; i++) {
-      if (data[i].symbol == toToken || data[i].symbol == fromToken) {
+      console.log('data', data)
+      if (data[i].symbol == 'H20') {
         if (toToken == 'ETH') {
-          if (BigInt(data[i].allowance) > BigInt(Math.round(Number(inputFromNum) * (10 ** 18)))) {
+          if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputFromNum) * (10 ** 18)))) {
             // console.log('111111111111111111111')
 
             setApproval((pre) => {
@@ -612,7 +622,8 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
           }
 
         } else {
-          if (BigInt(data[i].allowance) > BigInt(Math.round(Number(inputToNum) * (10 ** 18)))) {
+          console.log(BigInt(data[i].allowance), Math.floor(Number(inputToNum) * (10 ** 18)), Number(inputToNum) * (10 ** 18), BigInt(Math.floor(Number(inputToNum) * (10 ** 18))))
+          if (BigInt(data[i].allowance) > BigInt(Math.floor(Number(inputToNum) * (10 ** 18)))) {
             // console.log('111111111111111111111')
 
             setApproval((pre) => {
@@ -642,7 +653,7 @@ export default function ApprovalTokens({ open, onChange, handleApprovalClose, da
 
     }
 
-  }, [data, toToken])
+  }, [data, toToken, inputToNum, inputFromNum])
 
   // console.log(toToken, inputFromNum, inputToNum, fromToken)
 

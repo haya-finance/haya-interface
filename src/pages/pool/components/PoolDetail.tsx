@@ -37,7 +37,7 @@ function ValueNumber(num: number) {
     for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= 10 ** (i + 4)
-        num = Math.floor(num)
+        num = Math.round(num)
         num /= 10 ** (i + 4)
         var parts = num.toString().split(".");
         // console.log(parts)
@@ -47,7 +47,7 @@ function ValueNumber(num: number) {
     }
   } else {
     num *= 10000
-    num = Math.floor(num)
+    num = Math.round(num)
     num /= 10000
 
     return String(num)
@@ -63,7 +63,7 @@ function formatNumber(num: number) {
     for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= 10 ** (i + 4)
-        num = Math.floor(num)
+        num = Math.round(num)
         num /= 10 ** (i + 4)
         var parts = num.toString().split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");

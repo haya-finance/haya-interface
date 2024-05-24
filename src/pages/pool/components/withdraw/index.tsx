@@ -11,7 +11,7 @@ import pairAbi from 'abi/pair.json'
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { styled } from '@mui/material/styles';
 import TokenColorIcon from 'assets/tokens';
-import ShowDetail from './showDetail';
+// import ShowDetail from './showDetail';
 import { useNavigate } from 'react-router';
 import tokenAbi from 'abi/token.json'
 import ReviewWithdraw from './ReviewWithdraw';
@@ -124,7 +124,7 @@ function ValueNumber(num: number) {
     for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= (10 ** (i + 4))
-        num = Math.floor(num)
+        num = Math.round(num)
         num /= (10 ** (i + 4))
         var parts = num.toString().split(".");
         // console.log(parts)
@@ -134,7 +134,7 @@ function ValueNumber(num: number) {
     }
   } else {
     num *= 10000
-    num = Math.floor(num)
+    num = Math.round(num)
     num /= 10000
 
     return String(num)
@@ -590,7 +590,7 @@ export default function WithdrawPoolPage() {
                     </Stack>
 
                   </Box>
-                  <ShowDetail windowWeight={windowWidth} />
+                  {/* <ShowDetail data={data} windowWeight={windowWidth} /> */}
                   {
                     value == 0 ? (
                       <>
@@ -692,7 +692,7 @@ export default function WithdrawPoolPage() {
                     </Stack>
 
                   </Box>
-                  <ShowDetail windowWeight={windowWidth} />
+                  {/* <ShowDetail data={data} windowWeight={windowWidth} /> */}
                   {
                     value == 0 ? (
                       <>

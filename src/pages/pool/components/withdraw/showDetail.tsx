@@ -1,15 +1,22 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button, { ButtonProps } from '@mui/material/Button';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 
+type DataType = {
+  liq: string;
+  ETHAmount: string;
+  H20Amount: string
+}
+
 type DataProps = {
   windowWeight: number,
-  LpToken?: string
+  LpToken?: string,
+  data: DataType[]
 
 
 }
@@ -34,18 +41,49 @@ const ShowButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 
 
+function ValueNumber(num: number) {
+
+  if (num % 1 !== 0) {
+    const decimalPart = num.toString().split('.')[1]
+
+    for (let i = 0; i < decimalPart?.length; i++) {
+      if (Number(decimalPart[i]) !== 0) {
+        num *= (10 ** (i + 4))
+        num = Math.round(num)
+        num /= (10 ** (i + 4))
+        var parts = num.toString().split(".");
+        // console.log(parts)
+        // parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+    }
+  } else {
+    num *= 10000
+    num = Math.round(num)
+    num /= 10000
+
+    return String(num)
+
+  }
+}
 
 
 
 
 
 
-export default function ShowDetail({ windowWeight, LpToken }: DataProps) {
+
+
+export default function ShowDetail({ windowWeight, LpToken, data }: DataProps) {
 
   const [hidden, setHidden] = React.useState(true)
   const handleChange = () => {
     setHidden(!hidden)
   }
+
+  useEffect(() => {
+
+  }, [data])
 
   return (
     <>
@@ -74,11 +112,11 @@ export default function ShowDetail({ windowWeight, LpToken }: DataProps) {
               </Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 600 }}>
-                  1ETH ≈ 100.234 H20
+                  1ETH ≈ {ValueNumber(Number((1 * Number(data[0]?.H20Amount)) / Number(data[0]?.ETHAmount)))} H20
                 </Typography>
               </Stack>
             </Stack>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
+            {/* <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: '10px' }} >
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography sx={{ color: '#9B9B9B', fontSize: '14px', fontWeight: 600 }}>
                   Estimated Gas fee
@@ -86,10 +124,10 @@ export default function ShowDetail({ windowWeight, LpToken }: DataProps) {
               </Stack>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography sx={{ color: "#464646", fontSize: '14px', fontWeight: 600 }}>
-                  0.00035 ETH
+                  0.003 ETH
                 </Typography>
               </Stack>
-            </Stack>
+            </Stack> */}
           </Box>
         </Box>
 

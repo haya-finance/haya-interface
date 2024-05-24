@@ -36,10 +36,10 @@ function formatNumber(num: number) {
 
     for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
-        num *= 10 ** (i + 2)
-        num = Math.floor(num)
-        num /= 10 ** (i + 2)
-        var parts = num.toString().split(".");
+        // num *= 10 ** (i + 2)
+        // num = Math.floor(num)
+        // num /= 10 ** (i + 2)
+        var parts = num.toFixed(2).split(".");
         parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return parts.join(".");
       }

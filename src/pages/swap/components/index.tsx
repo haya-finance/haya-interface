@@ -103,59 +103,100 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
   ])
 
 
+  // async function getPrice(add: string, symbol: string) {
+  //   if (symbol == 'H20') {
+  //     const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
+  //     const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
+
+  //     await pairContract.token1().then(async (res: any) => {
+  //       const tokenContract = new ethers.Contract(res, tokenAbi, provider)
+  //       await tokenContract.symbol().then(async (res1) => {
+  //         // console.log('1111111', res1)
+  //         if (res1 == 'H20') {
+  //           await pairContract.getReserves().then(async (res: any) => {
+  //             // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+  //             await priceFeed.latestRoundData().then(async (res1) => {
+  //               // console.log(res1)
+  //               await priceFeed.decimals().then(async (res2) => {
+
+  //                 setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(((Number(res[0]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[1]) / (10 ** 18))))) } : item))
+
+  //               })
+
+  //             })
+
+  //           }).catch(err => {
+  //             // console.log('错误输出', err)
+  //           })
+
+  //         } else {
+  //           await pairContract.getReserves().then(async (res: any) => {
+  //             // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+  //             await priceFeed.latestRoundData().then(async (res1) => {
+  //               // console.log(res1)
+  //               await priceFeed.decimals().then(async (res2) => {
+
+  //                 setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18))))) } : item))
+
+
+
+  //               })
+
+  //             })
+
+  //           }).catch(err => {
+  //             // console.log('错误输出', err)
+  //           })
+
+  //         }
+
+  //       })
+  //       // console.log('结果', res)
+  //       // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+  //     }).catch(err => {
+  //       // console.log('错误输出', err)
+  //     })
+
+
+
+
+  //   } else {
+  //     const priceFeed = new ethers.Contract(add, PriceFeedAbi, provider);
+  //     await priceFeed.latestRoundData().then(async (res1) => {
+  //       await priceFeed.decimals().then(async (res2) => {
+
+  //         setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(res1[1]) / (10 ** Number(res2)))) } : item))
+
+
+  //       })
+  //     })
+  //   }
+  // }
+
+
   async function getPrice(add: string, symbol: string) {
     if (symbol == 'H20') {
       const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
       const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
 
-      await pairContract.token1().then(async (res: any) => {
-        const tokenContract = new ethers.Contract(res, tokenAbi, provider)
-        await tokenContract.symbol().then(async (res1) => {
-          // console.log('1111111', res1)
-          if (res1 == 'H20') {
-            await pairContract.getReserves().then(async (res: any) => {
-              // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
-              await priceFeed.latestRoundData().then(async (res1) => {
-                // console.log(res1)
-                await priceFeed.decimals().then(async (res2) => {
+      await pairContract.getReserves().then(async (res: any) => {
+        // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
+        await priceFeed.latestRoundData().then(async (res1) => {
+          // console.log(res1)
+          await priceFeed.decimals().then(async (res2) => {
 
-                  setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(((Number(res[0]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[1]) / (10 ** 18))))) } : item))
-
-                })
-
-              })
-
-            }).catch(err => {
-              // console.log('错误输出', err)
-            })
-
-          } else {
-            await pairContract.getReserves().then(async (res: any) => {
-              // console.log('结果', res, Number(res[0]) / (10 ** 18), Number(res[1]) / (10 ** 18), Number(res[2]) / (10 ** 18))
-              await priceFeed.latestRoundData().then(async (res1) => {
-                // console.log(res1)
-                await priceFeed.decimals().then(async (res2) => {
-
-                  setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18))))) } : item))
+            setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18))))) } : item))
 
 
 
-                })
-
-              })
-
-            }).catch(err => {
-              // console.log('错误输出', err)
-            })
-
-          }
+          })
 
         })
-        // console.log('结果', res)
-        // setInputReValue(String(Number(res[1]) / (10 ** 18)))
+
       }).catch(err => {
         // console.log('错误输出', err)
       })
+
 
 
 

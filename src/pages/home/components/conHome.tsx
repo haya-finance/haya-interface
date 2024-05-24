@@ -16,7 +16,8 @@ import { ethers } from 'ethers';
 import { arb_url, ETH_Price_ARB, H30_Address, pair_Address, sepolia_rpc } from 'config';
 import pairAbi from 'abi/pair.json'
 import PriceFeedAbi from 'abi/priceFeeds.json';
-import copyIcon from 'assets/images/icon/Copy.svg'
+import copyIcon from 'assets/images/icon/Copy.svg';
+import { FaRegSquareCheck } from "react-icons/fa6";
 
 // third party
 
@@ -207,8 +208,17 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
 
   }
 
+  const [copy, setCopy] = useState(false)
+
   const onCopy = () => {
     navigator.clipboard.writeText(H30_Address as string)
+
+    setCopy(true)
+
+    setTimeout(() => {
+      setCopy(false)
+
+    }, 2000)
   }
 
   return (
@@ -306,14 +316,22 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                       <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '16px', lineHeight: '14px' }}  >
                         Token Address
                       </Typography>
-                      <Stack direction="row" alignItems="center" spacing="10px">
+                      <Stack direction="row" alignItems="center" >
                         <Typography component="button" onClick={goCrantract} variant="body1" sx={{ cursor: 'pointer', color: '#000', backgroundColor: 'transparent', border: 0, fontWeight: 700, fontSize: '18px', lineHeight: '18px' }}  >
                           {H30_Address?.substring(0, 6)}...{H30_Address?.substring(H30_Address.length - 6)}
 
                         </Typography>
-                        <IconButton sx={{ width: '24px', height: '24px' }} onClick={onCopy}>
-                          <img src={copyIcon} />
-                        </IconButton>
+                        {
+                          !copy ? (
+                            <IconButton sx={{ width: '24px', height: '24px' }} onClick={onCopy}>
+                              <img style={{ width: '20px', height: '20px' }} src={copyIcon} />
+                            </IconButton>
+                          ) : (
+                            // <IconButton sx={{ width: '24px', height: '24px', padding: 0 }} onClick={onCopy}>
+                            <FaRegSquareCheck size={20} style={{ color: '#9B9B9B' }} />
+
+                          )
+                        }
                       </Stack>
 
                     </Stack>
@@ -348,7 +366,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                 </Stack>
                 <Box mt="30px" mb="60px" sx={{ boxShadow: '0 0 50px 0 rgba(25, 0, 61, 0.1)', borderRadius: '20px', width: '100%', padding: '20px 30px' }}>
                   {/* <Stack> */}
-                  <Stack spacing="16px" alignItems="center" padding="20px 20px">
+                  <Stack spacing="16px" alignItems="center" padding="20px 0px">
 
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 100, fontSize: '18px', lineHeight: '12px' }}  >
                       Current Price
@@ -371,7 +389,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                   <Box sx={{ width: '100%', backgroundColor: '#f6f6f6', height: '1px' }}></Box>
 
 
-                  <Stack spacing="16px" alignItems="center" padding="20px 20px">
+                  <Stack spacing="16px" alignItems="center" padding="20px 0px">
 
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 100, fontSize: '18px', lineHeight: '12px' }}  >
                       Total Value Locked
@@ -394,18 +412,26 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
 
                   <Box sx={{ width: '100%', backgroundColor: '#f6f6f6', height: '1px' }}></Box>
 
-                  <Stack spacing="16px" alignItems="center" padding="20px 20px">
+                  <Stack spacing="16px" alignItems="center" padding="20px 0px">
 
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 100, fontSize: '18px', lineHeight: '12px' }}  >
                       Token Address
                     </Typography>
-                    <Stack direction="row" alignItems="center" spacing="16px">
+                    <Stack direction="row" alignItems="center" >
                       <Typography variant="body1" onClick={goCrantract} component="button" sx={{ cursor: 'pointer', backgroundColor: 'transparent', border: 0, color: '#000', fontWeight: 700, fontSize: '20px', lineHeight: '12px' }}  >
                         {H30_Address?.substring(0, 6)}...{H30_Address?.substring(H30_Address.length - 6)}
                       </Typography>
-                      <IconButton sx={{ width: '24px', height: '24px' }} onClick={onCopy}>
-                        <img src={copyIcon} />
-                      </IconButton>
+                      {
+                        !copy ? (
+                          <IconButton sx={{ width: '24px', height: '24px' }} onClick={onCopy}>
+                            <img style={{ width: '20px', height: '20px' }} src={copyIcon} />
+                          </IconButton>
+                        ) : (
+                          // <IconButton sx={{ width: '24px', height: '24px', padding: 0 }} onClick={onCopy}>
+                          <FaRegSquareCheck size={20} style={{ color: '#9B9B9B' }} />
+
+                        )
+                      }
 
                     </Stack>
 

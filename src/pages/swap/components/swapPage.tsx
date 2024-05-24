@@ -463,7 +463,7 @@ const SwapSons = ({ data, windowWeight, OnChange, slippage, windowHeight }: type
     const newValue = event.target.value.replace(/[^0-9.]/g, '')
     setInputReValue(newValue)
     setInputReShowValue(newValue)
-    if (pay !== 'Select token' && receive !== "Select token") {
+    if (pay !== 'Select token' && receive !== "Select token" && !isNaN(Number(newValue))) {
       // console.log('数量', newValue)
       ReSwap(newValue)
     }

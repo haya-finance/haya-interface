@@ -350,7 +350,7 @@ const PoolLpDetail = () => {
                     </Stack>
                     <Box sx={{ backgroundColor: 'transparent', border: '1px solid rgba(192, 192, 192, 0.5)', borderRadius: '20px', padding: '4px' }}>
                       <Typography sx={{ color: "#9b9b9b", fontSize: '12px', fontWeight: 700 }}>
-                        LP fee 0.1%
+                        LP fee 0.3%
                       </Typography>
                     </Box>
 
@@ -594,7 +594,7 @@ const PoolLpDetail = () => {
                     </Stack>
                     <Box sx={{ backgroundColor: 'transparent', border: '1px solid rgba(192, 192, 192, 0.5)', borderRadius: '20px', padding: '4px' }}>
                       <Typography sx={{ color: "#9b9b9b", fontSize: '12px', fontWeight: 700 }}>
-                        LP fee 0.1%
+                        LP fee 0.3%
                       </Typography>
                     </Box>
 

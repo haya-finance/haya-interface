@@ -69,7 +69,7 @@ export default function ShowSwap({ toToken, fromToken, windowWeight, oneSwap, li
             </Stack>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography sx={{ color: "#464646", fontSize: '12px', fontWeight: 500 }}>
-                {liquidity}
+                {liquidity}%
               </Typography>
             </Stack>
           </Stack>

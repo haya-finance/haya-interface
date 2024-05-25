@@ -238,7 +238,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                       Buy the Crypto.
                     </Typography>
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '16px', lineHeight: '24px', mt: '20px', mb: '30px' }}  >
-                      H20 is an entirely data-driven on-chain index token consisting of 20 top-tier crypto market assets.It is fully open-source and represents the growth of the crypto market.
+                      $H20 is an entirely data-driven on-chain index token consisting of 20 top-tier crypto market assets.It is fully open-source and represents the growth of the crypto market.
                     </Typography>
                     <BuyButton onClick={goToSwap}>Buy $H20</BuyButton>
                   </Stack>
@@ -358,7 +358,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                       Buy the Crypto.
                     </Typography>
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '18px', mt: '10px', mb: '20px' }}  >
-                      H20 is an entirely data-driven on-chain index token consisting of 20 top-tier crypto market assets.It is fully open-source and represents the growth of the crypto market.
+                      $H20 is an entirely data-driven on-chain index token consisting of 20 top-tier crypto market assets.It is fully open-source and represents the growth of the crypto market.
                     </Typography>
                     <OneBuyButton onClick={goToSwap}>Buy $H20</OneBuyButton>
                   </Stack>

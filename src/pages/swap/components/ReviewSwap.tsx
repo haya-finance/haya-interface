@@ -421,6 +421,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, WETHAmount
               // console.log('结果swap', res)
               const res1 = await res.wait()
 
+
               if (res1.blockNumber == null) {
                 // console.log('nulllllllllll')
               } else {
@@ -458,8 +459,16 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, WETHAmount
               // setOpenConfirm(false)
               // setOpenSend(true)
 
+
               // console.log('结果swap', res)
               const res1 = await res.wait()
+              console.log('res1', res1)
+              console.log('res1.loga', res1.logs[res1.logs.length - 1].getTransaction())
+              console.log('res1.loga', res1.logs[res1.logs.length - 1].toJSON())
+              console.log('res1.loga', res1.logs[res1.logs.length - 1].getTransactionReceipt())
+              console.log(res1.logs[res1.logs.length - 1].data)
+              console.log(parseInt(res1.logs[res1.logs.length - 1].data, 16))
+
 
               if (res1.blockNumber == null) {
                 // console.log('nulllllllllll')
@@ -471,7 +480,7 @@ export default function SwapReviewSwap({ slippage, open, windowWidth, WETHAmount
                 // handleSwapClose()
               }
             }).catch((err) => {
-              console.log('错误1', err)
+              // console.log('错误1', err)
               setErrValue(err.revert['args'][0])
               openNotification('top')
               handleSwapClose()

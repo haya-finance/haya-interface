@@ -14,9 +14,10 @@ import ShowSwap from './showSwap';
 import ReviewSupply from './reviewSupply';
 import SelectAddOneToken from './select_add_token_one';
 import SelectAddTwoToken from './select_add_token_two';
-import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
+// import ConnectWallet from 'layout/CommonLayout/components/connectWallet/connectWallet';
 import addIcon from 'assets/images/icon/add.svg'
 import { network_Name, net_id } from 'config';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 
 // import Select, { components } from 'react-select'
 
@@ -162,7 +163,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
   // console.log('arrs', arrs)
 
 
-  const [open, setOpen] = React.useState(false);
+  const [toOpen, setOpen] = React.useState(false);
   const [disable, setDisable] = React.useState(false)
 
   const [reOpen, setReOpen] = React.useState(false);
@@ -325,17 +326,19 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
     },
   }));
 
-  const [openWallet, setOpenWallet] = useState(false)
+  const { open } = useWeb3Modal()
+
+  // const [openWallet, setOpenWallet] = useState(false)
 
 
 
   const walletConnect = () => {
-    setOpenWallet(true);
+    open();
   };
 
-  const onClose = () => {
-    setOpenWallet(false);
-  };
+  // const onClose = () => {
+  //   close();
+  // };
 
   const InputChange = (event: any) => {
     const newValue = event.target.value.replace(/-/, '')
@@ -486,7 +489,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                   width: "600px", margin: "0 auto", marginBottom: "10px", position: "relative"
                 }}
               >
-                <SelectAddOneToken windowWidth={windowWeight} open={open} handleClose={handleClose} handleListClose={handleToToken} data={data} />
+                <SelectAddOneToken windowWidth={windowWeight} open={toOpen} handleClose={handleClose} handleListClose={handleToToken} data={data} />
                 <Box>
 
                   <img src={addIcon} style={{ position: 'absolute', bottom: '-24%', left: '47%' }} />
@@ -645,7 +648,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                 ) : (
                   <>
                     <Box sx={{ width: "600px", margin: '0 auto', mt: '20px' }}>
-                      <ConnectWallet windowWidth={windowWeight} open={openWallet} handleClose={onClose} />
+                      {/* <ConnectWallet windowWidth={windowWeight} /> */}
                       <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
                     </Box>
 
@@ -664,7 +667,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                   width: "100%", marginBottom: "10px", position: "relative"
                 }}
               >
-                <SelectAddOneToken windowWidth={windowWeight} open={open} handleClose={handleClose} handleListClose={handleToToken} data={data} />
+                <SelectAddOneToken windowWidth={windowWeight} open={toOpen} handleClose={handleClose} handleListClose={handleToToken} data={data} />
                 <Box>
 
                   <img src={addIcon} style={{ position: 'absolute', bottom: '-24%', left: '41%' }} />
@@ -833,7 +836,7 @@ const PoolSons = ({ data, windowWeight, OnChange, windowHeight }: typeProps) => 
                 ) : (
                   <>
                     <Box sx={{ width: '100%' }}>
-                      <ConnectWallet windowWidth={windowWeight} open={openWallet} handleClose={onClose} />
+                      {/* <ConnectWallet windowWidth={windowWeight} /> */}
                       <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
                     </Box>
 

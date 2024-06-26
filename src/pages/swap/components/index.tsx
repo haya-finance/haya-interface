@@ -5,7 +5,7 @@ import Button, { ButtonProps } from '@mui/material/Button';
 
 import { useEffect, useState } from 'react';
 import { useAccount, useSwitchChain } from 'wagmi';
-import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
+// import ConnectWallet from 'layout/CommonLayout/components/connectWallet';
 import SwapSons from './swapPage';
 // import Web3 from 'web3'
 import tokenAbi from 'abi/token.json'
@@ -15,6 +15,7 @@ import { PiWarningBold } from "react-icons/pi";
 import Setting from 'assets/images/icon/Setting.svg';
 import PriceFeedAbi from 'abi/priceFeeds.json';
 import pairAbi from 'abi/pair.json'
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 
 // const web3 = new Web3(sepolia_rpc)
 const provider = new ethers.JsonRpcProvider(sepolia_rpc)
@@ -323,7 +324,6 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
   }, [address, chain])
 
-  const [openWallet, setOpenWallet] = useState(false)
 
 
   const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
@@ -341,15 +341,17 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
     },
   }));
 
+  const { open } = useWeb3Modal()
+
+  // const [openWallet, setOpenWallet] = useState(false)
+
 
 
   const walletConnect = () => {
-    setOpenWallet(true);
+    open();
   };
 
-  const onClose = () => {
-    setOpenWallet(false);
-  };
+
 
 
   const [slippage, setSlippage] = useState('auto')
@@ -415,8 +417,8 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const tokenopen = Boolean(anchorEl);
+  const id = tokenopen ? 'simple-popover' : undefined;
 
 
   const { switchChain } = useSwitchChain()
@@ -451,7 +453,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
                   <IconButton onClick={handleClick} aria-describedby={id}><img src={Setting} /></IconButton>
                   <Popover
                     id={id}
-                    open={open}
+                    open={tokenopen}
                     anchorEl={anchorEl}
                     onClose={handleClose}
                     anchorOrigin={{
@@ -524,7 +526,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
                   <IconButton onClick={handleClick} aria-describedby={id}><img src={Setting} /></IconButton>
                   <Popover
                     id={id}
-                    open={open}
+                    open={tokenopen}
                     anchorEl={anchorEl}
                     onClose={handleClose}
                     anchorOrigin={{
@@ -641,14 +643,14 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
                         windowWidth >= 600 ? (
                           <>
                             <Box sx={{ width: "600px", margin: '0 auto' }}>
-                              <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
+                              {/* <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} /> */}
                               <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
                             </Box>
                           </>
                         ) : (
                           <>
                             <Box sx={{ width: '100%' }}>
-                              <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} />
+                              {/* <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onClose} /> */}
                               <ConnectButton onClick={walletConnect} >Connect Wallet</ConnectButton>
                             </Box>
                           </>

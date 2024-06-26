@@ -15,13 +15,14 @@ import { WagmiProvider } from 'wagmi';
 import { watchChainId } from '@wagmi/core'
 import { config } from 'contexts/wagmiConfig';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { createWeb3Modal } from '@web3modal/wagmi/react'
 
 // ==============================|| APP - THEME, ROUTER, LOCAL  ||============================== //
 
 
 
 
-
+const projectId = 'ba194af96ee35dce47fc3fcbd424457c'
 
 const App = () => {
   const queryClient = new QueryClient()
@@ -31,6 +32,20 @@ const App = () => {
     onChange(chainId) {
       console.log('Chain ID changed!', chainId)
     },
+  })
+
+  createWeb3Modal({
+    wagmiConfig: config,
+    projectId: projectId,
+    allWallets: 'SHOW',
+    enableAnalytics: true,
+    enableOnramp: true,
+    themeMode: 'light',
+    themeVariables: {
+      '--w3m-accent': '#1aae70',
+      '--w3m-color-mix': '#f6f6f6',
+      '--w3m-border-radius-master': '20px',
+    }
   })
 
   return (

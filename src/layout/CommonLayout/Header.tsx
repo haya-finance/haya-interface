@@ -33,7 +33,7 @@ import HeaderLogo from './headerLogo';
 import Networks from 'assets/networks';
 import { useAccount, useSwitchChain } from 'wagmi';
 import DisConnectWallet from './components/disConnectWallet';
-import ConnectWallet from './components/connectWallet';
+import ConnectWallet from './components/connectWallet/connectWallet';
 import WalletIcon from 'assets/images/wallet';
 import { network_Name, net_id } from 'config';
 
@@ -74,43 +74,44 @@ interface NetworkType {
 }
 
 
-const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  // width: '100%',
-  borderRadius: '16px',
-  padding: '15px 15px',
-  fontSize: '14px',
-  lineHeight: '11px',
-  fontWeight: 600,
-  color: '#fff',
-  "&::after": { boxShadow: 'none' },
-  backgroundColor: '#1AAE70',
-  '&:hover': {
-    backgroundColor: '#19A56A',
-    color: '#fff',
-  },
-}));
+// const ConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
+//   // width: '100%',
+//   borderRadius: '16px',
+//   padding: '15px 15px',
+//   fontSize: '14px',
+//   lineHeight: '11px',
+//   fontWeight: 600,
+//   color: '#fff',
+//   "&::after": { boxShadow: 'none' },
+//   backgroundColor: '#1AAE70',
+//   '&:hover': {
+//     backgroundColor: '#19A56A',
+//     color: '#fff',
+//   },
+// }));
 
 
-const ConnectMaxButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  padding: '18px 20px',
-  borderRadius: '10px',
-  fontWeight: 600,
-  color: '#fff',
-  fontSize: '16px',
-  lineHeight: '11px',
-  backgroundColor: '#1AAE70',
-  "&::after": { boxShadow: 'none' },
-  '&:hover': {
-    backgroundColor: '#19A56A',
-    color: '#fff',
-  },
+// const ConnectMaxButton = styled(Button)<ButtonProps>(({ theme }) => ({
+//   padding: '18px 20px',
+//   borderRadius: '10px',
+//   fontWeight: 600,
+//   color: '#fff',
+//   fontSize: '16px',
+//   lineHeight: '11px',
+//   backgroundColor: '#1AAE70',
+//   "&::after": { boxShadow: 'none' },
+//   '&:hover': {
+//     backgroundColor: '#19A56A',
+//     color: '#fff',
+//   },
 
-}))
+// }))
 
 
 const DisConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
   // width: '100%',
   borderRadius: '16px',
+  display: 'none',
   fontSize: '14px', padding: '10px 20px', color: '#1B1B1B', fontWeight: 600,
   backgroundColor: '#f6f6f6',
   "&::after": { boxShadow: 'none' },
@@ -123,9 +124,9 @@ const DisConnectButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 
 const NavtionButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  width: '100%',
+  minWidth: '65px',
   // borderRadius: '10px',
-  padding: '12px 34px',
+  padding: '12px 0px',
   fontSize: '13px',
   lineHeight: '13px',
   color: '#464646',
@@ -158,30 +159,41 @@ const NavtionButton = styled(Button)<ButtonProps>(({ theme }) => ({
 const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeight, ...others }: Props) => {
 
 
-  // const [isVisible, setIsVisible] = React.useState(false);
-  // const ref = React.useRef(null);
+  const parentRef = React.useRef<any>(null);
+  const [overflownElement, setOverflownElement] = React.useState<any[]>([]);
 
-  // React.useEffect(() => {
-  //   const observer = new IntersectionObserver((entries) => {
-  //     entries.forEach((entry) => {
-  //       if (entry.isIntersecting) {
-  //         setIsVisible(true);
-  //       } else {
-  //         setIsVisible(false);
-  //       }
-  //     });
-  //   });
+  const checkOverflow = () => {
+    if (parentRef.current) {
+      const parentBounds = parentRef?.current.getBoundingClientRect();
+      const children = parentRef.current.children;
 
-  //   if (ref.current) {
-  //     observer.observe(ref.current);
-  //   }
+      for (let i = 0; i < children.length; i++) {
+        const childBounds = children[i].getBoundingClientRect();
+        if (childBounds.right > parentBounds.right || childBounds.bottom > parentBounds.bottom) {
+          console.log(children[i])
+          console.log(children[i].textContent)
+          if (!overflownElement.includes(children[i].textContent)) {
+            setOverflownElement(pre => [...pre, children[i].textContent]);
+          }
+        }
+      }
+    } else {
+      setOverflownElement([]);
+    }
+  };
 
-  //   return () => {
-  //     if (ref.current) {
-  //       observer.unobserve(ref.current);
-  //     }
-  //   };
-  // }, []);
+  React.useEffect(() => {
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, []);
+
+  console.log('parentRef', overflownElement)
+
+
+
+
+
 
 
   const theme = useTheme();
@@ -258,13 +270,13 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
 
 
   // 连接钱包
-  const [openWallet, setOpenWallet] = React.useState(false)
-  const walletConnect = () => {
-    setOpenWallet(true)
-  }
-  const onCloseWalletConnect = () => {
-    setOpenWallet(false)
-  }
+  // const [openWallet, setOpenWallet] = React.useState(false)
+  // const walletConnect = () => {
+  //   setOpenWallet(true)
+  // }
+  // const onCloseWalletConnect = () => {
+  //   setOpenWallet(false)
+  // }
 
 
   // 断开钱包连接
@@ -287,7 +299,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
 
   React.useEffect(() => {
 
-  }, [openWallet, disOpenWallet])
+  }, [disOpenWallet])
 
 
 
@@ -326,7 +338,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                       </Link> */}
                     </Stack>
                     <Stack direction="row" alignItems="center" spacing="20px">
-                      <Box sx={{ display: address == undefined ? 'none' : 'block' }}>
+                      <Box sx={{ display: address == undefined || chain == undefined ? 'none' : 'block' }}>
                         <Button
                           sx={{ backgroundColor: '#f6f6f6', fontSize: '14px', padding: '10px 20px', color: '#1B1B1B', fontWeight: 600, borderRadius: '16px', '&:hover': { backgroundColor: '#f6f6f6', color: '#1B1B1B', boxShadow: 'none' }, "&::after": { boxShadow: 'none' }, '&:active': { backgroundColor: '#f6f6f6', color: '#1B1B1B', border: 0, boxShadow: 'none', zIndex: 100, outline: '0px solid #fff' }, '&:focus': { backgroundColor: '#f6f6f6', boxShadow: 'none', color: '#1B1B1B', border: 0, outline: '0px solid #fff' } }}
                           ref={anchorRef}
@@ -391,6 +403,8 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                       </Box>
 
                       <Box >
+                        <ConnectWallet windowWidth={windowWidth} />
+
                         {address !== undefined ? (
                           <>
                             <DisConnectWallet windowWidth={windowWidth} open={disOpenWallet} handleClose={onCloseDisConnect} />
@@ -402,14 +416,7 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                           </>
                         ) : (
                           <>
-                            <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onCloseWalletConnect} />
-                            <ConnectMaxButton
-                              variant="contained"
-                              onClick={walletConnect}
-                              disableElevation
-                            >
-                              Connect Wallet
-                            </ConnectMaxButton>
+
                           </>
                         )
                         }
@@ -437,11 +444,10 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
               <Stack
                 direction="row"
                 alignItems="center"
-                spacing={2}
               >
                 <Box sx={{ display: address == undefined ? 'none' : 'block' }}>
                   <Button
-                    sx={{ backgroundColor: '#f6f6f6', color: '#000', padding: '10px 20px', minWidth: 0, borderRadius: '16px', "&::after": { boxShadow: 'none' }, '&:hover': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000' }, '&:active': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 }, '&:focus': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 }, }}
+                    sx={{ backgroundColor: '#f6f6f6', color: '#000', padding: '8px 14px', minWidth: 0, borderRadius: '16px', "&::after": { boxShadow: 'none' }, '&:hover': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000' }, '&:active': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 }, '&:focus': { backgroundColor: '#f6f6f6', borderRadius: '10px', color: '#000', border: 0 }, }}
                     ref={anchorRef}
                     id="composition-button"
                     aria-controls={open ? 'composition-menu' : undefined}
@@ -499,6 +505,8 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                   </Popper>
                 </Box>
                 <Box >
+                  <ConnectWallet windowWidth={windowWidth} />
+
                   {address !== undefined ? (
                     <>
                       <DisConnectWallet windowWidth={windowWidth} open={disOpenWallet} handleClose={onCloseDisConnect} />
@@ -510,14 +518,6 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
                     </>
                   ) : (
                     <>
-                      <ConnectWallet windowWidth={windowWidth} open={openWallet} handleClose={onCloseWalletConnect} />
-                      <ConnectButton
-                        variant="contained"
-                        onClick={walletConnect}
-                        disableElevation
-                      >
-                        Connect Wallet
-                      </ConnectButton>
                     </>
                   )
                   }
@@ -532,8 +532,8 @@ const Header = ({ handleDrawerOpen, layout = 'landing', windowWidth, windowHeigh
 
             </Box>
 
-            <Paper sx={{ position: 'sticky', bottom: 0, zIndex: 10 }} elevation={3}>
-              <Stack direction="row" alignItems="center" justifyContent="space-around" sx={{ backgroundColor: '#fff', width: `${windowWidth}px`, padding: '8px 14px' }}>
+            <Paper sx={{ position: 'sticky', bottom: 0, width: `${windowWidth}px`, padding: '8px 16px', zIndex: 10, backgroundColor: '#fff', height: '64px', }} elevation={3}>
+              <Stack direction="row" ref={parentRef} width="100%" alignItems="center" justifyContent="space-around" sx={{ backgroundColor: '#fff' }}>
                 <NavtionButton sx={{ backgroundColor: currentPath === '/' ? '#f6f6f6' : 'transparent', color: currentPath === '/' ? '#1aae70' : '#464646', borderRadius: currentPath === '/' ? '20px' : 0 }} onClick={() => onClickNav('/')}>
                   Home
                 </NavtionButton >

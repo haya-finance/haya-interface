@@ -1,6 +1,6 @@
 # Introduction
 
-Web theme with name as 'HAYA'. Its name of insect but we derived it from two popular UI framework, HAYA and Ant Design . It provides best features from each. Follows design principle of AntDesign and uses the Component of HAYA.
+Web theme with name as HAYA. Its name of insect but we derived it from two popular UI framework, HAYA and Ant Design . It provides best features from each. Follows design principle of AntDesign and uses the Component of HAYA.
 
 # Getting Started
 

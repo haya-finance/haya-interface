@@ -178,7 +178,8 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
   // }
 
 
-  async function getPrice(add: string, symbol: string) {
+  async function getPrice(addresses: string, add: string, symbol: string) {
+    const contract = new ethers.Contract(addresses, tokenAbi, provider)
     if (symbol == 'H20') {
       const pairContract = new ethers.Contract(pair_Address, pairAbi, provider)
       const priceFeed = new ethers.Contract(ETH_Price_ARB, PriceFeedAbi, provider);
@@ -188,8 +189,12 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
         await priceFeed.latestRoundData().then(async (res1) => {
           // console.log(res1)
           await priceFeed.decimals().then(async (res2) => {
+            await contract.decimals().then((res3) => {
+              setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18))))), decimasl: res3 } : item))
 
-            setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(((Number(res[1]) / (10 ** 18)) * (Number(res1[1]) / (10 ** Number(res2)))) / (Number(res[0]) / (10 ** 18))))) } : item))
+
+            })
+
 
 
 
@@ -206,11 +211,17 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
 
     } else {
+
       const priceFeed = new ethers.Contract(add, PriceFeedAbi, provider);
       await priceFeed.latestRoundData().then(async (res1) => {
         await priceFeed.decimals().then(async (res2) => {
+          await contract.decimals().then((res3) => {
+            setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(res1[1]) / (10 ** Number(res2)))), decimasl: res3 } : item))
 
-          setTokenList((pre) => pre.map((item) => item.symbol === symbol ? { ...item, price: String((Number(res1[1]) / (10 ** Number(res2)))) } : item))
+
+          })
+
+
 
 
         })
@@ -250,6 +261,9 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
     })
   }
+
+
+
 
   const [value, setValue] = useState(0)
 
@@ -303,7 +317,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
   useEffect(() => {
 
     for (let i = 0; i < tokenList.length; i++) {
-      getPrice(tokenList[i].contract, tokenList[i].symbol)
+      getPrice(tokenList[i].address, tokenList[i].contract, tokenList[i].symbol)
 
 
 

@@ -94,6 +94,7 @@ function formatNumber(num: number) {
 
   if (num % 1 !== 0) {
     const decimalPart = num.toString().split('.')[1]
+    console.log('11111111111', decimalPart)
 
     for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
@@ -117,7 +118,7 @@ function ValueNumber(num: number) {
   if (num % 1 !== 0) {
     const decimalPart = num.toString().split('.')[1]
 
-    for (let i = 0; i < decimalPart.length; i++) {
+    for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= 10 ** (i + 4)
         num = Math.round(num)
@@ -143,7 +144,7 @@ function ValueMaxNumber(num: number) {
   if (num % 1 !== 0) {
     const decimalPart = num.toString().split('.')[1]
 
-    for (let i = 0; i < decimalPart.length; i++) {
+    for (let i = 0; i < decimalPart?.length; i++) {
       if (Number(decimalPart[i]) !== 0) {
         num *= 10 ** (i + 4)
         num = Math.floor(num)

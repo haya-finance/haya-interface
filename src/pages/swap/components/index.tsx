@@ -316,7 +316,7 @@ export default function SwapPage({ windowHeight, windowWidth }: PropsType) {
 
   useEffect(() => {
 
-    for (let i = 0; i < tokenList.length; i++) {
+    for (let i = 0; i < tokenList?.length; i++) {
       getPrice(tokenList[i].address, tokenList[i].contract, tokenList[i].symbol)
 
 

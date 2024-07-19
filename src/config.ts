@@ -35,6 +35,7 @@ export const BasicIssuanceModule = '0xAFf6faCa3c4317a230c87Df006C91aA86958538E' 
 export const UniswapSepoliaRouterContract = '0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24' //"0x03bF31D072F676ee35b3B065a9CDFD8085Cb7002";
 export const sepolia_rpc = 'https://arbitrum-one-rpc.publicnode.com'  //"https://arbitrum-sepolia-rpc.publicnode.com"
 export const H30_Address = '0x250f93c92aebf7304c9e7e347d1aca8c0212edea' //'0xEe06564B279EcdA4cBC7983cc46e603A1D908b6a';
+export const HAYA_Address = "0x498127B0A9fBB955084ebB5cFf1e1e53dC670731"
 export const total_Address = '0xA533cB06073C08Bd78E56541279ef3247BaE1BeA' //"0xd84db6F731964b6ee52F66c7E6e86c2Eb5685894";
 // export const pair_Address = "0xc8d5A5b5E59dF02Eb3108158C724ED956b020029";
 export const pair_Address = '0x396EEdd12A43E68ecAca80021Db4F2E398dC88A0' //"0x09a5A8b579D17e06C7b021b6341dF4C3220C8C16";

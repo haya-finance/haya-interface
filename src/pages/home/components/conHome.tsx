@@ -18,6 +18,7 @@ import pairAbi from 'abi/pair.json'
 import PriceFeedAbi from 'abi/priceFeeds.json';
 import copyIcon from 'assets/images/icon/Copy.svg';
 import { FaRegSquareCheck } from "react-icons/fa6";
+import AddToWallet from './addToWallet';
 
 // third party
 
@@ -221,8 +222,22 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
     }, 2000)
   }
 
+  const [openAdd, setOpenAdd] = useState(false)
+
+  const onCloseAdd = () => {
+    setOpenAdd(false)
+  }
+
+
+
+  const onAddClick = () => {
+    setOpenAdd(true)
+
+  }
+
   return (
     <>
+      <AddToWallet windowWidth={windowWidth} open={openAdd} handleConfirmClose={onCloseAdd} />
       <Container sx={{ backgroundColor: '#fff', width: '100%' }}>
         {
           windowWidth >= 600 ? (
@@ -240,7 +255,10 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '16px', lineHeight: '24px', mt: '20px', mb: '30px' }}  >
                       $H20 is an entirely data-driven on-chain index token consisting of 20 top-tier crypto market assets.It is fully open-source and represents the growth of the crypto market.
                     </Typography>
-                    <BuyButton onClick={goToSwap}>Buy $H20</BuyButton>
+                    <Stack alignItems="start" spacing="16px">
+                      <BuyButton onClick={goToSwap}>Buy $H20</BuyButton>
+                      <Box component="button" onClick={onAddClick} sx={{ color: '#1aae70', fontSize: '16px', lineHeight: '20px', backgroundColor: 'transparent', border: 0, cursor: 'pointer' }}>{`Add to Metamask >`}</Box>
+                    </Stack>
                   </Stack>
                   <Box flex={1} textAlign="right">
                     <img
@@ -360,7 +378,11 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                     <Typography variant="body1" sx={{ color: '#6f6f6f', fontWeight: 600, fontSize: '12px', lineHeight: '18px', mt: '10px', mb: '20px' }}  >
                       $H20 is an entirely data-driven on-chain index token consisting of 20 top-tier crypto market assets.It is fully open-source and represents the growth of the crypto market.
                     </Typography>
-                    <OneBuyButton onClick={goToSwap}>Buy $H20</OneBuyButton>
+                    <Stack alignItems="start" spacing="16px">
+                      <OneBuyButton onClick={goToSwap}>Buy $H20</OneBuyButton>
+                      <Box component="button" onClick={onAddClick} sx={{ color: '#1aae70', fontSize: '16px', lineHeight: '20px', backgroundColor: 'transparent', border: 0, cursor: 'pointer' }}>{`Add to Metamask >`}</Box>
+                    </Stack>
+
                   </Stack>
 
                 </Stack>

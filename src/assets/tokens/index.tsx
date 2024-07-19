@@ -14,8 +14,10 @@ import ETHColor from './eth';
 import FIL from './fil';
 import FTM from './ftm';
 import GRT from './grt';
+import H20Token from './h20Token';
 import H20ETH from './h20_eth';
 import HAYColor from './h30';
+import HAYAToken from './hayaToken';
 import IcpColor from './icp';
 import IMX from './imx';
 import ING from './inj';
@@ -92,6 +94,10 @@ const TokenColorIcon = ({ name, size }: Props) => {
       return <WBtcColor size={size} />
     case 'H20':
       return <HAYColor size={size} />
+    case 'H20Token':
+      return <H20Token size={size} />
+    case 'HayaToken':
+      return <HAYAToken size={size} />
     case 'SHIB':
       return <SHIBColor size={size} />;
     case 'TONCOIN':

@@ -40,7 +40,7 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                   Haya aspires to become a leading provider of innovative decentralized financial solutions,driving the development of ZKML DeFi and setting new industry standards.
                 </Typography>
                 <Stack direction="row" spacing="10px" pt="20px">
-                  <IconButton onClick={() => goTo('https://twitter.com/haya_finance')} sx={{ padding: '0', width: '32px', height: '32px' }}>
+                  <IconButton onClick={() => goTo('https://twitter.com/HayaFinanceHQ')} sx={{ padding: '0', width: '32px', height: '32px' }}>
                     <FootIcon name="Twitter" size={32} />
                   </IconButton >
                   {/* <IconButton sx={{ padding: '0', width: '32px', height: '32px' }}>
@@ -107,7 +107,7 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
                   Haya aspires to become a leading provider of innovative decentralized financial solutions,driving the development of ZKML DeFi and setting new industry standards.
                 </Typography>
                 <Stack direction="row" spacing="10px" pt="20px">
-                  <IconButton onClick={() => goTo('https://twitter.com/haya_finance')} sx={{ padding: '0', width: '32px', height: '32px' }}>
+                  <IconButton onClick={() => goTo('https://twitter.com/HayaFinanceHQ')} sx={{ padding: '0', width: '32px', height: '32px' }}>
                     <FootIcon name="Twitter" size={32} />
                   </IconButton >
                   {/* <IconButton  sx={{ padding: '0', width: '32px', height: '32px' }}>

@@ -257,7 +257,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                     </Typography>
                     <Stack alignItems="start" spacing="16px">
                       <BuyButton onClick={goToSwap}>Buy $H20</BuyButton>
-                      <Box component="button" onClick={onAddClick} sx={{ color: '#1aae70', fontSize: '16px', lineHeight: '20px', backgroundColor: 'transparent', border: 0, cursor: 'pointer' }}>{`Add to Metamask >`}</Box>
+                      <Box component="button" onClick={onAddClick} sx={{ color: '#1aae70', fontSize: '16px', lineHeight: '20px', backgroundColor: 'transparent', border: 0, cursor: 'pointer' }}>{`Add to Wallet >`}</Box>
                     </Stack>
                   </Stack>
                   <Box flex={1} textAlign="right">
@@ -380,7 +380,7 @@ const HeaderPage = ({ windowWidth }: PropsType) => {
                     </Typography>
                     <Stack alignItems="start" spacing="16px">
                       <OneBuyButton onClick={goToSwap}>Buy $H20</OneBuyButton>
-                      <Box component="button" onClick={onAddClick} sx={{ color: '#1aae70', fontSize: '16px', lineHeight: '20px', backgroundColor: 'transparent', border: 0, cursor: 'pointer' }}>{`Add to Metamask >`}</Box>
+                      <Box component="button" onClick={onAddClick} sx={{ color: '#1aae70', fontSize: '16px', lineHeight: '20px', backgroundColor: 'transparent', border: 0, cursor: 'pointer' }}>{`Add to Wallet >`}</Box>
                     </Stack>
 
                   </Stack>

@@ -11,7 +11,7 @@ import pairAbi from 'abi/pair.json'
 import { useAccount } from "wagmi";
 import PriceFeedAbi from 'abi/priceFeeds.json'
 import { useNavigate } from "react-router";
-import ETHH20 from 'assets/images/token/H20_ETH.svg'
+import TokenColorIcon from "assets/tokens";
 
 
 
@@ -357,7 +357,11 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                       <Box component="button" sx={{ cursor: 'pointer', backgroundColor: 'transparent', border: 'none', width: '100%', padding: 0 }} onClick={GoTODetail}>
                         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ padding: '12px 20px' }}>
                           <Stack direction="row" alignItems="center" spacing="2px">
-                            <img src={ETHH20} />
+                            <Stack direction="row" alignItems="center" spacing="-4px">
+                              <TokenColorIcon name="H20" size={36} />
+                              <TokenColorIcon name="ETH" size={36} />
+
+                            </Stack>
                             <Stack alignItems="start">
                               <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
                                 H20/ETH
@@ -389,7 +393,11 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                             <Box component="button" sx={{ cursor: 'pointer', backgroundColor: 'transparent', border: 'none', width: '100%', padding: 0 }} onClick={GoTOLpDetail}>
                               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ padding: '12px 20px' }}>
                                 <Stack direction="row" alignItems="center" spacing="2px">
-                                  <img src={ETHH20} />
+                                  <Stack direction="row" alignItems="center" spacing="-4px">
+                                    <TokenColorIcon name="H20" size={36} />
+                                    <TokenColorIcon name="ETH" size={36} />
+
+                                  </Stack>
                                   <Stack alignItems="start">
                                     <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
                                       H20/ETH
@@ -472,7 +480,11 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                       <Box component="button" sx={{ cursor: 'pointer', backgroundColor: 'transparent', border: 'none', width: '100%', padding: 0 }} onClick={GoTODetail}>
                         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ padding: '12px 10px' }}>
                           <Stack direction="row" alignItems="center" spacing="2px">
-                            <img src={ETHH20} />
+                            <Stack direction="row" alignItems="center" spacing="-4px">
+                              <TokenColorIcon name="H20" size={36} />
+                              <TokenColorIcon name="ETH" size={36} />
+
+                            </Stack>
                             <Stack alignItems="start">
                               <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
                                 H20/ETH
@@ -504,7 +516,11 @@ const PoolTotal = ({ windowHeight, windowWidth }: PropsType) => {
                             <Box component="button" sx={{ cursor: 'pointer', backgroundColor: 'transparent', border: 'none', width: '100%', padding: 0 }} onClick={GoTOLpDetail}>
                               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ padding: '12px 10px' }}>
                                 <Stack direction="row" alignItems="center" spacing="2px">
-                                  <img src={ETHH20} />
+                                  <Stack direction="row" alignItems="center" spacing="-4px">
+                                    <TokenColorIcon name="H20" size={36} />
+                                    <TokenColorIcon name="ETH" size={36} />
+
+                                  </Stack>
                                   <Stack alignItems="start">
                                     <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
                                       H20/ETH

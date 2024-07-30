@@ -120,7 +120,11 @@ const Seed = ({ windowWidth, handleConfirmClose, open, inputFromNum, inputToNum,
                     </Stack>
                     <img src={RightRow} />
                     <Stack direction="row" spacing="4px" alignItems="center"  >
-                      <TokenColorIcon name="H20ETH" size={44} />
+                      <Stack direction="row" alignItems="center" spacing="-4px">
+                        <TokenColorIcon name="H20" size={22} />
+                        <TokenColorIcon name="ETH" size={22} />
+
+                      </Stack>
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 600, fontSize: '24px' }}>
                         {ValueNumber(Number(Math.sqrt(Number(inputToNum) * Number(inputFromNum))))} H20/ETH
                       </Typography>
@@ -185,7 +189,11 @@ const Seed = ({ windowWidth, handleConfirmClose, open, inputFromNum, inputToNum,
                     </Stack>
                     <img src={RightRow} />
                     <Stack direction="row" spacing="4px" alignItems="center"  >
-                      <TokenColorIcon name="H20ETH" size={44} />
+                      <Stack direction="row" alignItems="center" spacing="-4px">
+                        <TokenColorIcon name="H20" size={22} />
+                        <TokenColorIcon name="ETH" size={22} />
+
+                      </Stack>
                       <Typography sx={{ color: "#000", fontSize: '13px', fontWeight: 600 }}>
                         {ValueNumber(Number(Math.sqrt(Number(inputToNum) * Number(inputFromNum))))} H20/ETH
                       </Typography>

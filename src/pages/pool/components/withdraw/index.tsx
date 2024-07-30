@@ -15,7 +15,6 @@ import TokenColorIcon from 'assets/tokens';
 import { useNavigate } from 'react-router';
 import tokenAbi from 'abi/token.json'
 import ReviewWithdraw from './ReviewWithdraw';
-import ETHH20 from 'assets/images/token/selETH_H20.svg'
 // import PoolTotal from './pool';
 
 // const web3 = new Web3(sepolia_rpc)
@@ -537,7 +536,11 @@ export default function WithdrawPoolPage() {
                       </Typography>
                       <Box sx={{ backgroundColor: '#fff', borderRadius: '100px', padding: '8px 8px', border: 'none' }}>
                         <Stack direction="row" alignItems="center" spacing="8px">
-                          <img src={ETHH20} />
+                          <Stack direction="row" alignItems="center" spacing="-4px">
+                            <TokenColorIcon name="H20" size={22} />
+                            <TokenColorIcon name="ETH" size={22} />
+
+                          </Stack>
                           <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
                             ETH/H20
                           </Typography>
@@ -639,7 +642,11 @@ export default function WithdrawPoolPage() {
                       </Typography>
                       <Box sx={{ backgroundColor: '#fff', borderRadius: '100px', padding: '8px 8px', border: 'none' }}>
                         <Stack direction="row" alignItems="center" spacing="8px">
-                          <img src={ETHH20} />
+                          <Stack direction="row" alignItems="center" spacing="-4px">
+                            <TokenColorIcon name="H20" size={22} />
+                            <TokenColorIcon name="ETH" size={22} />
+
+                          </Stack>
                           <Typography sx={{ color: "#000", fontSize: '14px', fontWeight: 700 }}>
                             ETH/H20
                           </Typography>

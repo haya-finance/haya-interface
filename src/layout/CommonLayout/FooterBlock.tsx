@@ -24,7 +24,7 @@ const FooterBlock = ({ windowWidth }: PropsType) => {
 
 
   const goTo = (url: string) => {
-    window.location.assign(url)
+    window.open(`${url}`, '_blank')
   }
 
   return (

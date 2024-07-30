@@ -111,7 +111,11 @@ const Seed = ({ windowWidth, handleConfirmClose, open, data, num, balance }: Typ
                   </Typography>
                   <Stack direction="row" alignItems="center" spacing="10px" flexWrap="wrap" gap="10px" justifyContent="center">
                     <Stack direction="row" spacing="4px" alignItems="center"  >
-                      <TokenColorIcon name='H20ETH' size={44} />
+                      <Stack direction="row" alignItems="center" spacing="-4px">
+                        <TokenColorIcon name="H20" size={22} />
+                        <TokenColorIcon name="ETH" size={22} />
+
+                      </Stack>
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 600, fontSize: '24px' }}>
                         {ValueNumber(balance == '0' ? 0 : Number(balance) * (num / 100))} LP-H20/ETH
 
@@ -178,7 +182,11 @@ const Seed = ({ windowWidth, handleConfirmClose, open, data, num, balance }: Typ
                   </Typography>
                   <Stack direction="row" justifyContent="center" alignItems="center" spacing="6px" flexWrap="wrap" gap="6px" >
                     <Stack direction="row" spacing="4px" alignItems="center"  >
-                      <TokenColorIcon name='H20ETH' size={44} />
+                      <Stack direction="row" alignItems="center" spacing="-4px">
+                        <TokenColorIcon name="H20" size={22} />
+                        <TokenColorIcon name="ETH" size={22} />
+
+                      </Stack>
                       <Typography variant='body1' sx={{ color: '#000', fontWeight: 600, fontSize: '24px' }}>
                         {ValueNumber(balance == '0' ? 0 : Number(balance) * (num / 100))} LP-H20/ETH
 

@@ -27,7 +27,6 @@ import { notification } from 'antd';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import { WarningIcon } from '@chakra-ui/icons';
 
-import ETHH20 from 'assets/images/token/H20_ETH.svg'
 import Confirm from './confirm';
 import Seed from './send';
 import Succeed from './succeed';
@@ -537,7 +536,11 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
                         {ValueNumber(balance == '0' ? 0 : Number(balance) * (num / 100))} LP-H20/ETH
                       </Typography>
 
-                      <img src={ETHH20} />
+                      <Stack direction="row" alignItems="center" spacing="-4px">
+                        <TokenColorIcon name="H20" size={36} />
+                        <TokenColorIcon name="ETH" size={36} />
+
+                      </Stack>
                     </Stack>
                   </Box>
                 </Box>
@@ -675,7 +678,11 @@ export default function ReviewWithdraw({ open, windowWidth, handleSwapClose, dat
 
                       </Typography>
 
-                      <img src={ETHH20} />
+                      <Stack direction="row" alignItems="center" spacing="-4px">
+                        <TokenColorIcon name="H20" size={36} />
+                        <TokenColorIcon name="ETH" size={36} />
+
+                      </Stack>
                     </Stack>
                   </Stack>
                 </Box>

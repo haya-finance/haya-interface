@@ -11,7 +11,7 @@ import { ethers } from "ethers";
 import { useNavigate } from "react-router";
 
 
-import ETHH20 from 'assets/images/token/H20_ETH.svg'
+import TokenColorIcon from "assets/tokens";
 
 
 type DataType = {
@@ -296,7 +296,11 @@ const PoolDetail = () => {
                   <Box sx={{ padding: '20px', backgroundColor: '#f6f6f6', borderRadius: '20px' }}>
                     <Stack direction="row" justifyContent="space-between" alignItems="center" padding="10px 0 20px 0">
                       <Stack direction="row" alignItems="center" spacing="12px">
-                        <img src={ETHH20} />
+                        <Stack direction="row" alignItems="center" spacing="-4px">
+                          <TokenColorIcon name="H20" size={36} />
+                          <TokenColorIcon name="ETH" size={36} />
+
+                        </Stack>
                         <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
                           H20/ETH
                         </Typography>
@@ -435,7 +439,11 @@ const PoolDetail = () => {
                   <Box sx={{ padding: '20px 10px', backgroundColor: '#f6f6f6', borderRadius: '20px' }}>
                     <Stack direction="row" justifyContent="space-between" alignItems="center" padding="12px 0 22px 0">
                       <Stack direction="row" alignItems="center" spacing="12px">
-                        <img src={ETHH20} />
+                        <Stack direction="row" alignItems="center" spacing="-4px">
+                          <TokenColorIcon name="H20" size={36} />
+                          <TokenColorIcon name="ETH" size={36} />
+
+                        </Stack>
                         <Typography sx={{ color: "#000", fontSize: '18px', fontWeight: 700 }}>
                           H20/ETH
                         </Typography>

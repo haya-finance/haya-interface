@@ -41,6 +41,9 @@ const App = () => {
     enableAnalytics: true,
     enableOnramp: true,
     themeMode: 'light',
+    featuredWalletIds: [
+      '971e689d0a5be527bac79629b4ee9b925e82208e5168b733496a09c0faed0709'
+    ],
     themeVariables: {
       '--w3m-accent': '#1aae70',
       '--w3m-color-mix': '#f6f6f6',

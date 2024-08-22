@@ -45,6 +45,7 @@ export const config = createConfig({
     coinbaseWallet({
       appName: 'Coinbase Wallet',
     })
+
   ],
   transports: {
     // [mainnet.id]: http(),
